@@ -1,0 +1,2 @@
+defmodule Exgettext do
+end
