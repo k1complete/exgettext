@@ -19,6 +19,10 @@ exgettextはgettext()互換のpoファイルを用いたelixir用
 
 * mix.exsにdeps: exgettextを追加します。
 
+* use Exgettext; import Exgettext; を呼び出します。
+
+* 処理の最初でExgettext.start() を呼び出します。
+
 * 地域化が必要なリテラル文字列を~T() sigil でマークアップ
   します。
 
@@ -57,9 +61,9 @@ exgettextはgettext()互換のpoファイルを用いたelixir用
 * appを起動すると、exgettext(app)サーバが起動し、環境変数LANGに
   対応したapp用の言語ディレクトリをオープンします。
 
+* Exgettext.setlocale/1 でロケールを明示的に設定することが出来ます。
+
 * ~T()は、exgettextへの呼出に置き換えられ、lang/ja/app.moを
   参照して対応する言語のメッセージが使用されます。
 
 * Exgettext.h で翻訳されたmoduledocを表示させることができます。
-
-
