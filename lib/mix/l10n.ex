@@ -4,26 +4,28 @@ defmodule Mix.Tasks.L10n.Msginit do
     Mix.Shell.Process.cmd("msginit")
   end
 end
-defmodule Mix.Tasks.L10n.Msgmerge do
+defmodule Mix.Tasks.L10n.Msgfmt do
   use Mix.Task
-  def locale_to_lang("C") do
-    "en"
-  end
-  def locale_to_lang(nil) do
-    "en"
-  end
-  def locale_to_lang(locale) do
-    case Regex.run(~r/([^._]+)_([^._]+)\.([^.])+/, locale) do
-      nil -> locale
-      [^locale, lang, _country, _encoding] -> 
-        lang
-    end
-  end
   def run(_opt) do
     config = Mix.Project.config()
     app = to_string(config[:app])
-    lang = locale_to_lang(System.get_env("LANG"))
-    cmd = "msgmerge -o #{lang}.pox #{lang}.po #{app}.pot "
+    lang = Exgettext.getlang()
+    pofile = Exgettext.pofile(app, lang)
+    mofile = Exgettext.mofile(app, lang)
+    dir = Path.dirname(mofile)
+    Mix.Shell.IO.info("#{pofile} #{mofile}")
+    :ok = File.mkdir_p(dir)
+    :ok = Exgettext.Tool.msgfmt(pofile, mofile)
+  end
+end
+defmodule Mix.Tasks.L10n.Msgmerge do
+  use Mix.Task
+  def run(_opt) do
+    config = Mix.Project.config()
+    app = to_string(config[:app])
+    lang = Exgettext.getlang()
+    pofile = Exgettext.pofile(app, lang)
+    cmd = "msgmerge -o #{lang}.pox #{pofile} #{app}.pot"
     Mix.Shell.IO.info(cmd)
     case Mix.Shell.IO.cmd(cmd) do
       0 -> 0
@@ -34,6 +36,8 @@ end
 defmodule Mix.Tasks.L10n.Xgettext do
   use Mix.Task
   def run(_opt) do
+    :ok = Exgettext.Tool.clean()
     :ok = Mix.Tasks.Compile.run(["--force"])
+    :ok = Exgettext.Tool.xgettext()
   end
 end

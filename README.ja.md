@@ -26,9 +26,13 @@ exgettextはgettext()互換のpoファイルを用いたelixir用
 * 地域化が必要なリテラル文字列を~T() sigil でマークアップ
   します。
 
-* mix xgettextタスクにより、app.potファイルを生成します。
-  app.potファイルには、以下が格納されます。
-  @moduledoc, @doc, ~T()
+* mix xgettextタスクにより、app.potファイルを生成します。app.potファイ
+  ルには、以下が格納されます。
+
+  @moduledoc, @doc,~T()
+
+  現在の実装ではは、mix xgettextにより内部的にmix cleanが実行されコ
+  ンパイルしなおしになります。
 
 * リリースします。
 
@@ -45,9 +49,11 @@ exgettextはgettext()互換のpoファイルを用いたelixir用
 * まだ翻訳したい言語のpoファイルが無い場合、poファイルを作成する
   ために、 mix l10n.msginit を実行します。po/ja.po が作成されます。
 
-* 既にpo/ja.poがある場合で、パッケージのバージョンアップなどでメッ
-  セージを翻訳仕直す場合はmix l10n.msgmerge app.pot po/ja.po ja.ponを
-  実行します。問題がなければja.ponをpo/ja.poに移動します。
+* 既にpo/ja.poがある場合で、パッケージのバージョンアップなどでメッセー
+  ジを翻訳仕直す場合はmix l10n.msgmerge ja.po app.potを実行します。内部
+  では、msgmerge -o ja.pox ja.po app.potが実行され、マージ結果として
+  ja.poxが作成されます。マージ内容に問題がなければja.poxをpo/ja.poに移
+  動します。
 
 * po/ja.po中のmsgidをmsgstrに翻訳していきます。emacsのpoモードが
   便利です。

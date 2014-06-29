@@ -2,15 +2,13 @@ defmodule L10nTest do
   use Exgettext
   import Exgettext
   def test do
-    :gettext_server.start({L10nTest, []})
+#    :gettext_server.start({L10nTest, []})
     {
-     :erlang.list_to_binary(txt("Hello World!\nA what is this!")),
-             :erlang.list_to_binary(txt("Hello World!\nA \"what\" \\is \tthis!\n")),
-             :erlang.list_to_binary(txt("Hello World!\nA what is this!\n")),
-             :erlang.list_to_binary(~T"Hello World!\nA what is this!\n"),
-             :erlang.list_to_binary(txt2("Hello World!\nA what is this!\n", 'ja')),
-             :erlang.list_to_binary(stxt("Hello World! $hello$", [hello: txt("H")])),
-             :erlang.list_to_binary(stxt2("Hello World! $hello$", [hello: txt("H")], 'en'))
+     txt("Hello World!\nA what is this!"),
+     txt("Hello World!\nA \"what\" \\is \tthis!\n"),
+     txt("Hello World!\nA what is this!\n"),
+     ~T"Hello World!\nA what is this!\n",
+     txt2("Hello World!\nA what is this!\n", 'ja')
     }
   end
   def gettext_dir() do

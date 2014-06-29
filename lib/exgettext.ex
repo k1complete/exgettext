@@ -2,12 +2,37 @@ defmodule Exgettext do
   def __using__(_opt) do
     :ok
   end
+  def basedir() do
+    "lang"
+  end
+  def pofile(_app, lang) do
+    "#{lang}.po"
+  end
+  def mofile(app, lang) do
+    "#{basedir()}/#{lang}/#{app}.exmo"
+  end
   defmacro get_app( param \\ "" ) do
     to_string(Mix.Project.config[:app]) <> param
   end
-
+  def locale_to_lang("C") do
+    "en"
+  end
+  def locale_to_lang(nil) do
+    "en"
+  end
+  def locale_to_lang(locale) do
+    case Regex.run(~r/([^._]+)_([^._]+)\.([^.])+/, locale) do
+      nil -> locale
+      [^locale, lang, _country, _encoding] -> 
+        lang
+    end
+  end
+  def getlang() do
+    locale_to_lang(System.get_env("LANG"))
+  end
   def encode(s) do
-    :unicode.characters_to_list(s, :unicode)
+    #:unicode.characters_to_list(s, :unicode)
+    s
   end
   def put_dets(s, reference) do
     app_pot_db = get_app(".pot_db")
@@ -23,6 +48,28 @@ defmodule Exgettext do
   def relative(file, path) do
     Path.relative_to(file, path)
   end
+  def getpath(lang) do
+    mofile(get_app(), lang)
+  end
+  def gettext(key, lang) do
+    dets_file = getpath(lang)
+    case :dets.open_file(dets_file) do
+      {:ok, dets} ->
+        r = case :dets.lookup(dets, key) do
+              [] -> key
+              [{^key, ""}] -> key
+              [{^key, value}] -> value
+              {:error, _reason} -> key
+            end
+        :dets.close(dets)
+        r
+      {:error, _reason} ->
+        key
+    end
+  end
+  def gettext(key) do
+    gettext(key, getlang())
+  end
   @doc """
   ~T is detect to translate target string.
   """
@@ -34,13 +81,10 @@ defmodule Exgettext do
     r = __CALLER__
     path = System.get_env("PWD")
     put_dets(s, %{line: r.line, file: relative(r.file, path), function: r.function })
-    quote do: :gettext.key2str(encode(unquote(s)))
+    quote do: Exgettext.gettext(unquote(s))
   end
-  defmacro txt2(s, lang), do: quote do: :gettext.key2str(encode(unquote(s)), unquote(lang))
-  defmacro stxt(s, a), do: quote do: :gettext_format.stxt(txt(unquote(s)), unquote(a))
-  defmacro stxt2(s, a, lang) do
-    quote do: :gettext_format.stxt(txt2(unquote(s), unquote(lang)), unquote(a))
-  end
+
+  defmacro txt2(s, lang), do: quote do: Exgettext.gettext(unquote(s), unquote(lang))
 end
 defmodule Exgettext.Tool do
   def get_app() do
@@ -65,22 +109,31 @@ defmodule Exgettext.Tool do
   end
   def parse(fh, r, ac) do
     r = skip_comment(fh, r)
-    %{line: r, str: i} = get_msgid(fh, r)
-    if (i) do
-      %{line: r, str: str} = get_msgstr(fh, r)
-      if (str) do
-        ac = if (i != "") do
-               Map.put(ac, Macro.unescape_string(i), Macro.unescape_string(str))
-             else
-               ac
-             end
-        parse(fh, r, ac)
-      end
+    case r do 
+      :eof ->
+           ac
+      r ->
+        %{line: r, str: i} = get_msgid(fh, r)
+        if (i) do
+          %{line: r, str: str} = get_msgstr(fh, r)
+          if (str) do
+            ac = if (i != "") do
+                   Map.put(ac, Macro.unescape_string(i), 
+                                     Macro.unescape_string(str))
+                 else
+                   ac
+                 end
+            parse(fh, r, ac)
+          end
+        end
     end
   end
   @doc """
   parse skip comment (#, whitespaces line)
   """
+  def skip_comment(_fh, :eof) do
+    :eof
+  end
   def skip_comment(fh, r) do
     case Regex.named_captures(~r/^(?<m>\s*|\#.*)$/, r) do
       nil -> r
@@ -203,14 +256,14 @@ defmodule Exgettext.Tool do
                  end
                  m = e[:references]
                  if ((length(m)) > 0) do
-                   :io.format("--~p---~n", [m])
                    IO.binwrite(fh, "#: ")
-                   Enum.map(m, fn(x) -> IO.binwrite(fh, "#{x[:file]}:#{x[:line]} ") end)
+                   Enum.map(m, fn(x) -> 
+                                   IO.binwrite(fh, "#{x[:file]}:#{x[:line]} ") 
+                               end)
                    IO.binwrite(fh, "\n")
                  end
                  IO.binwrite(fh, "msgid \"\"\n")
                  m = e[:msgid]
-                 :io.format("msgid ~p~n", [m])
                  Enum.map(m, fn(x) -> 
                                  s = escape(x)
                                  IO.binwrite(fh, "\"")
@@ -220,14 +273,19 @@ defmodule Exgettext.Tool do
                  IO.binwrite(fh, "msgstr \"\"\n")
              end)
   end
+  def clean() do
+    pot_db = get_app(:pot_db)
+    {:ok, dets} = :dets.open_file(pot_db, [])
+    :dets.delete_all_objects(dets)
+    :dets.close(dets)
+  end
   def xgettext() do
     pot_db = get_app(:pot_db)
     pot = get_app(:pot)
     {:ok, dets} = :dets.open_file(pot_db, [])
-#    :dets.delete_all_objects(dets)
     r = :dets.foldl(fn(e, acc) -> [e|acc] end, [], dets) |>
       Enum.sort( fn({_k1, v1}, {_k2, v2}) -> v1 < v2 end)
-    r2 = r |> Enum.map(fn({k, v}) -> km = line_split(List.to_string(k))
+    r2 = r |> Enum.map(fn({k, v}) -> km = line_split(k)
                       %{msgid: km, references: v}
                   end)
     :dets.close(dets)
@@ -235,7 +293,8 @@ defmodule Exgettext.Tool do
                      %{msgid: e[:msgid],
                        references: Enum.map(e[:references], 
                                             fn(x) ->
-                                                %{file: x[:file], line: x[:line]}
+                                                %{file: x[:file], 
+                                                  line: x[:line]}
                                             end)
                       } end)
     {:ok, fh} = File.open(pot, [:write])
@@ -243,6 +302,7 @@ defmodule Exgettext.Tool do
     s = doc()
     output(fh, s)
     File.close(fh)
+    :ok
   end
 
 end
