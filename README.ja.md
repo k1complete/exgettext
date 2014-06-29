@@ -43,10 +43,10 @@ exgettextはgettext()互換のpoファイルを用いたelixir用
   を確認します。
 
 * まだ翻訳したい言語のpoファイルが無い場合、poファイルを作成する
-  ために、 mix msginit を実行します。po/ja.po が作成されます。
+  ために、 mix l10n.msginit を実行します。po/ja.po が作成されます。
 
 * 既にpo/ja.poがある場合で、パッケージのバージョンアップなどでメッ
-  セージを翻訳仕直す場合はmix msgmerge app.pot po/ja.po ja.ponを
+  セージを翻訳仕直す場合はmix l10n.msgmerge app.pot po/ja.po ja.ponを
   実行します。問題がなければja.ponをpo/ja.poに移動します。
 
 * po/ja.po中のmsgidをmsgstrに翻訳していきます。emacsのpoモードが
