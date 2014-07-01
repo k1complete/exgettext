@@ -11,7 +11,7 @@ defmodule Exgettext do
   def mofile(app, lang) do
     "#{basedir()}/#{lang}/#{app}.exmo"
   end
-  defmacro get_app( param \\ "" ) do
+  def get_app( param \\ "" ) do
     to_string(Mix.Project.config[:app]) <> param
   end
   def locale_to_lang("C") do
@@ -101,9 +101,6 @@ defmodule Exgettext.Tool do
     s3 = Regex.replace(~r/\"/, s2,~S(\\\"))
     s3
   end
-  @doc """
-  parse po file, return maps %{msgid => msgstr}
-  """
   def parse(_fh, :eof, ac) do
     ac
   end
@@ -128,9 +125,6 @@ defmodule Exgettext.Tool do
         end
     end
   end
-  @doc """
-  parse skip comment (#, whitespaces line)
-  """
   def skip_comment(_fh, :eof) do
     :eof
   end
@@ -273,15 +267,17 @@ defmodule Exgettext.Tool do
                  IO.binwrite(fh, "msgstr \"\"\n")
              end)
   end
-  def clean() do
+  def clean(_app) do
     pot_db = get_app(:pot_db)
+    IO.puts "clean #{pot_db}\n"
     {:ok, dets} = :dets.open_file(pot_db, [])
     :dets.delete_all_objects(dets)
     :dets.close(dets)
   end
-  def xgettext() do
+  def xgettext(_app) do
     pot_db = get_app(:pot_db)
     pot = get_app(:pot)
+    IO.puts "xgettext #{pot_db} --output=#{pot}\n"
     {:ok, dets} = :dets.open_file(pot_db, [])
     r = :dets.foldl(fn(e, acc) -> [e|acc] end, [], dets) |>
       Enum.sort( fn({_k1, v1}, {_k2, v2}) -> v1 < v2 end)

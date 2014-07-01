@@ -10,6 +10,7 @@ defmodule Mix.Tasks.L10n.Msgfmt do
     config = Mix.Project.config()
     app = to_string(config[:app])
     lang = Exgettext.getlang()
+    Mix.Shell.IO.info("msgfmt for #{app}")
     pofile = Exgettext.pofile(app, lang)
     mofile = Exgettext.mofile(app, lang)
     dir = Path.dirname(mofile)
@@ -36,8 +37,11 @@ end
 defmodule Mix.Tasks.L10n.Xgettext do
   use Mix.Task
   def run(_opt) do
-    :ok = Exgettext.Tool.clean()
+    config = Mix.Project.config()
+    app = to_string(config[:app])
+    Mix.Shell.IO.info("xgettext for #{app}")
+    :ok = Exgettext.Tool.clean(app)
     :ok = Mix.Tasks.Compile.run(["--force"])
-    :ok = Exgettext.Tool.xgettext()
+    :ok = Exgettext.Tool.xgettext(app)
   end
 end

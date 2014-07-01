@@ -5,7 +5,21 @@
 exgettextはgettext()互換のpoファイルを用いたelixir用
 地域化(l10n)パッケージです。
 
-下記の記述はまだ実現されていません。構想段階です。。。
+用語やファイルは [GNU gettext] (https://www.gnu.org/software/gettext/) 
+ライブラリに準じています。
+
+|拡張子   | 意味                               | 生成コマンド
+|:--------|:-----------------------------------|:-------------
+| pot     | ポータブルオブジェクトテンプレート | xgetetxt
+| po      | メッセージの翻訳マスタ             | msginit
+| pox     | poとpotをマージしたファイル        | msgmerge
+| exmo    | poをコンパイルしたもの             | msgfmt
+
+
+* xgettext: プログラムソースからpotを生成
+* msginit : potファイルからpoを初期化
+* msgmerge: potとpoをマージしてpoxを生成
+* msgfmt  : poからexmoを生成
 
 
 ワークフロー
@@ -20,8 +34,6 @@ exgettextはgettext()互換のpoファイルを用いたelixir用
 * mix.exsにdeps: exgettextを追加します。
 
 * use Exgettext; import Exgettext; を呼び出します。
-
-* 処理の最初でExgettext.start() を呼び出します。
 
 * 地域化が必要なリテラル文字列を~T() sigil でマークアップ
   します。
@@ -39,37 +51,34 @@ exgettextはgettext()互換のpoファイルを用いたelixir用
 * 翻訳は翻訳チームが行いますので、プログラマはこれだけ。
 
 
-
 翻訳チーム
 -----------------------------------------------------
 
-* パッケージを入手し、po/ja.poファイル(日本語jaを例にしています)
-  を確認します。
+* パッケージを入手し、app.potファイルを確認します。
 
 * まだ翻訳したい言語のpoファイルが無い場合、poファイルを作成する
   ために、 mix l10n.msginit を実行します。po/ja.po が作成されます。
 
 * 既にpo/ja.poがある場合で、パッケージのバージョンアップなどでメッセー
-  ジを翻訳仕直す場合はmix l10n.msgmerge ja.po app.potを実行します。内部
-  では、msgmerge -o ja.pox ja.po app.potが実行され、マージ結果として
-  ja.poxが作成されます。マージ内容に問題がなければja.poxをpo/ja.poに移
-  動します。
+  ジを翻訳仕直す場合はmix l10n.msgmerge を実行します。内部では、
+  msgmerge -o po/ja.pox po/ja.po app.potが実行され、マージ結果として
+  po/ja.poxが作成されます。マージ内容に問題がなければpo/ja.poxを
+  po/ja.poに移動します。
 
 * po/ja.po中のmsgidをmsgstrに翻訳していきます。emacsのpoモードが
   便利です。
 
-* 翻訳が終ったら、mix msgfmtを実行して lang/ja/app.moを生成します。
+* 翻訳が終ったら、mix l10n.msgfmtを実行して po/ja.poからlang/ja/app.exmo
+  を生成します。
   
 
 実行時
 -----------------------------------------------------
 
-* appを起動すると、exgettext(app)サーバが起動し、環境変数LANGに
-  対応したapp用の言語ディレクトリをオープンします。
-
 * Exgettext.setlocale/1 でロケールを明示的に設定することが出来ます。
 
-* ~T()は、exgettextへの呼出に置き換えられ、lang/ja/app.moを
-  参照して対応する言語のメッセージが使用されます。
+* ~T()は、exgettextへの呼出に置き換えられ、lang/ja/app.exmoを
+  参照して対応する言語のメッセージが使用されます。オープンに失敗すると
+  置き換えは行なわれません。
 
-* Exgettext.h で翻訳されたmoduledocを表示させることができます。
+[* Exgettext.h で翻訳されたmoduledocを表示させることができます。]
