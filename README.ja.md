@@ -5,28 +5,37 @@
 exgettextはgettext()互換のpoファイルを用いたelixir用
 地域化(l10n)パッケージです。
 
-用語やファイルは [GNU gettext] (https://www.gnu.org/software/gettext/) 
-ライブラリに準じています。
+用語やファイルは [GNU gettext] (https://www.gnu.org/software/gettext/)
+ライブラリに準じています。ファイルフォーマットはpot, po, poxはGNU
+gettext互換ですが、exmo, pot_dbは独自形式です。poファイルが
+GNU gettext互換ですので、GNU gettextに対応したツールが使えます。
 
-|拡張子   | 意味                               | 生成コマンド
-|:--------|:-----------------------------------|:-------------
-| pot     | ポータブルオブジェクトテンプレート | xgetetxt
-| po      | メッセージの翻訳マスタ             | msginit
-| pox     | poとpotをマージしたファイル        | msgmerge
-| exmo    | poをコンパイルしたもの             | msgfmt
+|拡張子   | 意味                        | 生成コマンド      |
+|:--------|:----------------------------|:------------------|
+| pot     | POテンプレート              | l10n.xgetetxt     |
+| pot_db  | POテンプレート中間ファイル  | l10n.xgetetxt     |
+| po      | メッセージの翻訳マスタ      | l10n.msginit      |
+| pox     | poとpotをマージしたファイル | l10n.msgmerge     |
+| exmo    | poをコンパイルしたもの      | l10n.msgfmt       |
 
 
-* xgettext: プログラムソースからpotを生成
-* msginit : potファイルからpoを初期化
-* msgmerge: potとpoをマージしてpoxを生成
-* msgfmt  : poからexmoを生成
+* l10n.xgettext: プログラムソースからpotを生成
+* l10n.msginit : potファイルからpoを初期化
+* l10n.msgmerge: potとpoをマージしてpoxを生成
+* l10n.msgfmt  : poからexmoを生成
+
+インストール
+=====================================================
+
+GNU gettextをインストールしておきます。exgettextはmsginit, msgmergeを内
+部で使用します。
 
 
 ワークフロー
 =====================================================
 
-以下では、パッケージとしてappを日本語(ja)にローカライズする
-例としています。
+以下では、パッケージとしてappを日本語(ja)にローカライズする例としていま
+す。
 
 プログラマ
 -----------------------------------------------------
@@ -38,13 +47,13 @@ exgettextはgettext()互換のpoファイルを用いたelixir用
 * 地域化が必要なリテラル文字列を~T() sigil でマークアップ
   します。
 
-* mix xgettextタスクにより、app.potファイルを生成します。app.potファイ
+* mix l10n.xgettextタスクにより、app.potファイルを生成します。app.potファイ
   ルには、以下が格納されます。
 
   @moduledoc, @doc,~T()
 
-  現在の実装ではは、mix xgettextにより内部的にmix cleanが実行されコ
-  ンパイルしなおしになります。
+  現在の実装ではは、mix l10n.xgettextにより内部的にmix cleanが実行され
+  コンパイルしなおしになります。
 
 * リリースします。
 
@@ -60,17 +69,17 @@ exgettextはgettext()互換のpoファイルを用いたelixir用
   ために、 mix l10n.msginit を実行します。po/ja.po が作成されます。
 
 * 既にpo/ja.poがある場合で、パッケージのバージョンアップなどでメッセー
-  ジを翻訳仕直す場合はmix l10n.msgmerge を実行します。内部では、
-  msgmerge -o po/ja.pox po/ja.po app.potが実行され、マージ結果として
-  po/ja.poxが作成されます。マージ内容に問題がなければpo/ja.poxを
+  ジを翻訳仕直す場合はmix l10n.msgmerge を実行します。内部では、GNU
+  gettextのmsgmerge -o po/ja.pox po/ja.po app.potが実行され、マージ結果
+  としてpo/ja.poxが作成されます。マージ内容に問題がなければpo/ja.poxを
   po/ja.poに移動します。
 
-* po/ja.po中のmsgidをmsgstrに翻訳していきます。emacsのpoモードが
+* po/ja.po中のmsgidをmsgstrに翻訳していきます。GNU emacsのpoモードが
   便利です。
 
 * 翻訳が終ったら、mix l10n.msgfmtを実行して po/ja.poからlang/ja/app.exmo
   を生成します。
-  
+
 
 実行時
 -----------------------------------------------------

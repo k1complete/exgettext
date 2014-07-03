@@ -1,18 +1,67 @@
 defmodule Exgettext do
-  def __using__(_opt) do
+  defmacro __using__(_opt \\ :dummy ) do
+    :io.format("- ~p~n", [__CALLER__.module])
+    module = __CALLER__.module
+    put_dets(:module, %{module: module })
     :ok
   end
-  def basedir() do
-    "lang"
-  end
-  def pofile(_app, lang) do
-    "#{lang}.po"
-  end
-  def mofile(app, lang) do
-    "#{basedir()}/#{lang}/#{app}.exmo"
+  def popath() do
+    "po"
   end
   def get_app( param \\ "" ) do
     to_string(Mix.Project.config[:app]) <> param
+  end
+  def pofile(_app, lang) do
+    Path.join(popath(), "#{lang}.po")
+  end
+  def pot_file(app) do
+    Path.join(popath(), "#{app}.pot")
+  end
+  def put_dets(s, reference) do
+    app_pot_db = get_app(".pot_db")
+    {:ok, dets} = :dets.open_file(app_pot_db, [])
+    k = s
+    case :dets.lookup(dets, k) do
+      [] -> :dets.insert(dets, {k, [reference]})
+      [{^k, v}] ->
+        :dets.insert(dets, {k, [reference | v]})
+    end
+    :dets.close(dets)
+  end
+  def relative(file, path) do
+    Path.relative_to(file, path)
+  end
+  @doc """
+  ~T is detect to translate target string.
+  """
+  defmacro sigil_T({:<<>>, _line, [string]}, []) when is_binary(string) do
+    binary = Macro.unescape_string(string)
+    quote do: txt(unquote(binary))
+  end
+  defmacro txt(s) do
+    r = __CALLER__
+    path = System.get_env("PWD")
+    app = get_app()
+    put_dets(s, %{line: r.line, file: relative(r.file, path), function: r.function })
+    quote do: Exgettext.Runtime.gettext(unquote(app), unquote(s))
+  end
+
+  defmacro txt2(s, lang) do
+    app = get_app()
+    quote do
+      Exgettext.Runtime.gettext(unquote(app), unquote(s), unquote(lang))
+    end
+  end
+end
+defmodule Exgettext.Runtime do
+  def basedir() do
+    "lang"
+  end
+  def mofile(app, lang) do
+    Path.join("#{basedir()}", "#{lang}", "#{app}.exmo")
+  end
+  def getpath(app, lang) do
+    mofile(app, lang)
   end
   def locale_to_lang("C") do
     "en"
@@ -30,29 +79,8 @@ defmodule Exgettext do
   def getlang() do
     locale_to_lang(System.get_env("LANG"))
   end
-  def encode(s) do
-    #:unicode.characters_to_list(s, :unicode)
-    s
-  end
-  def put_dets(s, reference) do
-    app_pot_db = get_app(".pot_db")
-    {:ok, dets} = :dets.open_file(app_pot_db, [])
-    k = encode(s)
-    case :dets.lookup(dets, k) do
-      [] -> :dets.insert(dets, {k, [reference]})
-      [{^k, v}] ->
-        :dets.insert(dets, {k, [reference | v]})
-    end
-    :dets.close(dets)
-  end
-  def relative(file, path) do
-    Path.relative_to(file, path)
-  end
-  def getpath(lang) do
-    mofile(get_app(), lang)
-  end
-  def gettext(key, lang) do
-    dets_file = getpath(lang)
+  def gettext(app, key, lang) do
+    dets_file = getpath(app, lang)
     case :dets.open_file(dets_file) do
       {:ok, dets} ->
         r = case :dets.lookup(dets, key) do
@@ -67,24 +95,9 @@ defmodule Exgettext do
         key
     end
   end
-  def gettext(key) do
-    gettext(key, getlang())
+  def gettext(app, key) do
+    gettext(app, key, getlang())
   end
-  @doc """
-  ~T is detect to translate target string.
-  """
-  defmacro sigil_T({:<<>>, _line, [string]}, []) when is_binary(string) do
-    binary = Macro.unescape_string(string)
-    quote do: txt(unquote(binary))
-  end
-  defmacro txt(s) do
-    r = __CALLER__
-    path = System.get_env("PWD")
-    put_dets(s, %{line: r.line, file: relative(r.file, path), function: r.function })
-    quote do: Exgettext.gettext(unquote(s))
-  end
-
-  defmacro txt2(s, lang), do: quote do: Exgettext.gettext(unquote(s), unquote(lang))
 end
 defmodule Exgettext.Tool do
   def get_app() do
@@ -267,19 +280,33 @@ defmodule Exgettext.Tool do
                  IO.binwrite(fh, "msgstr \"\"\n")
              end)
   end
-  def clean(_app) do
-    pot_db = get_app(:pot_db)
-    IO.puts "clean #{pot_db}\n"
-    {:ok, dets} = :dets.open_file(pot_db, [])
-    :dets.delete_all_objects(dets)
-    :dets.close(dets)
+  def potdb(app) do
+    "#{app}.pot_db"
   end
-  def xgettext(_app) do
-    pot_db = get_app(:pot_db)
-    pot = get_app(:pot)
+  def clean(app) do
+    pot_db = potdb(app)
+    IO.puts "clean #{pot_db}\n"
+    case :dets.open_file(pot_db, []) do
+      {:ok, dets} -> 
+        :dets.delete_all_objects(dets)
+        :dets.close(dets)
+      err -> 
+        IO.puts "clean #{err}\n"
+        :ok
+    end
+  end
+
+  def xgettext(app) do
+    pot_db = potdb(app)
+    pot = Exgettext.pot_file(app)
     IO.puts "xgettext #{pot_db} --output=#{pot}\n"
+    :ok = File.mkdir_p(Exgettext.popath())
     {:ok, dets} = :dets.open_file(pot_db, [])
-    r = :dets.foldl(fn(e, acc) -> [e|acc] end, [], dets) |>
+    r = :dets.foldl(fn({k, v}, acc) when not(is_atom(k)) -> 
+                        [{k, v}|acc] 
+                      ({k,v}, acc) -> 
+                        acc
+                    end, [], dets) |>
       Enum.sort( fn({_k1, v1}, {_k2, v2}) -> v1 < v2 end)
     r2 = r |> Enum.map(fn({k, v}) -> km = line_split(k)
                       %{msgid: km, references: v}
@@ -295,7 +322,8 @@ defmodule Exgettext.Tool do
                       } end)
     {:ok, fh} = File.open(pot, [:write])
     output(fh, r3)
-    s = doc()
+    s = doc(~r/Sample/)
+    :io.format("~p~n", [s])
     output(fh, s)
     File.close(fh)
     :ok

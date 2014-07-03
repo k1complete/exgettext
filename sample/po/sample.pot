@@ -1,0 +1,14 @@
+#: lib/sample.ex:20 lib/sample.ex:9 
+msgid ""
+"Hello, World"
+msgstr ""
+#. TRANSLATORS: Elixir.Sample2 Summary
+#: Elixir.Sample2:13 
+msgid ""
+"sample module for exgettext library2\n"
+msgstr ""
+#. TRANSLATORS: Elixir.Sample Summary
+#: Elixir.Sample:2 
+msgid ""
+"sample module for exgettext library\n"
+msgstr ""
