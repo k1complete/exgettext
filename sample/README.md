@@ -3,7 +3,7 @@ Sample
 
 
 
-    bash-3.2$ env LANG=ja iex -S mix
+    bash-3.2$ env LANG=C iex -S mix
     Warning: could not run smart terminal, falling back to dumb one
     Interactive Elixir (0.14.0-dev) - press Ctrl+C to exit (type h() ENTER for help)
     iex(1)> Sample.hello
