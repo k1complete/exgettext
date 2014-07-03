@@ -1,8 +1,8 @@
 defmodule Exgettext do
   defmacro __using__(_opt \\ :dummy ) do
-    :io.format("- ~p~n", [__CALLER__.module])
+#    :io.format("- ~p~n", [__CALLER__.module])
     module = __CALLER__.module
-    put_dets(:module, %{module: module })
+    put_dets(:module, module)
     :ok
   end
   def popath() do
@@ -197,11 +197,11 @@ defmodule Exgettext.Tool do
         end
     Enum.reverse r
   end
-  def modules(criteria) do
-    :code.all_loaded |> Enum.filter_map fn({m, beam}) ->
-                                            criteria.({m, beam})
-                                        end,
-                                        fn({m, _x}) -> m end
+  def modules(app) do
+    pot_db = potdb(app)
+    {:ok, dets} = :dets.open_file(pot_db, [])
+    [{:module, r}] = :dets.lookup(dets, :module)
+    r
   end
   def moduledoc(modules) do
     result =modules |> Enum.map fn(x) ->
@@ -247,9 +247,8 @@ defmodule Exgettext.Tool do
                         end 
     Enum.filter(r, fn(x) -> is_map(x) and is_binary(x.msgid) end) |> Enum.sort &(&1 < &2)
   end
-  def doc(c \\ ~r/#{__MODULE__}/) do
-    criteria = fn({m, _beam}) ->  Regex.match? c, Atom.to_string(m) end
-    mod = modules(criteria)
+  def doc(c) do
+    mod = modules(c)
     m = moduledoc(mod)
     f = funcdoc(mod)
     o = f ++ m|> Enum.sort &( &1.module < &2.module && &1.name < &2.name )
@@ -304,7 +303,7 @@ defmodule Exgettext.Tool do
     {:ok, dets} = :dets.open_file(pot_db, [])
     r = :dets.foldl(fn({k, v}, acc) when not(is_atom(k)) -> 
                         [{k, v}|acc] 
-                      ({k,v}, acc) -> 
+                      ({_k,_v}, acc) -> 
                         acc
                     end, [], dets) |>
       Enum.sort( fn({_k1, v1}, {_k2, v2}) -> v1 < v2 end)
@@ -322,8 +321,8 @@ defmodule Exgettext.Tool do
                       } end)
     {:ok, fh} = File.open(pot, [:write])
     output(fh, r3)
-    s = doc(~r/Sample/)
-    :io.format("~p~n", [s])
+    s = doc(app)
+#    :io.format("~p~n", [s])
     output(fh, s)
     File.close(fh)
     :ok
