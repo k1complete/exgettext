@@ -54,11 +54,11 @@ defmodule Exgettext do
   end
 end
 defmodule Exgettext.Runtime do
-  def basedir() do
-    "lang"
+  def basedir(app) do
+    :code.lib_dir(binary_to_atom(app))
   end
   def mofile(app, lang) do
-    Path.join("#{basedir()}", "#{lang}", "#{app}.exmo")
+    Path.join([basedir(app), "lang", "#{lang}", "#{app}.exmo"])
   end
   def getpath(app, lang) do
     mofile(app, lang)

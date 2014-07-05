@@ -1,7 +1,8 @@
 defmodule Mix.Tasks.L10n.Msginit do
   use Mix.Task
   def run(_opt) do
-    Mix.Shell.Process.cmd("msginit")
+    podir = Exgettext.popath()
+    Mix.Shell.Process.cmd("cd #{podir}; msginit")
   end
 end
 defmodule Mix.Tasks.L10n.Msgfmt do
@@ -9,10 +10,10 @@ defmodule Mix.Tasks.L10n.Msgfmt do
   def run(_opt) do
     config = Mix.Project.config()
     app = to_string(config[:app])
-    lang = Exgettext.getlang()
+    lang = Exgettext.Runtime.getlang()
     Mix.Shell.IO.info("msgfmt for #{app}")
     pofile = Exgettext.pofile(app, lang)
-    mofile = Exgettext.mofile(app, lang)
+    mofile = Exgettext.Runtime.mofile(app, lang)
     dir = Path.dirname(mofile)
     Mix.Shell.IO.info("#{pofile} #{mofile}")
     :ok = File.mkdir_p(dir)
@@ -24,7 +25,7 @@ defmodule Mix.Tasks.L10n.Msgmerge do
   def run(_opt) do
     config = Mix.Project.config()
     app = to_string(config[:app])
-    lang = Exgettext.getlang()
+    lang = Exgettext.Runtime.getlang()
     pofile = Exgettext.pofile(app, lang)
     cmd = "msgmerge -o #{lang}.pox #{pofile} #{app}.pot"
     Mix.Shell.IO.info(cmd)
