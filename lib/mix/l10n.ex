@@ -27,7 +27,8 @@ defmodule Mix.Tasks.L10n.Msgmerge do
     app = to_string(config[:app])
     lang = Exgettext.Runtime.getlang()
     pofile = Exgettext.pofile(app, lang)
-    cmd = "msgmerge -o #{lang}.pox #{pofile} #{app}.pot"
+    potfile = Exgettext.pot_file(app)
+    cmd = "msgmerge -o #{lang}.pox #{pofile} #{potfile}"
     Mix.Shell.IO.info(cmd)
     case Mix.Shell.IO.cmd(cmd) do
       0 -> 0

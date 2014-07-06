@@ -17,7 +17,7 @@ defmodule Sample2 do
   use Exgettext
   import Exgettext
   def hello() do
-    IO.puts ~T"Hello, World"
+    IO.puts ~T"Hello, World2"
   end
 
 end

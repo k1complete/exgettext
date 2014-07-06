@@ -10,13 +10,13 @@ exgettextはgettext()互換のpoファイルを用いたelixir用
 gettext互換ですが、exmo, pot_dbは独自形式です。poファイルが
 GNU gettext互換ですので、GNU gettextに対応したツールが使えます。
 
-|拡張子   | 意味                        | 生成コマンド      |
-|:--------|:----------------------------|:------------------|
-| pot     | POテンプレート              | l10n.xgetetxt     |
-| pot_db  | POテンプレート中間ファイル  | l10n.xgetetxt     |
-| po      | メッセージの翻訳マスタ      | l10n.msginit      |
-| pox     | poとpotをマージしたファイル | l10n.msgmerge     |
-| exmo    | poをコンパイルしたもの      | l10n.msgfmt       |
+|拡張子|意味                       |生成コマンド |パス
+|:-----|:--------------------------|:------------|:------------------------
+|pot   |POテンプレート             |l10n.xgetetxt|./po/
+|pot_db|POテンプレート中間ファイル |l10n.xgetetxt|./
+|po    |メッセージの翻訳マスタ     |l10n.msginit |./po/
+|pox   |poとpotをマージしたファイル|l10n.msgmerge|./po/
+|exmo  |poをコンパイルしたもの     |l10n.msgfmt  |lib_dir(app)/lang/$(lang)/
 
 
 * l10n.xgettext: プログラムソースからpotを生成
@@ -47,13 +47,13 @@ GNU gettextをインストールしておきます。exgettextはmsginit, msgmer
 * 地域化が必要なリテラル文字列を~T() sigil でマークアップ
   します。
 
-* mix l10n.xgettextタスクにより、app.potファイルを生成します。app.potファイ
-  ルには、以下が格納されます。
+* mix l10n.xgettextタスクにより、app.potファイルを生成します。
+  po/app.potファイルには、以下が格納されます。
 
   @moduledoc, @doc,~T()
 
-  現在の実装ではは、mix l10n.xgettextにより内部的にmix cleanが実行され
-  コンパイルしなおしになります。
+  現在の実装ではは、mix l10n.xgettextにより内部的にmix cleanが
+  実行され、コンパイルしなおしになります。
 
 * リリースします。
 
@@ -63,10 +63,13 @@ GNU gettextをインストールしておきます。exgettextはmsginit, msgmer
 翻訳チーム
 -----------------------------------------------------
 
-* パッケージを入手し、app.potファイルを確認します。
+* パッケージを入手し、po/app.potファイルを確認します。
 
-* まだ翻訳したい言語のpoファイルが無い場合、poファイルを作成する
-  ために、 mix l10n.msginit を実行します。po/ja.po が作成されます。
+* まだ翻訳したい言語のpoファイルが無い場合、poファイルを作成するために、
+  env LANG=ja mix l10n.msginit を実行します。po/ja.po が作成されます。
+  mix l10n.msginitでは環境変数LANGを参照してどの言語へローカライズしよ
+  うとしているかを判断します。内部ではGNU gettextのmsginitが呼び出され
+  ます。
 
 * 既にpo/ja.poがある場合で、パッケージのバージョンアップなどでメッセー
   ジを翻訳仕直す場合はmix l10n.msgmerge を実行します。内部では、GNU

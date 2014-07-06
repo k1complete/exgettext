@@ -6,7 +6,7 @@ defmodule Exgettext do
     :ok
   end
   def popath() do
-    "po"
+    Path.join("priv", "po")
   end
   def get_app( param \\ "" ) do
     to_string(Mix.Project.config[:app]) <> param
@@ -58,7 +58,7 @@ defmodule Exgettext.Runtime do
     :code.lib_dir(binary_to_atom(app))
   end
   def mofile(app, lang) do
-    Path.join([basedir(app), "lang", "#{lang}", "#{app}.exmo"])
+    Path.join([basedir(app), "priv", "lang", "#{lang}", "#{app}.exmo"])
   end
   def getpath(app, lang) do
     mofile(app, lang)
