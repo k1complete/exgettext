@@ -8,7 +8,7 @@ defmodule Exgettext do
   def popath(suffix \\ "") do
     Path.join(["priv", "po", suffix])
   end
-  def get_app() do
+  defp get_app() do
     Mix.Project.config[:app]
   end
   def poxfile(_app, lang) do
@@ -20,7 +20,7 @@ defmodule Exgettext do
   def pot_file(app) do
     popath("#{app}.pot")
   end
-  def put_dets(s, reference) do
+  defp put_dets(s, reference) do
     app_pot_db = "#{get_app()}.pot_db"
     {:ok, dets} = :dets.open_file(app_pot_db, [])
     k = s
@@ -31,7 +31,7 @@ defmodule Exgettext do
     end
     :dets.close(dets)
   end
-  def relative(file, path) do
+  defp relative(file, path) do
     Path.relative_to(file, path)
   end
   @doc """
