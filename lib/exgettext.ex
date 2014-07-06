@@ -5,20 +5,23 @@ defmodule Exgettext do
     put_dets(:module, module)
     :ok
   end
-  def popath() do
-    Path.join("priv", "po")
+  def popath(suffix \\ "") do
+    Path.join(["priv", "po", suffix])
   end
-  def get_app( param \\ "" ) do
-    to_string(Mix.Project.config[:app]) <> param
+  def get_app() do
+    Mix.Project.config[:app]
+  end
+  def poxfile(_app, lang) do
+    popath("#{lang}.pox")
   end
   def pofile(_app, lang) do
-    Path.join(popath(), "#{lang}.po")
+    popath("#{lang}.po")
   end
   def pot_file(app) do
-    Path.join(popath(), "#{app}.pot")
+    popath("#{app}.pot")
   end
   def put_dets(s, reference) do
-    app_pot_db = get_app(".pot_db")
+    app_pot_db = "#{get_app()}.pot_db"
     {:ok, dets} = :dets.open_file(app_pot_db, [])
     k = s
     case :dets.lookup(dets, k) do
@@ -55,7 +58,7 @@ defmodule Exgettext do
 end
 defmodule Exgettext.Runtime do
   def basedir(app) do
-    :code.lib_dir(binary_to_atom(app))
+    :code.lib_dir(app)
   end
   def mofile(app, lang) do
     Path.join([basedir(app), "priv", "lang", "#{lang}", "#{app}.exmo"])
@@ -100,18 +103,15 @@ defmodule Exgettext.Runtime do
   end
 end
 defmodule Exgettext.Tool do
-  def get_app() do
-    Mix.Project.config[:app]
-  end
-  def get_app(type) do
-    app = get_app()
-    "#{app}.#{type}"
-  end
   def escape(s) do
-    s0 = Regex.replace(~r/\\/, s,~S(\\\\))
-    s1 = Regex.replace(~r/\t/, s0, ~S(\\t))
-    s2 = Regex.replace(~r/\n/, s1, ~S(\\n))
-    s3 = Regex.replace(~r/\"/, s2,~S(\\\"))
+    s3 = for <<c <- s>>, into: "" do
+      case c do
+        ?\\ -> "\\\\"
+        ?\t -> "\\t"
+        ?\n -> "\\n"
+        _ -> <<c>>
+      end
+    end
     s3
   end
   def parse(_fh, :eof, ac) do
