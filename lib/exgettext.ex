@@ -149,7 +149,7 @@ defmodule Exgettext.Tool do
     :eof
   end
   def skip_comment(fh, r) do
-    case Regex.named_captures(~r"^(?<m>\s*|\#.*)$", r) do
+    case Regex.named_captures(~r/^(?<m>\s*|\#.*)$/, r) do
       nil -> r
       %{"m" => _m} -> 
         r = IO.binread(fh, :line)
@@ -161,7 +161,7 @@ defmodule Exgettext.Tool do
     %{line: :eof, str: ac}
   end                                   
   def get_strline(fh, r, ac) do
-    case Regex.named_captures ~r'^\s*"(?<str>.*)"$', r do
+    case Regex.named_captures ~r/^\s*"(?<str>.*)"$/, r do
       nil -> %{line: r, str: ac}
       %{"str" => str} ->
         r = IO.binread(fh, :line)
@@ -169,12 +169,12 @@ defmodule Exgettext.Tool do
     end
   end
   def get_msgid(fh, r) do
-    %{"str" => str} = Regex.named_captures ~r'^\s*msgid\s+"(?<str>.*)"$', r
+    %{"str" => str} = Regex.named_captures ~r/^\s*msgid\s+"(?<str>.*)"$/, r
     r = IO.binread(fh, :line)
     get_strline(fh, r, str)
   end
   def get_msgstr(fh, r) do
-    %{"str" => str} = Regex.named_captures ~r'^\s*msgstr\s+"(?<str>.*)"$', r
+    %{"str" => str} = Regex.named_captures ~r/^\s*msgstr\s+"(?<str>.*)"$/, r
     r = IO.binread(fh, :line)
     get_strline(fh, r, str)
   end
