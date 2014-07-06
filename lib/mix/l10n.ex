@@ -8,8 +8,7 @@ end
 defmodule Mix.Tasks.L10n.Msgfmt do
   use Mix.Task
   def run(_opt) do
-    config = Mix.Project.config()
-    app = to_string(config[:app])
+    app = Mix.Project.config[:app]
     lang = Exgettext.Runtime.getlang()
     Mix.Shell.IO.info("msgfmt for #{app}")
     pofile = Exgettext.pofile(app, lang)
