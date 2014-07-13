@@ -181,13 +181,23 @@ defmodule Exgettext.Introspection do
     IO.puts IEx.color(:eval_error, "No #{type} for #{for} was found")
   end
 
+  def conv_other(app, doc) do
+    case Exgettext.Runtime.gettext(app, doc) do
+      ^doc -> Exgettext.Runtime.gettext(:"l10n_#{app}", doc)
+      conv -> conv
+    end
+  end
+  def get_app(mod) do
+    :code.ensure_loaded(mod)
+    {:file, r} = :code.is_loaded(mod)
+    binary_to_atom(Path.basename(Path.dirname(Path.dirname(r))))
+  end
   def conv_doc(mod, {{func, arity}, line, type, args, doc}) do
-    {:ok, app}  = :application.get_application(mod)
-    doc = Exgettext.Runtime.gettext(app, doc)
+    doc = conv_doc(mod, doc)
     {{func, arity}, line, type, args, doc}
   end
-  def conv_doc(mod, doc) do
-    {:ok, app}  = :application.get_application(mod)
-    Exgettext.Runtime.gettext(app, doc)
+  def conv_doc(mod, doc) when is_binary(doc) do
+    app = get_app(mod)
+    conv_other(app, doc)
   end
 end

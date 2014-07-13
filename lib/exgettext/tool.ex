@@ -105,7 +105,12 @@ defmodule Exgettext.Tool do
   def modules(app) when is_binary(app) do
     pot_db = potdb(app)
     {:ok, dets} = :dets.open_file(pot_db, [])
-    [{:module, r}] = :dets.lookup(dets, :module)
+    r =  case :dets.lookup(dets, :module) do
+           [{:module, r}] -> r
+           other ->
+             []
+         end
+    :io.format("modules ~p", [r])
     r
   end
   def modules(app) when is_atom(app) do
