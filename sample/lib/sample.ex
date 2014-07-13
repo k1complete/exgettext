@@ -5,6 +5,9 @@ defmodule Sample do
   """
   use Exgettext
   import Exgettext
+  @doc """
+  Hello is hello function
+  """
   def hello() do
     IO.puts ~T"Hello, World"
   end

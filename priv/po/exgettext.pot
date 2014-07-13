@@ -1,0 +1,15 @@
+#: lib/l10test.ex:7 
+msgid ""
+"Hello World!\n"
+"A what is this!"
+msgstr ""
+#: lib/l10test.ex:8 
+msgid ""
+"Hello World!\n"
+"A \"what\" \\is \tthis!\n"
+msgstr ""
+#: lib/l10test.ex:10 lib/l10test.ex:9 
+msgid ""
+"Hello World!\n"
+"A what is this!\n"
+msgstr ""
