@@ -4,7 +4,7 @@ defmodule Exgettext.Helper do
     Exgettext.Introspection.h(IEx.Helpers)
     dont_display_result
   end
-  @h_modules [__MODULE__, Kernel, Kernel.SpecialForms]
+  @h_modules [__MODULE__, IEx.Helpers, Kernel, Kernel.SpecialForms]
 
   defmacro h({:/, _, [call, arity]} = other) do
     args =
