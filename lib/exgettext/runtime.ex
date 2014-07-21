@@ -1,6 +1,9 @@
 defmodule Exgettext.Runtime do
   def basedir(app) do
-    :code.lib_dir(app)
+    case :code.lib_dir(app) do
+      {:error, _other} -> ""
+      r -> r
+    end
   end
   def mofile(app, lang) do
     Path.join([basedir(app), "priv", "lang", "#{lang}", "#{app}.exmo"])

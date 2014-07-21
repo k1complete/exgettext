@@ -107,8 +107,7 @@ defmodule Exgettext.Tool do
     {:ok, dets} = :dets.open_file(pot_db, [])
     r =  case :dets.lookup(dets, :module) do
            [{:module, r}] -> r
-           _other ->
-             []
+           _other -> []
          end
     :io.format("modules ~p", [r])
     r
@@ -116,8 +115,10 @@ defmodule Exgettext.Tool do
   def modules(app) when is_atom(app) do
     :application.load(app)
     case :application.get_key(app, :modules) do
-      {:ok, modules} -> modules
-      r -> :io.format("~p input ~p~n", [r, app])
+      {:ok, mods} -> mods
+      r -> 
+        :error_logger.error_report([{:get_key, [app, :module]}, 
+                                    {:result, r}])
         []
     end
   end
@@ -166,7 +167,6 @@ defmodule Exgettext.Tool do
     Enum.filter(r, fn(x) -> is_map(x) and is_binary(x.msgid) end) |> Enum.sort &(&1 < &2)
   end
   def doc(c) do
-    :io.format "[~p]~n", [c]
     mod = modules(c)
     m = moduledoc(mod)
     f = funcdoc(mod)
