@@ -1,5 +1,34 @@
 defmodule Mix.Tasks.L10n.Msgfmt do
   use Mix.Task
+  @shortdoc "run msgfmt"
+  @moduledoc """
+  create elixir message object for current project.
+
+  ## Synopsis
+
+  ```
+      mix l10n.msgfmt
+  ```
+
+  ## Environment
+  
+    * LANG -- localize target language for `Language`
+
+  ## Mix Environment
+
+    * project[:app] -- basename for portable object file.
+
+  ## Files
+
+  ### Input
+
+    * priv/po/`LANG`.po -- portable object for translation working.
+ 
+  ### Output
+
+    * priv/lang/`LANG`/`app`.exmo -- message object dets.
+
+  """
   def run(_opt) do
     app = Mix.Project.config[:app]
     lang = Exgettext.Runtime.getlang()

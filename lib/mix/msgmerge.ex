@@ -1,5 +1,6 @@
 defmodule Mix.Tasks.L10n.Msgmerge do
   use Mix.Task
+  @shortdoc "run msgmerge"
   def run(_opt) do
     config = Mix.Project.config()
     app = to_string(config[:app])

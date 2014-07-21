@@ -112,7 +112,8 @@ defmodule Exgettext.Tool do
     :io.format("modules ~p", [r])
     r
   end
-  def modules(app) when is_atom(app) do
+  def modules_app(app) when is_binary(app) do
+    app = String.to_atom(app)
     :application.load(app)
     case :application.get_key(app, :modules) do
       {:ok, mods} -> mods
@@ -167,7 +168,7 @@ defmodule Exgettext.Tool do
     Enum.filter(r, fn(x) -> is_map(x) and is_binary(x.msgid) end) |> Enum.sort &(&1 < &2)
   end
   def doc(c) do
-    mod = modules(c)
+    mod = modules_app(c)
     m = moduledoc(mod)
     f = funcdoc(mod)
     o = f ++ m|> Enum.sort &( &1.module < &2.module && &1.name < &2.name )
@@ -215,7 +216,7 @@ defmodule Exgettext.Tool do
   end
 
   def xgettext(app, opt \\ []) do
-    apps = [app | Enum.map(opt, &(String.to_atom(&1)))]
+    apps = [app | Enum.map(opt, &(&1))]
     pot_db = potdb(app)
     pot = Exgettext.pot_file(app)
     IO.puts "xgettext #{pot_db} --output=#{pot}\n"
@@ -243,6 +244,7 @@ defmodule Exgettext.Tool do
     output(fh, r3)
     Enum.map(apps,
              fn(x) ->
+               :io.format("doc ~p~n", [x])
                s = doc(x)
                output(fh, s)
              end)
