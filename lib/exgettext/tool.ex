@@ -107,7 +107,7 @@ defmodule Exgettext.Tool do
     {:ok, dets} = :dets.open_file(pot_db, [])
     r =  case :dets.lookup(dets, :module) do
            [{:module, r}] -> r
-           other ->
+           _other ->
              []
          end
     :io.format("modules ~p", [r])
@@ -215,7 +215,7 @@ defmodule Exgettext.Tool do
   end
 
   def xgettext(app, opt \\ []) do
-    apps = [app | Enum.map(opt, &(binary_to_atom(&1)))]
+    apps = [app | Enum.map(opt, &(String.to_atom(&1)))]
     pot_db = potdb(app)
     pot = Exgettext.pot_file(app)
     IO.puts "xgettext #{pot_db} --output=#{pot}\n"

@@ -190,7 +190,7 @@ defmodule Exgettext.Introspection do
   def get_app(mod) do
     :code.ensure_loaded(mod)
     {:file, r} = :code.is_loaded(mod)
-    binary_to_atom(Path.basename(Path.dirname(Path.dirname(r))))
+    String.to_atom(Path.basename(Path.dirname(Path.dirname(r))))
   end
   def conv_doc(mod, {{func, arity}, line, type, args, doc}) do
     doc = conv_doc(mod, doc)
