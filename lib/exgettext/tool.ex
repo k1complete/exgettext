@@ -204,13 +204,13 @@ defmodule Exgettext.Tool do
   end
   def clean(app) do
     pot_db = potdb(app)
-    IO.puts "clean #{pot_db}\n"
+    Mix.shell.info "clean #{pot_db}\n"
     case :dets.open_file(pot_db, []) do
       {:ok, dets} -> 
         :dets.delete_all_objects(dets)
         :dets.close(dets)
       err -> 
-        IO.puts "clean #{err}\n"
+        Mix.shell.info "clean #{err}\n"
         :ok
     end
   end
@@ -218,9 +218,9 @@ defmodule Exgettext.Tool do
   def xgettext(app, opt \\ []) do
     apps = [app | Enum.map(opt, &(&1))]
     pot_db = potdb(app)
-    pot = Exgettext.pot_file(app)
-    IO.puts "xgettext #{pot_db} --output=#{pot}\n"
-    :ok = File.mkdir_p(Exgettext.popath())
+    pot = Exgettext.Util.pot_file(app)
+    Mix.shell.info "xgettext #{pot_db} --output=#{pot}"
+    :ok = File.mkdir_p(Exgettext.Util.popath())
     {:ok, dets} = :dets.open_file(pot_db, [])
     r = :dets.foldl(fn({k, v}, acc) when not(is_atom(k)) -> 
                         [{k, v}|acc] 
@@ -244,7 +244,7 @@ defmodule Exgettext.Tool do
     output(fh, r3)
     Enum.map(apps,
              fn(x) ->
-               :io.format("doc ~p~n", [x])
+               Mix.shell.info("collecting document for #{x}")
                s = doc(x)
                output(fh, s)
              end)

@@ -31,10 +31,9 @@ defmodule Mix.Tasks.L10n.Msginit do
 
   """
   def run(_opt) do
-    podir = Exgettext.popath()
-    Mix.Shell.IO.info(podir)
+    podir = Exgettext.Util.popath()
     cmd = "cd #{podir}; msginit"
-    Mix.Shell.IO.info(cmd)
+    Mix.shell.info(cmd)
     Mix.Shell.Process.cmd(cmd)
   end
 end

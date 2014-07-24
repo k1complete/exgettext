@@ -4,20 +4,9 @@ defmodule Exgettext do
     put_dets(:module, module)
     :ok
   end
-  def popath(suffix \\ "") do
-    Path.join(["priv", "po", suffix])
-  end
+
   defp get_app() do
     Mix.Project.config[:app]
-  end
-  def poxfile(_app, lang) do
-    popath("#{lang}.pox")
-  end
-  def pofile(_app, lang) do
-    popath("#{lang}.po")
-  end
-  def pot_file(app) do
-    popath("#{app}.pot")
   end
   defp put_dets(s, reference) do
     app_pot_db = "#{get_app()}.pot_db"
@@ -30,13 +19,11 @@ defmodule Exgettext do
     end
     :dets.close(dets)
   end
-  defp relative(file, path) do
-    Path.relative_to(file, path)
-  end
   @doc """
   ~T is detect to translate target string.
   """
   defmacro sigil_T({:<<>>, _line, [string]}, []) when is_binary(string) do
+#  def sigil_T(string, []) when is_binary(string) do
     binary = Macro.unescape_string(string)
     quote do: txt(unquote(binary))
   end
@@ -44,7 +31,7 @@ defmodule Exgettext do
     r = __CALLER__
     path = System.get_env("PWD")
     app = get_app()
-    put_dets(s, %{line: r.line, file: relative(r.file, path), function: r.function })
+    put_dets(s, %{line: r.line, file: Exgettext.Util.relative(r.file, path), function: r.function })
     quote do: Exgettext.Runtime.gettext(unquote(app), unquote(s))
   end
 
