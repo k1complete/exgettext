@@ -44,7 +44,7 @@ defmodule Mix.Tasks.ExgettextTest do
     File.write!("priv/po/#{loc}.po", contents2)
     Mix.Tasks.L10n.Msgmerge.run []
     rec = "msgmerge -o priv/po/#{loc}.pox priv/po/#{loc}.po priv/po/exgettext_test.pot"
-    assert_received {:mix_shell, :info, [ rec ]}
+    assert_received {:mix_shell, :info, [ ^rec ]}
     assert File.regular? "priv/po/#{loc}.pox"
     contents3 = File.read!("priv/po/#{loc}.pox")
     #      Mix.Shell.IO.info(contents3)
