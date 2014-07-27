@@ -1,47 +1,46 @@
-#: lib/l10test.ex:7 
-msgid ""
-"Hello World!\n"
-"A what is this!"
-msgstr ""
-#: lib/l10test.ex:8 
-msgid ""
-"Hello World!\n"
-"A \"what\" \\is \tthis!\n"
-msgstr ""
-#: lib/l10test.ex:10 lib/l10test.ex:9 
-msgid ""
-"Hello World!\n"
-"A what is this!\n"
-msgstr ""
 #. TRANSLATORS: defmacro Exgettext.sigil_T(arg1, list2)
-#: Elixir.Exgettext.sigil_T/2:39 
+#: lib/exgettext.ex:25 
 msgid ""
 "~T is detect to translate target string.\n"
 msgstr ""
+#. TRANSLATORS: defmacro Exgettext.Helper.h(other)
+#: lib/exgettext/helpler.ex:18 
+msgid ""
+"Prints the localized  documentation for the given module or \n"
+"for the given function/arity pair.\n"
+"if there is not localized document, prints original documentation.\n"
+msgstr ""
 #. TRANSLATORS: def Exgettext.Introspection.h(modules, function, arity)
-#: Elixir.Exgettext.Introspection.h/3:82 
+#: lib/exgettext/introspection.ex:82 
 msgid ""
 "Documentation for the given function and arity in the list of modules.\n"
 msgstr ""
 #. TRANSLATORS: def Exgettext.Introspection.h(modules, function)
-#: Elixir.Exgettext.Introspection.h/2:40 
+#: lib/exgettext/introspection.ex:40 
 msgid ""
 "Docs for the given function, with any arity, in any of the modules.\n"
 msgstr ""
+#. TRANSLATORS: def Exgettext.Helper.h()
+#: lib/exgettext/helpler.ex:7 
+msgid ""
+"Prints the localized documentation for IEx.Helpers.\n"
+"if there is not localized document, prints original documentation.\n"
+msgstr ""
 #. TRANSLATORS: Elixir.Mix.Tasks.L10n.Xgettext Summary
-#: Elixir.Mix.Tasks.L10n.Xgettext:1 
+#: lib/mix/xgettext.ex:1 
 msgid ""
 "create portable object template for current project.\n"
 "\n"
 "## Synopsis\n"
 "\n"
 "```\n"
-"    mix l10n.xgettext [app...]\n"
+"    mix l10n.xgettext [--app src_root]...\n"
 "```\n"
 "\n"
 "## Arguments\n"
 "\n"
-"  * [app...] -- addional `app` for correcting @moduledoc, @doc\n"
+"  * --app srcroot  -- addional `app` and src_root\n"
+"                      for correcting @moduledoc, @doc\n"
 "\n"
 "## Environment\n"
 "\n"
@@ -64,7 +63,7 @@ msgid ""
 "\n"
 msgstr ""
 #. TRANSLATORS: Elixir.Mix.Tasks.L10n.Msginit Summary
-#: Elixir.Mix.Tasks.L10n.Msginit:1 
+#: lib/mix/msginit.ex:1 
 msgid ""
 "run msginit in GNU gettext utility for current project.\n"
 "\n"
@@ -95,7 +94,7 @@ msgid ""
 "\n"
 msgstr ""
 #. TRANSLATORS: Elixir.Mix.Tasks.L10n.Msgfmt Summary
-#: Elixir.Mix.Tasks.L10n.Msgfmt:1 
+#: lib/mix/msgfmt.ex:1 
 msgid ""
 "create elixir message object for current project.\n"
 "\n"

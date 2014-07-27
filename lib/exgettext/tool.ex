@@ -109,11 +109,10 @@ defmodule Exgettext.Tool do
            [{:module, r}] -> r
            _other -> []
          end
-    :io.format("modules ~p", [r])
+#    :io.format("modules ~p", [r])
     r
   end
-  def modules_app(app) when is_binary(app) do
-    app = String.to_atom(app)
+  def modules_app(app) when is_atom(app) do
     :application.load(app)
     case :application.get_key(app, :modules) do
       {:ok, mods} -> mods
@@ -123,33 +122,39 @@ defmodule Exgettext.Tool do
         []
     end
   end
-  def moduledoc(modules) do
-    result =modules |> Enum.map fn(x) ->
-                                    case Code.get_docs(x, :moduledoc) do
-                                      nil -> nil
-                                      {l, d} ->
-                                        ref = %{file: "#{x}",
-                                                line: l}
-                                        %{module: x, 
-                                          name: "", 
-                                          msgid: d,
-                                          references: [ref],
-                                          comment: "#{x} Summary"
-                                         }
-                                    end
-                                end
+  def module_to_file(module, src_root) do
+    file = module.__info__(:compile)[:source]
+    Exgettext.Util.relative(file, src_root)
+  end
+  def moduledoc(modules, src_root) do
+    result = modules |> 
+      Enum.map fn(x) ->
+                 case Code.get_docs(x, :moduledoc) do
+                   nil -> nil
+                   {l, d} ->
+                     ref = %{file: module_to_file(x, src_root),
+                             line: l}
+                     %{module: x, 
+                       name: "", 
+                       msgid: d,
+                       references: [ref],
+                       comment: "#{x} Summary"
+                      }
+                 end
+    end
     Enum.filter(result, fn(x) -> is_map(x) and is_binary(x.msgid) end) |> Enum.sort &(&1 < &2)
   end
-  def funcdoc(modules) do
+  def funcdoc(modules, src_root) do
     r = modules |> List.foldr [], 
                         fn(m, a) ->
                             d = Code.get_docs(m, :docs)
+                            file = module_to_file(m, src_root)
                             case d do
                                   nil -> a
                                   d -> a ++ Enum.map d, 
                                             fn(x) -> 
-                                                {{name, arity},line, type, arg, doc} = x
-                                                ref = %{file: "#{m}.#{name}/#{arity}",
+                                                {{name, _arity},line, type, arg, doc} = x
+                                                ref = %{file: file,
                                                         line: line}
                                                 com = Macro.to_string {{:".", 
                                                                         [], 
@@ -167,10 +172,11 @@ defmodule Exgettext.Tool do
                         end 
     Enum.filter(r, fn(x) -> is_map(x) and is_binary(x.msgid) end) |> Enum.sort &(&1 < &2)
   end
-  def doc(c) do
-    mod = modules_app(c)
-    m = moduledoc(mod)
-    f = funcdoc(mod)
+  def doc(app, opts) do
+    src_root = Path.expand(Keyword.get(opts, app, System.get_env("PWD")))
+    mod = modules_app(app)
+    m = moduledoc(mod, src_root)
+    f = funcdoc(mod, src_root)
     o = f ++ m|> Enum.sort &( &1.module < &2.module && &1.name < &2.name )
     Enum.map o, fn(x) -> %{x | msgid: line_split(x.msgid) } end
   end
@@ -184,7 +190,7 @@ defmodule Exgettext.Tool do
                  if ((length(m)) > 0) do
                    IO.binwrite(fh, "#: ")
                    Enum.map(m, fn(x) -> 
-                                   IO.binwrite(fh, "#{x[:file]}:#{x[:line]} ") 
+                                   IO.binwrite(fh, "#{x[:file]}:#{x[:line]} ")
                                end)
                    IO.binwrite(fh, "\n")
                  end
@@ -215,8 +221,13 @@ defmodule Exgettext.Tool do
     end
   end
 
-  def xgettext(app, opt \\ []) do
-    apps = [app | Enum.map(opt, &(&1))]
+  def xgettext(app, opt) do
+    {opt, _args, _rest} = if ([] == opt)  do
+                            {[], [], []}
+                          else
+                            OptionParser.parse(opt)
+                          end
+    apps = [String.to_atom(app) | Keyword.keys(opt)]
     pot_db = potdb(app)
     pot = Exgettext.Util.pot_file(app)
     Mix.shell.info "xgettext #{pot_db} --output=#{pot}"
@@ -245,7 +256,7 @@ defmodule Exgettext.Tool do
     Enum.map(apps,
              fn(x) ->
                Mix.shell.info("collecting document for #{x}")
-               s = doc(x)
+               s = doc(x, opt)
                output(fh, s)
              end)
     File.close(fh)

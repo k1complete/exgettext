@@ -10,9 +10,10 @@ defmodule Mix.Tasks.L10n.Msgmerge do
     poxfile = Exgettext.Util.poxfile(app,lang)
     cmd = "msgmerge -o #{poxfile} #{pofile} #{potfile}"
     Mix.shell.info(cmd)
-    case Mix.Shell.IO.cmd(cmd) do
+    case Mix.shell.cmd(cmd) do
       0 -> 0
-      r -> Mix.Shell.IO.error("failed #{r}")
+      r -> Mix.shell.error("failed #{r}")
+           r
     end
   end
 end

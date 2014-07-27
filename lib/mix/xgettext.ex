@@ -7,12 +7,13 @@ defmodule Mix.Tasks.L10n.Xgettext do
   ## Synopsis
 
   ```
-      mix l10n.xgettext [app...]
+      mix l10n.xgettext [--app src_root]...
   ```
 
   ## Arguments
  
-    * [app...] -- addional `app` for correcting @moduledoc, @doc
+    * --app srcroot  -- addional `app` and src_root
+                        for correcting @moduledoc, @doc
 
   ## Environment
   
