@@ -14,11 +14,11 @@ GNU gettext互換ですので、GNU gettextに対応したツールが使えま�
 
 |拡張子|意味                       |生成コマンド |パス
 |:-----|:--------------------------|:------------|:------------------------
-|pot   |POテンプレート             |l10n.xgetetxt|po
+|pot   |POテンプレート             |l10n.xgetetxt|priv/po/
 |pot_db|POテンプレート中間ファイル |l10n.xgetetxt|
-|po    |メッセージの翻訳マスタ     |l10n.msginit |po/
-|pox   |poとpotをマージしたファイル|l10n.msgmerge|po/
-|exmo  |poをコンパイルしたもの     |l10n.msgfmt  |lang/#{LANG}/
+|po    |メッセージの翻訳マスタ     |l10n.msginit |priv/po/
+|pox   |poとpotをマージしたファイル|l10n.msgmerge|priv/po/
+|exmo  |poをコンパイルしたもの     |l10n.msgfmt  |priv/lang/#{LANG}/
 
 
 インストールされるmixタスク

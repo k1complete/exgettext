@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: k 1\n"
-"PO-Revision-Date: 2014-07-27 15:43+0900\n"
+"PO-Revision-Date: 2014-07-27 21:42+0900\n"
 "Last-Translator: 小田 照敬 <EMAIL@ADDRESS>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
@@ -13,7 +13,7 @@ msgstr ""
 #. TRANSLATORS: defmacro Exgettext.sigil_T(arg1, list2)
 #: lib/exgettext.ex:25
 msgid "~T is detect to translate target string.\n"
-msgstr ""
+msgstr "~Tは翻訳対象の文字列を指定します。"
 
 #. TRANSLATORS: defmacro Exgettext.Helper.h(other)
 #: lib/exgettext/helpler.ex:18
@@ -22,17 +22,21 @@ msgid ""
 "for the given function/arity pair.\n"
 "if there is not localized document, prints original documentation.\n"
 msgstr ""
+"与えられたモジュールまたは関数/アリティペアのローカライズされたドキュメ\n"
+"ントを表示します。\n"
+"もし、ローカライズされたドキュメントが無い場合、オリジナルのドキュメン\n"
+"トを表示します。"
 
 #. TRANSLATORS: def Exgettext.Introspection.h(modules, function, arity)
 #: lib/exgettext/introspection.ex:82
 msgid ""
 "Documentation for the given function and arity in the list of modules.\n"
-msgstr ""
+msgstr "与えられたモジュールのリストの中の関数と引数のドキュメントを取り出します。"
 
 #. TRANSLATORS: def Exgettext.Introspection.h(modules, function)
 #: lib/exgettext/introspection.ex:40
 msgid "Docs for the given function, with any arity, in any of the modules.\n"
-msgstr ""
+msgstr "モジュールの中から与えられた関数とアリティのドキュメントを取り出します。"
 
 #. TRANSLATORS: def Exgettext.Helper.h()
 #: lib/exgettext/helpler.ex:7
@@ -40,6 +44,8 @@ msgid ""
 "Prints the localized documentation for IEx.Helpers.\n"
 "if there is not localized document, prints original documentation.\n"
 msgstr ""
+"IEx.Helperのローカライズされたドキュメントを表示します。\n"
+"もしローカライズされたドキュメントが無い場合、オリジナルのドキュメントを表示します。\n"
 
 #. TRANSLATORS: Elixir.Mix.Tasks.L10n.Xgettext Summary
 #: lib/mix/xgettext.ex:1
