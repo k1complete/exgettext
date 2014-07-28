@@ -3,6 +3,7 @@ defmodule Exgettext do
     module = __CALLER__.module
     put_dets(:module, module)
     :ok
+    quote do: import Exgettext
   end
 
   defp get_app() do

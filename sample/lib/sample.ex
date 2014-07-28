@@ -4,7 +4,7 @@ defmodule Sample do
   sample module for exgettext library
   """
   use Exgettext
-  import Exgettext
+#  import Exgettext
   @doc """
   Hello is hello function
   """

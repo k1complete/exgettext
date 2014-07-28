@@ -57,7 +57,7 @@ GNU gettextをインストールしておきます。exgettextはmsginit, msgmer
 
   @moduledoc, @doc,~T()
 
-  現在の実装ではは、mix l10n.xgettextにより内部的にmix cleanが
+  現在の実装では、mix l10n.xgettextにより内部的にmix cleanが
   実行され、コンパイルしなおしになります。
 
 * リリースします。

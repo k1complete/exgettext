@@ -1,7 +1,7 @@
 
 defmodule A do
   use Exgettext
-  import Exgettext
+#  import Exgettext
   @moduledoc """
   module doc for A
   """
