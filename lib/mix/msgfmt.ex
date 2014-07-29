@@ -2,7 +2,7 @@ defmodule Mix.Tasks.L10n.Msgfmt do
   use Mix.Task
   @shortdoc "run msgfmt"
   @moduledoc """
-  create elixir message object for current project.
+  create elixir machine object for current project.
 
   ## Synopsis
 
@@ -26,7 +26,7 @@ defmodule Mix.Tasks.L10n.Msgfmt do
  
   ### Output
 
-    * priv/lang/`LANG`/`app`.exmo -- message object dets.
+    * priv/lang/`LANG`/`app`.exmo -- machine object dets.
 
   """
   def run(_opt) do

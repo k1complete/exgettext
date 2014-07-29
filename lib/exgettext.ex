@@ -1,4 +1,31 @@
 defmodule Exgettext do
+  @moduledoc """
+  ** Localization package for Elixir
+  
+  *** target
+  
+  1. ~T sigil quoted string literal
+  2. @moduledoc
+  3. @doc
+  
+  *** example
+    example for the :app application:
+
+    ```
+    use Exgettext
+    def hello do
+      ~T "Hello, World."
+    end
+    ```
+
+    ~T macro expanded to
+
+    ```
+    def hello do
+      Exgettext.Runtime.gettext(:app, "Hello, World.")
+    end
+    ```
+  """
   defmacro __using__(_opt \\ :dummy ) do
     module = __CALLER__.module
     put_dets(:module, module)
@@ -6,6 +33,7 @@ defmodule Exgettext do
     quote do: import Exgettext
   end
 
+  @doc nil
   defp get_app() do
     Mix.Project.config[:app]
   end
