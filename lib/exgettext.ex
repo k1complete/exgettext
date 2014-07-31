@@ -52,10 +52,12 @@ defmodule Exgettext do
   ~T is detect to translate target string.
   """
   defmacro sigil_T({:<<>>, _line, [string]}, []) when is_binary(string) do
-#  def sigil_T(string, []) when is_binary(string) do
     binary = Macro.unescape_string(string)
     quote do: txt(unquote(binary))
   end
+  @doc """
+  translate target string by LANG environment.
+  """
   defmacro txt(s) do
     r = __CALLER__
     path = System.get_env("PWD")
@@ -63,9 +65,14 @@ defmodule Exgettext do
     put_dets(s, %{line: r.line, file: Exgettext.Util.relative(r.file, path), function: r.function })
     quote do: Exgettext.Runtime.gettext(unquote(app), unquote(s))
   end
-
-  defmacro txt2(s, lang) do
+  @doc """
+  translate target string by lang.
+  """
+  defmacro txt(s, lang) do
+    r = __CALLER__
+    path = System.get_env("PWD")
     app = get_app()
+    put_dets(s, %{line: r.line, file: Exgettext.Util.relative(r.file, path), function: r.function })
     quote do
       Exgettext.Runtime.gettext(unquote(app), unquote(s), unquote(lang))
     end

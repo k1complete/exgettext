@@ -11,13 +11,13 @@ defmodule Exgettext.Runtime do
   def getpath(app, lang) do
     mofile(app, lang)
   end
-  def locale_to_lang("C") do
+  defp locale_to_lang("C") do
     "en"
   end
-  def locale_to_lang(nil) do
+  defp locale_to_lang(nil) do
     "en"
   end
-  def locale_to_lang(locale) do
+  defp locale_to_lang(locale) do
     case Regex.run(~r/([^._]+)_([^._]+)\.([^.])+/, locale) do
       nil -> locale
       [^locale, lang, _country, _encoding] -> 
