@@ -1,7 +1,6 @@
 
 defmodule A do
   use Exgettext
-#  import Exgettext
   @moduledoc """
   module doc for A
   """
@@ -10,6 +9,10 @@ defmodule A do
   method doc for hello
   """
   def hello do
+    ~T"Hello world"
+  end
+  def hello2 do
+    setlocale("en")
     ~T"Hello world"
   end
 end

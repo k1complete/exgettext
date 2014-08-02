@@ -3,7 +3,7 @@ defmodule Exgettext do
   ** Localization package for Elixir
   
   *** target
-  
+  0. setlocale() 
   1. ~T sigil quoted string literal
   2. @moduledoc
   3. @doc
@@ -14,6 +14,7 @@ defmodule Exgettext do
     ```
     use Exgettext
     def hello do
+      setlocale()  
       ~T "Hello, World."
     end
     ```
@@ -22,6 +23,7 @@ defmodule Exgettext do
 
     ```
     def hello do
+      Exgettext.setlocale()
       Exgettext.Runtime.gettext(:app, "Hello, World.")
     end
     ```
@@ -29,10 +31,37 @@ defmodule Exgettext do
   defmacro __using__(_opt \\ :dummy ) do
     module = __CALLER__.module
     put_dets(:module, module)
-    :ok
-    quote do: import Exgettext
+    quote do
+      import Exgettext
+    end
   end
+  @lang :"Exgettext.Lang"
 
+  @doc """
+  get current 2byte language code from LANG environment variable format.
+  """
+  def lang(<<a,b>> <> _ = _lang) do
+    <<a,b>>
+  end
+  def lang(lang) do
+    lang
+  end
+  @doc """
+  set locale to Process dictionary :'Exgettext.Lang' 
+  from lang or LANG environment.
+  """
+  def setlocale(lang) when is_binary(lang) do
+    Process.put(@lang, lang(lang))
+  end
+  def setlocale() do
+    setlocale(System.get_env("LANG"))
+  end
+  @doc """
+  get locale from Process dictionary :'Exgettext.Lang'
+  """
+  def getlocale() do
+    Process.get(@lang)
+  end
   @doc nil
   defp get_app() do
     Mix.Project.config[:app]
@@ -63,7 +92,9 @@ defmodule Exgettext do
     path = System.get_env("PWD")
     app = get_app()
     put_dets(s, %{line: r.line, file: Exgettext.Util.relative(r.file, path), function: r.function })
-    quote do: Exgettext.Runtime.gettext(unquote(app), unquote(s))
+    quote do
+      Exgettext.Runtime.gettext(unquote(app), unquote(s), getlocale())
+    end
   end
   @doc """
   translate target string by lang.

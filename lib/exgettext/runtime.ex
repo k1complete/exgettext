@@ -24,8 +24,16 @@ defmodule Exgettext.Runtime do
         lang
     end
   end
+  def getlang(lang) do
+    locale_to_lang(lang)
+  end
   def getlang() do
-    locale_to_lang(System.get_env("LANG"))
+    case Exgettext.getlocale() do
+      nil -> 
+        getlang(System.get_env("LANG"))
+      r -> 
+        r
+    end
   end
   def gettext(app, key, lang) do
     dets_file = getpath(app, lang)

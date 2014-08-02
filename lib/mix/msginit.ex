@@ -7,7 +7,7 @@ defmodule Mix.Tasks.L10n.Msginit do
   ## Synopsis
 
   ```
-      mix l10n.msginit
+      mix l10n.msginit [--locale LL_CC.charset]
   ```
 
   ## Environment
@@ -30,9 +30,11 @@ defmodule Mix.Tasks.L10n.Msginit do
     * priv/po/`LANG`.po -- portable object for translation working.
 
   """
-  def run(_opt) do
+  def run(opt) do
+    {opt, _args, _rest} = OptionParser.parse(opt)
+    lang = Keyword.get(opt, :locale, System.get_env("LANG"))
     podir = Exgettext.Util.popath()
-    cmd = "cd #{podir}; msginit"
+    cmd = "cd #{podir}; msginit --locale #{lang}"
     Mix.shell.info(cmd)
     Mix.Shell.Process.cmd(cmd)
   end
