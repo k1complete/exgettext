@@ -67,7 +67,7 @@ defmodule Mix.Tasks.ExgettextTest do
   test "test_lang" do
     assert Exgettext.lang("ja") =~ "ja"
     assert Exgettext.lang("ja_JP.UTF-8") =~ "ja"
-    assert Exgettext.lang(System.get_env("LANG")) =~ System.get_env("LANG")
+    assert Exgettext.lang("C") =~ "C"
   end
 
   test "xgettext" do

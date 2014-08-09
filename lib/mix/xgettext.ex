@@ -40,7 +40,15 @@ defmodule Mix.Tasks.L10n.Xgettext do
     app = to_string(config[:app])
     Mix.shell.info("xgettext for #{app}")
     :ok = Exgettext.Tool.clean(app)
-    :ok = Mix.Tasks.Compile.run(["--force"])
+#    m = Path.join([Mix.Project.compile_path(config),"**/#{app}/ebin/*"]) |>
+#      Path.wildcard 
+#    IO.puts "stat #{m}"
+    case Mix.Tasks.Compile.Elixir.run(["--force"]) do
+      :noop -> 
+        Mix.shell.info("noop")
+        :ok
+      :ok -> :ok
+    end
     :ok = Exgettext.Tool.xgettext(app, opt)
   end
 end
