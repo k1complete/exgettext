@@ -29,7 +29,6 @@ defmodule Mix.Tasks.ExgettextTest do
     assert_received {:mix_shell, :info, [^ex]}
     assert File.regular? "priv/po/#{la}.po"
     File.read!("priv/po/#{la}.po")
-
   end
 
   def msgmerge_run(lang, replace) do

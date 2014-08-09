@@ -43,7 +43,13 @@ defmodule Mix.Tasks.L10n.Xgettext do
 #    m = Path.join([Mix.Project.compile_path(config),"**/#{app}/ebin/*"]) |>
 #      Path.wildcard 
 #    IO.puts "stat #{m}"
-    case Mix.Tasks.Compile.Elixir.run(["--force"]) do
+    case Mix.Tasks.Compile.Elixir.run(["--force --docs"]) do
+      :noop -> 
+        Mix.shell.info("noop")
+        :ok
+      :ok -> :ok
+    end
+    case Mix.Tasks.Compile.App.run(["--force --docs"]) do
       :noop -> 
         Mix.shell.info("noop")
         :ok
