@@ -36,6 +36,15 @@ defmodule Exgettext.Runtime do
     end
   end
   def gettext(app, key, lang) do
+    r = case gettext_raw(app, key, lang) do
+          {:ok, r} -> r
+          _ ->
+            {_, r} = gettext_raw(:"l10n_#{app}", key, lang)
+            r
+        end
+    r
+  end
+  def gettext_raw(app, key, lang) do
     dets_file = getpath(app, lang)
     case :dets.open_file(dets_file) do
       {:ok, dets} ->
@@ -46,9 +55,9 @@ defmodule Exgettext.Runtime do
               {:error, _reason} -> key
             end
         :dets.close(dets)
-        r
+        {:ok, r}
       {:error, _reason} ->
-        key
+        {:error, key}
     end
   end
   def gettext(app, key) do

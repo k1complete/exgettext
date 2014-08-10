@@ -115,7 +115,10 @@ defmodule Exgettext.Tool do
   def modules_app(app) when is_atom(app) do
     :application.load(app)
     case :application.get_key(app, :modules) do
-      {:ok, mods} -> mods
+      {:ok, mods} -> Enum.filter(mods, fn(x) ->
+                                         Regex.match?(~r/^Elixir\./, 
+                                                      Atom.to_string(x))
+                                 end)
       r -> 
         :error_logger.error_report([{:get_key, [app, :module]}, 
                                     {:result, r}])
@@ -123,6 +126,7 @@ defmodule Exgettext.Tool do
     end
   end
   def module_to_file(module, src_root) do
+    module.__info__(:compile)[:source]
     file = module.__info__(:compile)[:source]
     Exgettext.Util.relative(file, src_root)
   end
@@ -172,12 +176,20 @@ defmodule Exgettext.Tool do
                         end 
     Enum.filter(r, fn(x) -> is_map(x) and is_binary(x.msgid) end) |> Enum.sort &(&1 < &2)
   end
+  def redup(m) do
+    r = List.foldl(m, %{}, fn(x, a) -> 
+                         k = x[:msgid]
+                         Dict.put(a, k, x)
+               end)
+    Enum.map(r, fn({_k,v}) -> v end)
+  end
   def doc(app, opts) do
     src_root = Path.expand(Keyword.get(opts, app, System.get_env("PWD")))
     mod = modules_app(app)
     m = moduledoc(mod, src_root)
     f = funcdoc(mod, src_root)
-    o = f ++ m|> Enum.sort &( &1.module < &2.module && &1.name < &2.name )
+    o = redup(f ++ m)
+    o = o |> Enum.sort &( &1.module < &2.module && &1.name < &2.name )
     Enum.map o, fn(x) -> %{x | msgid: line_split(x.msgid) } end
   end
   defp output(fh, r) do
