@@ -16,14 +16,12 @@ defmodule Exgettext.Util do
   end
   def get_app(mod) do
     r = :application.get_application(mod) 
+#    raise(ArgumentError, message: "bad mod #{mod}, cannot load app")
     # IO.inspect [mod: mod, app: r]
     case r do
       {:ok, app} -> app
       :undefined -> :iex
     end
-  end
-  defp conv_other(app, doc) do
-    Exgettext.Runtime.gettext(app, doc)
   end
 
   def defdelegate_filter(src, target, func) do

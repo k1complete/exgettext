@@ -43,7 +43,13 @@ defmodule Exgettext.Runtime do
     r = case gettext_raw(app, key, lang) do
           {:ok, r} -> r
           _ ->
-            {_, r} = gettext_raw(:"l10n_#{app}", key, lang)
+            rm = try do
+                       gettext_raw(:"l10n_#{app}", key, lang)
+                     rescue 
+                       x -> 
+                         {:error, key}
+                     end
+            {_, r} = rm
             r
         end
     r

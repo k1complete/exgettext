@@ -5,9 +5,8 @@ defmodule Exgettext.Introspection do
     case Code.ensure_loaded(module) do
       {:module, _} ->
         if function_exported?(module, :__info__, 1) do
-          case Code.get_docs(module, :moduledoc) do
+          case Exgettext.Code.get_docs(module, :moduledoc) do
             {_, binary} when is_binary(binary) ->
-              binary = conv_doc(module, binary)
               if opts = ansi_docs() do
                 IO.ANSI.Docs.print_heading(inspect(module), opts)
                 IO.ANSI.Docs.print(binary, opts)
@@ -64,7 +63,7 @@ defmodule Exgettext.Introspection do
   end
 
   defp h_mod_fun(mod, fun) when is_atom(mod) and is_atom(fun) do
-    if docs = Code.get_docs(mod, :docs) do
+    if docs = Exgettext.Code.get_docs(mod, :docs) do
       result = for {{f, arity}, _line, _type, _args, doc} <- docs, fun == f, doc != false do
         h(mod, fun, arity)
         IO.puts ""
@@ -106,7 +105,7 @@ defmodule Exgettext.Introspection do
   end
 
   defp h_mod_fun_arity(mod, fun, arity) when is_atom(mod) and is_atom(fun) and is_integer(arity) do
-    if docs = Code.get_docs(mod, :docs) do
+    if docs = Exgettext.Code.get_docs(mod, :docs) do
       doc =
         cond do
           d = find_doc(docs, fun, arity)         -> d
@@ -115,7 +114,7 @@ defmodule Exgettext.Introspection do
         end
 
       if doc do
-        print_doc(conv_doc(mod, doc))
+        print_doc(doc)
         :ok
       else
         :not_found
@@ -170,10 +169,12 @@ defmodule Exgettext.Introspection do
 
   defp ansi_docs() do
     opts = Application.get_env(:iex, :colors)
-    if opts[:enabled] do
+    if color_enabled?(opts[:enabled]) do
       [width: IEx.width] ++ opts
     end
   end
+  defp color_enabled?(nil), do: IO.ANSI.enabled?
+  defp color_enabled?(bool) when is_boolean(bool), do: bool
 
   defp nodocs(for),  do: no(for, "documentation")
 
@@ -182,13 +183,10 @@ defmodule Exgettext.Introspection do
   end
 
   def conv_other(app, doc) do
-    case Exgettext.Runtime.gettext(app, doc) do
-      ^doc -> Exgettext.Runtime.gettext(:"l10n_#{app}", doc)
-      conv -> conv
-    end
+    Exgettext.Runtime.gettext(app, doc)
   end
   def get_app(mod) do
-    :code.ensure_loaded(mod)
+#    :code.ensure_loaded(mod)
     {:file, r} = :code.is_loaded(mod)
     String.to_atom(Path.basename(Path.dirname(Path.dirname(r))))
   end
