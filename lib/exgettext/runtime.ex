@@ -30,7 +30,7 @@ defmodule Exgettext.Runtime do
   def getlang(lang) do
     locale_to_lang(lang)
   end
-  def getlang() do
+  defp getlang() do
     case Exgettext.getlocale() do
       nil -> 
         getlang(System.get_env("LANG"))

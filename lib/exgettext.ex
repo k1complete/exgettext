@@ -32,8 +32,8 @@ defmodule Exgettext do
     module = __CALLER__.module
     put_dets(:module, module)
     quote do
-      import Exgettext
       alias Exgettext.Code, as: Code
+      import Exgettext
     end
   end
   @lang :"Exgettext.Lang"
