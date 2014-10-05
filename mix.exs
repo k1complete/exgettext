@@ -5,6 +5,7 @@ defmodule Exgettext.Mixfile do
     [app: :exgettext,
      version: "0.0.1",
      elixir: "~> 0.15.0-dev",
+     compilers: Mix.compilers ++ [:po],
      deps: deps]
   end
 
