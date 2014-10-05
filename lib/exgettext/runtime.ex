@@ -46,7 +46,7 @@ defmodule Exgettext.Runtime do
             rm = try do
                        gettext_raw(:"l10n_#{app}", key, lang)
                      rescue 
-                       x -> 
+                       _x -> 
                          {:error, key}
                      end
             {_, r} = rm

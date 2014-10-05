@@ -7,7 +7,7 @@ defmodule Mix.Tasks.L10n.Msgfmt do
   ## Synopsis
 
   ```
-      mix l10n.msgfmt
+      mix l10n.msgfmt [--force]
   ```
 
   ## Environment
@@ -35,13 +35,17 @@ defmodule Mix.Tasks.L10n.Msgfmt do
     env  = Keyword.get(opt, :locale, System.get_env("LANG"))
     lang = Exgettext.Runtime.getlang(env)
     app = Mix.Project.config[:app]
-    Mix.shell.info("msgfmt for #{app}")
     pofile = Exgettext.Util.pofile(app, lang)
     mofile = Exgettext.Runtime.mofile(app, lang)
-    dir = Path.dirname(mofile)
-    Mix.shell.info("#{pofile} #{mofile}")
-#    Mix.Shell.IO.info("#{pofile} #{mofile}")
-    :ok = File.mkdir_p(dir)
-    :ok = Exgettext.Tool.msgfmt(pofile, mofile)
+    if opt[:force] || Mix.Utils.stale?([pofile], [mofile]) do
+      Mix.shell.info("msgfmt for #{app}")
+      dir = Path.dirname(mofile)
+      Mix.shell.info("#{pofile} #{mofile}")
+      #    Mix.Shell.IO.info("#{pofile} #{mofile}")
+      :ok = File.mkdir_p(dir)
+      :ok = Exgettext.Tool.msgfmt(pofile, mofile)
+    else
+      :noop
+    end
   end
 end

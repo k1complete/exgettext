@@ -44,6 +44,14 @@ msgid ""
 "get current 2byte language code from LANG environment variable format.\n"
 msgstr ""
 
+#. TRANSLATORS: def Exgettext.Code.get_docs(module, kind)
+#: lib/exgettext/code.ex:29
+msgid ""
+"Returns the localized docs for the given module.\n"
+"\n"
+"see `Elixir.Code.get_docs`\n"
+msgstr ""
+
 #. TRANSLATORS: defmacro Exgettext.Helper.h(other)
 #: lib/exgettext/helpler.ex:18
 #, fuzzy
@@ -140,6 +148,11 @@ msgstr ""
 "  * priv/po/`LANG`.po -- 翻訳作業ファイルです(portable object)\n"
 "\n"
 
+#. TRANSLATORS: Elixir.Mix.Tasks.Compile.Po Summary
+#: lib/mix/compile.ex:1
+msgid "po compile\n"
+msgstr ""
+
 #. TRANSLATORS: Elixir.Mix.Tasks.L10n.Xgettext Summary
 #: lib/mix/xgettext.ex:1
 msgid ""
@@ -218,7 +231,7 @@ msgid ""
 "## Synopsis\n"
 "\n"
 "```\n"
-"    mix l10n.msgfmt\n"
+"    mix l10n.msgfmt [--force]\n"
 "```\n"
 "\n"
 "## Environment\n"
