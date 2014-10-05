@@ -11,7 +11,7 @@ defmodule Exgettext.Helper do
   @h_modules [__MODULE__, IEx.Helpers, Kernel, Kernel.SpecialForms]
 
   @doc """
-  Prints the localized  documentation for the given module or 
+  Prints the localized documentation for the given module or 
   for the given function/arity pair.
   if there is not localized document, prints original documentation.
   """
