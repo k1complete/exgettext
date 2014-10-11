@@ -17,7 +17,7 @@ defmodule Exgettext.Util do
   def get_app(mod) do
     r = :application.get_application(mod) 
 #    raise(ArgumentError, message: "bad mod #{mod}, cannot load app")
-    # IO.inspect [mod: mod, app: r]
+    :error_logger.info_report [mod: mod, app: r]
     case r do
       {:ok, app} -> app
       :undefined -> :iex
