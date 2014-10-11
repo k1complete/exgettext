@@ -25,10 +25,13 @@ defmodule Exgettext.Util do
         case :code.is_loaded(mod) do
           false -> :iex
           {_, path} -> 
-            Path.dirname(path) |>
+            app = Path.dirname(path) |>
               Path.join("*.app") |>
               Path.wildcard |>
-              Path.basename(".app")
+              Path.basename(".app") |>
+              String.to_atom
+            :application.load(app)
+            app
         end
     end
   end
