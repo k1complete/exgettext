@@ -15,12 +15,21 @@ defmodule Exgettext.Util do
     Path.relative_to(file, path)
   end
   def get_app(mod) do
-    r = :application.get_application(mod) 
+    r = :application.get_application(mod)
 #    raise(ArgumentError, message: "bad mod #{mod}, cannot load app")
     :error_logger.info_report [mod: mod, app: r]
     case r do
       {:ok, app} -> app
-      :undefined -> :iex
+      :undefined -> 
+        Code.ensure_loaded(mod)
+        case :code.is_loaded(mod) do
+          false -> :iex
+          {_, path} -> 
+            Path.dirname(path) |>
+              Path.join("*.app") |>
+              Path.wildcard |>
+              Path.basename(".app")
+        end
     end
   end
 
