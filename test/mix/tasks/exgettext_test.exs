@@ -33,7 +33,6 @@ defmodule Mix.Tasks.ExgettextTest do
 
   def msgmerge_run(lang, replace) do
     loc = lang(lang)
-#    Mix.Shell.IO.info(loc)
     contents = msginit_run(lang)
     assert contents =~ "Language: #{loc}"
     assert contents =~ ~r/msgid \"(\"\"\n)?module doc for A/
@@ -41,17 +40,13 @@ defmodule Mix.Tasks.ExgettextTest do
     assert contents =~ ~r/msgid \"(\"\"\n)?Hello world/
     assert contents =~ ~r/msgid \"(\"\"\n)?Hello world\"\nmsgstr \"\"/
     contents2 = Regex.replace ~r/(msgid \"(\"\"\n)?Hello world\"\nmsgstr \")/, contents, ~s(\\1#{replace})
-    #      Mix.Shell.IO.info(contents2)
     File.write!("priv/po/#{loc}.po", contents2)
     Mix.Tasks.L10n.Msgmerge.run ["--locale", lang]
     rec = "msgmerge -o priv/po/#{loc}.pox priv/po/#{loc}.po priv/po/exgettext_test.pot"
-#    Mix.Shell.IO.info rec
     assert_received {:mix_shell, :info, [ ^rec ]}
-#    assert File.regular? "priv/po/ja.pox"
     file = "priv/po/#{loc}.pox"
     assert File.regular? file
     contents3 = File.read!("priv/po/#{loc}.pox")
-    #      Mix.Shell.IO.info(contents3)
     assert contents2 == contents3
   end
   def msgfmt_run(lang, replace) do

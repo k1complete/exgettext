@@ -3,9 +3,15 @@ defmodule Exgettext.Mixfile do
 
   def project do
     [app: :exgettext,
-     version: "0.0.1",
+     version: "0.0.2",
      elixir: "~> 1.1.0-dev or ~> 1.0.0 or ~> 0.15.0-dev",
      compilers: Mix.compilers ++ [:po],
+     description: "Localization package using GNU gettext",
+     package: [
+               contributors: ["k1complete"],
+               licenses: ["MIT"],
+               links: %{"GitHub" => "https://github.com/k1complete/exgettext"}
+       ],
      deps: deps]
   end
 

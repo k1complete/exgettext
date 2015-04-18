@@ -176,6 +176,28 @@ defmodule Exgettext.Tool do
                         end 
     Enum.filter(r, fn(x) -> is_map(x) and is_binary(x.msgid) end) |> Enum.sort &(&1 < &2)
   end
+  def typedoc(modules, src_root) do
+    r = List.foldr(modules, [],
+                   fn(m, a) ->
+                     d = Kernel.Typespec.beam_typedocs(m)
+                     file = module_to_file(m, src_root)
+                     case d do
+                       nil -> a
+                       d -> a ++ Enum.map d, 
+                            fn(x) ->
+                              ref = %{file: file, line: 0}
+                              {{ty, _ar}, doc} = x
+                              %{module: m, 
+                                name: ty, 
+                                msgid: doc,
+                                references: [ref],
+                                comment: "@type #{ty}"}
+                            end
+                     end
+                   end)
+    Enum.filter(r, fn(x) -> is_map(x) and is_binary(x.msgid) end) |>
+      Enum.sort &(&1 < &2)
+  end
   def redup(m) do
     r = List.foldl(m, %{}, fn(x, a) -> 
                          k = x[:msgid]
@@ -188,7 +210,8 @@ defmodule Exgettext.Tool do
     mod = modules_app(app)
     m = moduledoc(mod, src_root)
     f = funcdoc(mod, src_root)
-    o = redup(f ++ m)
+    t = typedoc(mod, src_root)
+    o = redup(f ++ m ++ t)
     o = o |> Enum.sort &( &1.module < &2.module && &1.name < &2.name )
     Enum.map o, fn(x) -> %{x | msgid: line_split(x.msgid) } end
   end
