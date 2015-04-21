@@ -9,7 +9,6 @@ defmodule Exgettext.Kernel.Typespec do
     Enum.map(r, fn(x) ->
                   d = elem(x, 1)
                   dloc = Exgettext.Runtime.gettext(app, d)
-                  IO.inspect [dloc: dloc]
                   put_elem(x, 1, dloc)
              end)
   end
