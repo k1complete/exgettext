@@ -7,9 +7,10 @@ defmodule Exgettext.Kernel.Typespec do
     app = Exgettext.Util.get_app(module)
     r = Elixir.Kernel.Typespec.beam_typedocs(module)
     Enum.map(r, fn(x) ->
-                  d = elem(x, 4)
+                  d = elem(x, 1)
                   dloc = Exgettext.Runtime.gettext(app, d)
-                  put_elem(x, 4, dloc)
+                  IO.inspect [dloc: dloc]
+                  put_elem(x, 1, dloc)
              end)
   end
 end
