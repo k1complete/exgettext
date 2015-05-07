@@ -1,4 +1,5 @@
 defmodule Mix.Tasks.L10n.Msgfmt do
+  use Exgettext
   use Mix.Task
   @shortdoc "run msgfmt"
   @moduledoc """
@@ -30,7 +31,6 @@ defmodule Mix.Tasks.L10n.Msgfmt do
 
   """
   def run(opt) do
-    use Exgettext
     {opt, _args, _rest} = OptionParser.parse(opt)
     env  = Keyword.get(opt, :locale, System.get_env("LANG"))
     lang = Exgettext.Runtime.getlang(env)
