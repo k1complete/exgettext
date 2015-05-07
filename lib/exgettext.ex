@@ -32,8 +32,8 @@ defmodule Exgettext do
     module = __CALLER__.module
     put_dets(:module, module)
     quote do
+#      alias Exgettext.Kernel.Typespec, as: Typespec
       alias Exgettext.Code, as: Code
-      alias Exgettext.Kernel.Typespec, as: Kernel.Typespec
       import Exgettext
     end
   end
@@ -82,9 +82,18 @@ defmodule Exgettext do
   @doc """
   ~T is detect to translate target string.
   """
-  defmacro sigil_T({:<<>>, _line, [string]}, []) when is_binary(string) do
+  defmacro sigil_T({:<<>>, _line, [string]}, options) when is_binary(string) do
     binary = Macro.unescape_string(string)
-    quote do: txt(unquote(binary))
+    case  options do
+      [] -> 
+        quote do: txt(unquote(binary))
+      options ->
+        options = List.to_atom(options)
+        v = {:"var!", [], [{options, [], nil}]}
+        quote do
+          txt(unquote(binary), unquote(v))
+        end
+    end
   end
   @doc """
   translate target string by LANG environment.
@@ -94,8 +103,8 @@ defmodule Exgettext do
     path = System.get_env("PWD")
     app = get_app()
     put_dets(s, %{line: r.line, file: Exgettext.Util.relative(r.file, path), function: r.function })
-    quote do
-      Exgettext.Runtime.gettext(unquote(app), unquote(s), getlocale())
+    quote bind_quoted: [app: app, s: s] do
+      Exgettext.Runtime.gettext(app, s, getlocale())
     end
   end
   @doc """
@@ -106,8 +115,8 @@ defmodule Exgettext do
     path = System.get_env("PWD")
     app = get_app()
     put_dets(s, %{line: r.line, file: Exgettext.Util.relative(r.file, path), function: r.function })
-    quote do
-      Exgettext.Runtime.gettext(unquote(app), unquote(s), unquote(lang))
+    quote bind_quoted: [app: app, s: s, lang: lang] do
+      Exgettext.Runtime.gettext(app, s, lang)
     end
   end
 end
