@@ -32,7 +32,7 @@ defmodule Exgettext do
     module = __CALLER__.module
     put_dets(:module, module)
     quote do
-#      alias Exgettext.Kernel.Typespec, as: Typespec
+      alias Exgettext.Typespec, as: Typespec
       alias Exgettext.Code, as: Code
       import Exgettext
     end
