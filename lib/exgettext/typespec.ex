@@ -1,5 +1,5 @@
-defmodule Exgettext.Kernel.Typespec do
-  Exgettext.Util.defdelegate_filter(Exgettext.Kernel.Typespec, Kernel.Typespec,
+defmodule Exgettext.Typespec do
+  Exgettext.Util.defdelegate_filter(Exgettext.Typespec, Elixir.Kernel.Typespec,
                                     fn(x) -> 
                                       not(x in [{:beam_typedocs, 1}])
                                     end)
