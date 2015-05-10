@@ -124,4 +124,28 @@ defmodule Mix.Tasks.ExgettextTest do
       assert result == "Hello world"
     end
   end
+  test "gettext no locale" do
+    in_fixture "ex_src", fn() ->
+      msgfmt_run("ja_JP.UTF-8", "今日は世界")
+      Exgettext.setlocale("ja")
+      result_us = A.hello2
+      assert result_us == "Hello world"
+      Exgettext.setlocale("en")
+      result = A.hello
+      assert result == "Hello world"
+      result = A.helloja
+      assert result == "今日は世界"
+    end
+  end
+  test "option" do
+    assert {:__block__, [], 
+            [{:=, [], [{:ja, [], Mix.Tasks.ExgettextTest}, "ja"]}, 
+             {:sigil_T, [context:
+                         Mix.Tasks.ExgettextTest, import: Exgettext],
+              [{:<<>>, [], ["Hello world"]}, 'ja']}]} ==
+      Macro.expand(quote do
+                     ja = "ja"
+                     ~T"Hello world"ja
+                   end, __ENV__)
+  end
 end

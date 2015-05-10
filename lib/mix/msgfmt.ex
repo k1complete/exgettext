@@ -30,6 +30,7 @@ defmodule Mix.Tasks.L10n.Msgfmt do
     * priv/lang/`LANG`/`app`.exmo -- machine object dets.
 
   """
+  @spec run(String.t) :: :ok | :noop 
   def run(opt) do
     {opt, _args, _rest} = OptionParser.parse(opt)
     env  = Keyword.get(opt, :locale, System.get_env("LANG"))

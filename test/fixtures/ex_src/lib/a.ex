@@ -15,4 +15,8 @@ defmodule A do
     setlocale("en")
     ~T"Hello world"
   end
+  def helloja do
+    ja = "ja"
+    ~T"Hello world"ja
+  end
 end
