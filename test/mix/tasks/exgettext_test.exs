@@ -51,7 +51,7 @@ defmodule Mix.Tasks.ExgettextTest do
     contents2 = Regex.replace ~r/(msgid \"(\"\"\n)?Hello world\"\nmsgstr \")/, contents, ~s(\\1#{replace})
     File.write!("priv/po/#{loc}.po", contents2)
     Mix.Tasks.L10n.Msgmerge.run ["--locale", lang]
-    rec = "msgmerge -o priv/po/#{loc}.pox priv/po/#{loc}.po priv/po/exgettext_test.pot"
+    rec = "msgmerge -o priv/po/#{loc}.pox -D priv/po #{loc}.po exgettext_test.pot"
     assert_received {:mix_shell, :info, [ ^rec ]}
     file = "priv/po/#{loc}.pox"
 #    IO.inspect [test_file: file, cd: File.cwd, lang: lang]

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: k 1\n"
-"PO-Revision-Date: 2015-05-17 19:14+0900\n"
+"PO-Revision-Date: 2015-05-19 18:30+0900\n"
 "Last-Translator: 小田 照敬 <EMAIL@ADDRESS>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
@@ -24,9 +24,3 @@ msgstr "exgettextライブラリのサンプルモジュール\n"
 #: lib/sample.ex:11
 msgid "Hello is hello function\n"
 msgstr "Helloはこんにちは関数です。\n"
-
-#~ msgid "Hello, World"
-#~ msgstr "今日は、世界"
-
-#~ msgid "Hello, World2"
-#~ msgstr "今日は、世界２"
