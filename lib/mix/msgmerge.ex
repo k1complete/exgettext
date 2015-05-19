@@ -70,16 +70,17 @@ defmodule Mix.Tasks.L10n.Msgmerge do
     Enum.map(pofiles, 
              fn(x) ->
                dir = Path.dirname(x)
-               basename = Exgettext.Util.pathescape(Path.basename(x))
-               pofile = Exgettext.Util.pofile_base(lang)
-               dirs = Exgettext.Util.pathescape(dir)
+               pofile = Path.join(dir, Exgettext.Util.pofile_base(lang))
+               basename = Path.join(dir, Path.basename(x))
+               pofile = Exgettext.Util.pathescape(pofile)
+               basename = Exgettext.Util.pathescape(basename)
                #x = Exgettext.Util.pathescape(x)
                poxfile = Path.join(dir, outfile)
                poxfile = Exgettext.Util.pathescape(poxfile)
                if (update) do
-                 cmd = "msgmerge -U #{opts}-D #{dirs} #{pofile} #{basename}"
+                 cmd = "msgmerge -U #{opts}#{pofile} #{basename}"
                else
-                 cmd = "msgmerge -o #{poxfile} #{opts}-D #{dirs} #{pofile} #{basename}"
+                 cmd = "msgmerge -o #{poxfile} #{opts}#{pofile} #{basename}"
                end
 #               IO.inspect [merge: cmd]
                Mix.shell.info(cmd)
