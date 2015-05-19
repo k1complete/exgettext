@@ -1,18 +1,33 @@
 defmodule Exgettext.Util do
+  def pot_path(app, file) do
+    Path.join(["priv", "po", app, file, Path.basename(file) <> ".pot"])
+  end
   def popath(suffix \\ "") do
     Path.join(["priv", "po", suffix])
+  end
+  def poxfile_base(lang) do
+    "#{lang}.pox"
   end
   def poxfile(_app, lang) do
     popath("#{lang}.pox")
   end
+  def pofile_base(lang) do
+    "#{lang}.po"
+  end
   def pofile(_app, lang) do
     popath("#{lang}.po")
+  end
+  def pofiles(lang) do
+    Path.wildcard(Path.join([popath("**"), pofile_base(lang)]))
   end
   def pot_file(app) do
     popath("#{app}.pot")
   end
   def relative(file, path) do
     Path.relative_to(file, path)
+  end
+  def pathescape(path) do
+    Regex.replace(~r/ /, path, "\\\\ ", [:global])
   end
   def get_app(mod) do
     r = :application.get_application(mod)

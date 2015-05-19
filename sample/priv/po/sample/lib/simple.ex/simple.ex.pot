@@ -1,0 +1,10 @@
+#. TRANSLATORS: def Simple.good_morning()
+#: lib/simple.ex:10 
+msgid ""
+"  good morning function\n"
+msgstr ""
+#. TRANSLATORS: Elixir.Simple Summary
+#: lib/simple.ex:1 
+msgid ""
+"  extension module for sample\n"
+msgstr ""

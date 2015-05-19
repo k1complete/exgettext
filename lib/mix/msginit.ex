@@ -33,9 +33,15 @@ defmodule Mix.Tasks.L10n.Msginit do
   def run(opt) do
     {opt, _args, _rest} = OptionParser.parse(opt)
     lang = Keyword.get(opt, :locale, System.get_env("LANG"))
-    podir = Exgettext.Util.popath()
-    cmd = "cd #{podir}; msginit --locale #{lang}"
-    Mix.shell.info(cmd)
-    Mix.Shell.Process.cmd(cmd)
+    potdir = Exgettext.Util.popath()
+    Enum.map(Path.wildcard(Path.join([potdir, "**", "*.pot"])),
+             fn(x) ->
+               dir = Path.dirname(x)
+               dir2 = Exgettext.Util.pathescape(dir)
+               cmd = "cd #{dir2}; msginit --locale #{lang}"
+#               IO.inspect [msgint: cmd]
+               Mix.shell.info(cmd)
+               Mix.Shell.Process.cmd(cmd)
+             end)
   end
 end

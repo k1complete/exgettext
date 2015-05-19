@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: k 1\n"
-"PO-Revision-Date: 2014-07-06 21:07+0900\n"
+"PO-Revision-Date: 2015-05-17 21:17+0900\n"
 "Last-Translator: 小田 照敬 <EMAIL@ADDRESS>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
@@ -12,24 +12,12 @@ msgstr ""
 
 #: lib/sample.ex:12
 msgid "Hello, World"
-msgstr "今日は、世界"
+msgstr "今日は世界"
 
 #: lib/sample.ex:23
-#, fuzzy
 msgid "Hello, World2"
-msgstr "今日は、世界2"
+msgstr "今日は世界2"
 
-#. TRANSLATORS: Elixir.Sample2 Summary
-#: Elixir.Sample2:16
-msgid "sample module for exgettext library2\n"
-msgstr ""
-
-#. TRANSLATORS: Elixir.Sample Summary
-#: Elixir.Sample:2
-msgid "sample module for exgettext library\n"
-msgstr "xgettextライブラリの為のサンプルモジュール"
-
-#. TRANSLATORS: def Sample.hello()
-#: Elixir.Sample.hello/0:11
-msgid "Hello is hello function\n"
-msgstr "「今日は」関数です。"
+#: lib/simple.ex:11
+msgid "good morning"
+msgstr "お早うございます"

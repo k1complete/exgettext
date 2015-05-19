@@ -35,9 +35,9 @@ defmodule Mix.Tasks.L10n.Msgfmt do
     env  = Keyword.get(opt, :locale, System.get_env("LANG"))
     lang = Exgettext.Runtime.getlang(env)
     app = Mix.Project.config[:app]
-    pofile = Exgettext.Util.pofile(app, lang)
+    pofile = Exgettext.Util.pofiles(lang)
     mofile = Exgettext.Runtime.mofile(app, lang)
-    if opt[:force] || Mix.Utils.stale?([pofile], [mofile]) do
+    if opt[:force] || Mix.Utils.stale?(pofile, [mofile]) do
       Mix.shell.info("msgfmt for #{app}")
       dir = Path.dirname(mofile)
       Mix.shell.info("#{pofile} #{mofile}")
