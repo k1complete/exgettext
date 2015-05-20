@@ -1,0 +1,146 @@
+#. TRANSLATORS: def Mix.Dep.loaded_by_name(given, all_deps \\ nil, opts)
+#: lib/mix/dep.ex:97 
+msgid ""
+"Receives a list of dependency names and returns loaded `Mix.Dep`s.\n"
+"Logs a message if the dependency could not be found.\n"
+"\n"
+"## Exceptions\n"
+"\n"
+"This function raises an exception if any of the dependencies\n"
+"provided in the project are in the wrong format.\n"
+msgstr ""
+#. TRANSLATORS: def Mix.Dep.__struct__()
+#: lib/mix/dep.ex:49 
+msgid ""
+"The Mix.Dep a struct keeps information about your project dependencies.\n"
+"It contains:\n"
+"\n"
+"  * `scm` - a module representing the source code management tool (SCM)\n"
+"    operations\n"
+"\n"
+"  * `app` - the application name as an atom\n"
+"\n"
+"  * `requirement` - a binary or regex with the dependency's requirement\n"
+"\n"
+"  * `status` - the current status of the dependency, check\n"
+"    `Mix.Dep.format_status/1` for more info\n"
+"\n"
+"  * `opts` - the options given by the developer\n"
+"\n"
+"  * `deps` - dependencies of this dependency\n"
+"\n"
+"  * `top_level` - true if dependency was defined in the top-level project\n"
+"\n"
+"  * `manager` - the project management, possible values:\n"
+"    `:rebar` | `:mix` | `:make` | `nil`\n"
+"\n"
+"  * `from` - path to the file where the dependency was defined\n"
+"\n"
+"  * `extra` - a slot for adding extra configuration based on the manager;\n"
+"    the information on this field is private to the manager and should not be\n"
+"    relied on\n"
+"\n"
+"A dependency is in two specific states: loaded and unloaded.\n"
+"\n"
+"When a dependency is unloaded, it means Mix only parsed its specification\n"
+"and made no attempt to actually load the dependency or validate its\n"
+"status. When the dependency is loaded, it means Mix attempted to fetch,\n"
+"load and validate it, the status is set in the status field.\n"
+"\n"
+"Furthermore, in the `opts` fields, Mix keeps some internal options, which\n"
+"can be accessed by SCMs:\n"
+"\n"
+"  * `:app`   - the application name\n"
+"  * `:dest`  - the destination path for the dependency\n"
+"  * `:lock`  - the lock information retrieved from mix.lock\n"
+"  * `:build` - the build path for the dependency\n"
+"\n"
+msgstr ""
+#. TRANSLATORS: def Mix.Dep.in_dependency(dep, post_config \\ [], fun)
+#: lib/mix/dep.ex:122 
+msgid ""
+"Runs the given `fun` inside the given dependency project by\n"
+"changing the current working directory and loading the given\n"
+"project onto the project stack.\n"
+"\n"
+"It is expected a loaded dependency as argument.\n"
+msgstr ""
+#. TRANSLATORS: def Mix.Dep.ok?(dep)
+#: lib/mix/dep.ex:243 
+msgid ""
+"Returns true if the dependency is ok.\n"
+msgstr ""
+#. TRANSLATORS: def Mix.Dep.loaded(opts)
+#: lib/mix/dep.ex:84 
+msgid ""
+"Returns loaded dependencies recursively as a `Mix.Dep` struct.\n"
+"\n"
+"## Exceptions\n"
+"\n"
+"This function raises an exception if any of the dependencies\n"
+"provided in the project are in the wrong format.\n"
+msgstr ""
+#. TRANSLATORS: def Mix.Dep.source_paths(dep)
+#: lib/mix/dep.ex:287 
+msgid ""
+"Returns all source paths.\n"
+"\n"
+"Source paths are the directories that contains ebin files for a given\n"
+"dependency. All managers, except rebar, have only one source path.\n"
+msgstr ""
+#. TRANSLATORS: def Mix.Dep.load_paths(dep)
+#: lib/mix/dep.ex:274 
+msgid ""
+"Returns all load paths for the given dependency.\n"
+"\n"
+"Automatically derived from source paths.\n"
+msgstr ""
+#. TRANSLATORS: def Mix.Dep.children(otps)
+#: lib/mix/dep.ex:74 
+msgid ""
+"Returns all children dependencies for the current project,\n"
+"as well as the defined apps in case of umbrella projects.\n"
+"The children dependencies returned by this function were\n"
+"not loaded yet.\n"
+"\n"
+"## Exceptions\n"
+"\n"
+"This function raises an exception if any of the dependencies\n"
+"provided in the project are in the wrong format.\n"
+msgstr ""
+#. TRANSLATORS: def Mix.Dep.rebar?(dep)
+#: lib/mix/dep.ex:313 
+msgid ""
+"Return `true` if dependency is a rebar project.\n"
+msgstr ""
+#. TRANSLATORS: def Mix.Dep.mix?(dep)
+#: lib/mix/dep.ex:306 
+msgid ""
+"Return `true` if dependency is a mix project.\n"
+msgstr ""
+#. TRANSLATORS: def Mix.Dep.make?(dep)
+#: lib/mix/dep.ex:320 
+msgid ""
+"Return `true` if dependency is a make project.\n"
+msgstr ""
+#. TRANSLATORS: def Mix.Dep.format_status(dep)
+#: lib/mix/dep.ex:146 
+msgid ""
+"Formats the status of a dependency.\n"
+msgstr ""
+#. TRANSLATORS: def Mix.Dep.format_dep(dep)
+#: lib/mix/dep.ex:259 
+msgid ""
+"Formats a dependency for printing.\n"
+msgstr ""
+#. TRANSLATORS: def Mix.Dep.check_lock(dep, lock)
+#: lib/mix/dep.ex:215 
+msgid ""
+"Checks the lock for the given dependency and update its status accordingly.\n"
+msgstr ""
+#. TRANSLATORS: def Mix.Dep.available?(dep)
+#: lib/mix/dep.ex:250 
+msgid ""
+"Checks if a dependency is available. Available dependencies\n"
+"are the ones that can be loaded.\n"
+msgstr ""

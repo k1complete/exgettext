@@ -1,0 +1,14 @@
+#. TRANSLATORS: def Mix.ProjectStack.disable_recursion()
+#: lib/mix/project_stack.ex:110 
+msgid ""
+"Disables the recursion for the project in the stack.\n"
+"Returns true if recursion was disabled or false if there\n"
+"is no project or recursion was not enabled.\n"
+msgstr ""
+#. TRANSLATORS: def Mix.ProjectStack.enable_recursion()
+#: lib/mix/project_stack.ex:93 
+msgid ""
+"Enables the recursion for the project at the top of the stack.\n"
+"Returns true if recursion was enabled or false if the project\n"
+"already had recursion enabled or there is no project in the stack.\n"
+msgstr ""

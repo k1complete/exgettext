@@ -1,0 +1,217 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: l 10n_mix\n"
+"PO-Revision-Date: 2015-05-20 22:53+0900\n"
+"Last-Translator: 小田 照敬 <EMAIL@ADDRESS>\n"
+"Language-Team: Japanese\n"
+"Language: ja\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#. TRANSLATORS: Elixir.Mix.Utils Summary
+#: lib/mix/utils.ex:1
+msgid "Utilities used throughout Mix and tasks.\n"
+msgstr ""
+
+#. TRANSLATORS: def Mix.Utils.module_name_to_command(module, nesting \\ 0)
+#: lib/mix/utils.ex:265
+msgid ""
+"Takes a module and converts it to a command.\n"
+"\n"
+"The nesting argument can be given in order to remove\n"
+"the nesting of a module.\n"
+"\n"
+"## Examples\n"
+"\n"
+"    iex> Mix.Utils.module_name_to_command(Mix.Tasks.Compile, 2)\n"
+"    \"compile\"\n"
+"\n"
+"    iex> Mix.Utils.module_name_to_command(\"Mix.Tasks.Compile.Elixir\", 2)\n"
+"    \"compile.elixir\"\n"
+"\n"
+msgstr ""
+
+#. TRANSLATORS: def Mix.Utils.command_to_module_name(s)
+#: lib/mix/utils.ex:285
+msgid ""
+"Takes a command and converts it to the module name format.\n"
+"\n"
+"## Examples\n"
+"\n"
+"    iex> Mix.Utils.command_to_module_name(\"compile.elixir\")\n"
+"    \"Compile.Elixir\"\n"
+"\n"
+msgstr ""
+
+#. TRANSLATORS: def Mix.Utils.command_to_module(command, at \\ Elixir)
+#: lib/mix/utils.ex:58
+msgid ""
+"Take a `command` name and attempts to load a module\n"
+"with the command name converted to a module name\n"
+"in the given `at` scope.\n"
+"\n"
+"Returns `{:module, module}` in case a module\n"
+"exists and is loaded, `{:error, reason}` otherwise.\n"
+"\n"
+"## Examples\n"
+"\n"
+"    iex> Mix.Utils.command_to_module(\"compile\", Mix.Tasks)\n"
+"    {:module, Mix.Tasks.Compile}\n"
+"\n"
+msgstr ""
+
+#. TRANSLATORS: def Mix.Utils.symlink_or_copy(source, target)
+#: lib/mix/utils.ex:304
+msgid ""
+"Symlink directory `source` to `target` or copy it recursively\n"
+"in case symlink fails.\n"
+"\n"
+"Expect source and target to be absolute paths as it generates\n"
+"a relative symlink.\n"
+msgstr ""
+
+#. TRANSLATORS: def Mix.Utils.last_modified(path)
+#: lib/mix/utils.ex:95
+msgid ""
+"Returns the date the given path was last modified.\n"
+"\n"
+"If the path does not exist, it returns the unix epoch\n"
+"(1970-01-01 00:00:00).\n"
+msgstr ""
+
+#. TRANSLATORS: def Mix.Utils.stale?(sources, targets)
+#: lib/mix/utils.ex:67
+msgid ""
+"Returns `true` if any of the `sources` are stale\n"
+"compared to the given `targets`.\n"
+msgstr ""
+
+#. TRANSLATORS: def Mix.Utils.read_path!(path, opts \\ [])
+#: lib/mix/utils.ex:365
+msgid ""
+"Opens and reads content from either a URL or a local filesystem path\n"
+"and returns the contents as a binary.\n"
+"\n"
+"Raises if the given path is not a URL, nor a file or if the\n"
+"file or URL are invalid.\n"
+"\n"
+"## Options\n"
+"\n"
+"  * `:shell` - Forces the use of `wget` or `curl` to fetch the file if the\n"
+"    given path is a URL.\n"
+msgstr ""
+
+#. TRANSLATORS: def Mix.Utils.copy_path!(source, target, opts \\ [])
+#: lib/mix/utils.ex:395
+msgid ""
+"Copies content from either a URL or a local filesystem path to\n"
+"target path.\n"
+"\n"
+"Used by tasks like `archive.install` and `local.rebar` that support\n"
+"installation either from a URL or a local file.\n"
+"\n"
+"Raises if the given path is not a URL, nor a file or if the\n"
+"file or URL are invalid.\n"
+"\n"
+"## Options\n"
+"\n"
+"  * `:shell` - Forces the use of `wget` or `curl` to fetch the file if the\n"
+"    given path is a URL.\n"
+"\n"
+"  * `:force` - Forces overwriting target file without a shell prompt.\n"
+msgstr ""
+
+#. TRANSLATORS: def Mix.Utils.camelize(arg1)
+#: lib/mix/utils.ex:216
+msgid ""
+"Converts the given string to CamelCase format.\n"
+"\n"
+"## Examples\n"
+"\n"
+"    iex> Mix.Utils.camelize \"foo_bar\"\n"
+"    \"FooBar\"\n"
+"\n"
+msgstr ""
+
+#. TRANSLATORS: def Mix.Utils.overwriting?(path)
+#: lib/mix/utils.ex:418
+msgid ""
+"Prompts the user to overwrite the file if it exists. Returns\n"
+"the user input.\n"
+msgstr ""
+
+#. TRANSLATORS: def Mix.Utils.mix_home()
+#: lib/mix/utils.ex:19
+msgid ""
+"Get the mix home.\n"
+"\n"
+"It defaults to `~/.mix` unless the `MIX_HOME`\n"
+"environment variable is set.\n"
+"\n"
+"Developers should only store entries in the\n"
+"`MIX_HOME` directory which are guaranteed to\n"
+"work across multiple Elixir versions, as it is\n"
+"not recommended to swap the `MIX_HOME` directory\n"
+"as configuration and other important data may be\n"
+"stored there.\n"
+msgstr ""
+
+#. TRANSLATORS: def Mix.Utils.mix_paths()
+#: lib/mix/utils.ex:29
+msgid ""
+"Get all paths defined in the MIX_PATH env variable.\n"
+"\n"
+"`MIX_PATH` may contain multiple paths. If on Windows, those\n"
+"paths should be separated by `;`, if on unix systems, use `:`.\n"
+msgstr ""
+
+#. TRANSLATORS: def Mix.Utils.extract_files(paths, exts_or_pattern)
+#: lib/mix/utils.ex:127
+msgid ""
+"Extract files from a list of paths.\n"
+"\n"
+"`exts_or_pattern` may be a list of extensions or a\n"
+"`Path.wildcard/1` pattern.\n"
+"\n"
+"If the path in `paths` is a file, it is included in\n"
+"the return result. If it is a directory, it is searched\n"
+"recursively for files with the given extensions or matching\n"
+"the given patterns.\n"
+msgstr ""
+
+#. TRANSLATORS: def Mix.Utils.extract_stale(sources, targets)
+#: lib/mix/utils.ex:74
+msgid "Extract all stale `sources` compared to the given `targets`.\n"
+msgstr ""
+
+#. TRANSLATORS: def Mix.Utils.underscore(atom)
+#: lib/mix/utils.ex:166
+msgid ""
+"Converts the given atom or binary to underscore format.\n"
+"\n"
+"If an atom is given, it is assumed to be an Elixir module,\n"
+"so it is converted to a binary and then processed.\n"
+"\n"
+"## Examples\n"
+"\n"
+"    iex> Mix.Utils.underscore \"FooBar\"\n"
+"    \"foo_bar\"\n"
+"\n"
+"    iex> Mix.Utils.underscore \"Foo.Bar\"\n"
+"    \"foo/bar\"\n"
+"\n"
+"    iex> Mix.Utils.underscore Foo.Bar\n"
+"    \"foo/bar\"\n"
+"\n"
+"In general, `underscore` can be thought of as the reverse of\n"
+"`camelize`, however, in some cases formatting may be lost:\n"
+"\n"
+"    iex> Mix.Utils.underscore \"SAPExample\"\n"
+"    \"sap_example\"\n"
+"\n"
+"    iex> Mix.Utils.camelize \"sap_example\"\n"
+"    \"SapExample\"\n"
+"\n"
+msgstr ""

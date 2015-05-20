@@ -1,0 +1,10 @@
+#. TRANSLATORS: def Mix.Dep.Fetcher.by_name(names, old_lock, new_lock, opts)
+#: lib/mix/dep/fetcher.ex:24 
+msgid ""
+"Fetches the dependencies with the given names and their children recursively.\n"
+msgstr ""
+#. TRANSLATORS: def Mix.Dep.Fetcher.all(old_lock, new_lock, opts)
+#: lib/mix/dep/fetcher.ex:15 
+msgid ""
+"Fetches all dependencies.\n"
+msgstr ""

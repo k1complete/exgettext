@@ -1,0 +1,37 @@
+#. TRANSLATORS: def Mix.Rebar.local_rebar_path()
+#: lib/mix/rebar.ex:7 
+msgid ""
+"Returns the path supposed to host the local copy of rebar.\n"
+msgstr ""
+#. TRANSLATORS: def Mix.Rebar.recur(config, fun)
+#: lib/mix/rebar.ex:72 
+msgid ""
+"Runs `fun` for the given config and for each `sub_dirs` in the\n"
+"given rebar config.\n"
+msgstr ""
+#. TRANSLATORS: def Mix.Rebar.local_rebar_cmd()
+#: lib/mix/rebar.ex:19 
+msgid ""
+"Returns the path to the local copy of rebar, if one exists.\n"
+msgstr ""
+#. TRANSLATORS: def Mix.Rebar.global_rebar_cmd()
+#: lib/mix/rebar.ex:12 
+msgid ""
+"Returns the path to the global copy of rebar, if one exists.\n"
+msgstr ""
+#. TRANSLATORS: def Mix.Rebar.rebar_cmd()
+#: lib/mix/rebar.ex:27 
+msgid ""
+"Returns the path to the available rebar command.\n"
+msgstr ""
+#. TRANSLATORS: def Mix.Rebar.deps(config)
+#: lib/mix/rebar.ex:59 
+msgid ""
+"Parses the dependencies in given rebar.config to Mix's dependency format.\n"
+msgstr ""
+#. TRANSLATORS: def Mix.Rebar.load_config(dir)
+#: lib/mix/rebar.ex:35 
+msgid ""
+"Loads the rebar.config and evaluates rebar.config.script if it\n"
+"exists in the given directory.\n"
+msgstr ""

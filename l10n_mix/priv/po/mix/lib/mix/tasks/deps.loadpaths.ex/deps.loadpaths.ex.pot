@@ -1,0 +1,5 @@
+#. TRANSLATORS: Elixir.Mix.Tasks.Deps.Loadpaths Summary
+#: lib/mix/tasks/deps.loadpaths.ex:1 
+msgid ""
+"Loads the available dependencies paths.\n"
+msgstr ""

@@ -1,0 +1,60 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: l 10n_mix\n"
+"PO-Revision-Date: 2015-05-20 22:52+0900\n"
+"Last-Translator: 小田 照敬 <EMAIL@ADDRESS>\n"
+"Language-Team: Japanese\n"
+"Language: ja\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#. TRANSLATORS: defmacro Mix.Generator.embed_text(name, contents)
+#: lib/mix/generator.ex:78
+msgid ""
+"Embeds a text given by `contents` into the current module.\n"
+"\n"
+"It will define a private function with the `name` followed by\n"
+"`_text` that expects no argument.\n"
+msgstr ""
+
+#. TRANSLATORS: defmacro Mix.Generator.embed_template(name, contents)
+#: lib/mix/generator.ex:53
+msgid ""
+"Embed a template given by `contents` into the current module.\n"
+"\n"
+"It will define a private function with the `name` followed by\n"
+"`_template` that expects assigns as arguments.\n"
+"\n"
+"This function must be invoked passing a keyword list.\n"
+"Each key in the keyword list can be accessed in the\n"
+"template using the `@` macro.\n"
+"\n"
+"For more information, check `EEx.SmartEngine`.\n"
+msgstr ""
+
+#. TRANSLATORS: def Mix.Generator.create_file(path, contents, opts \\ [])
+#: lib/mix/generator.ex:17
+msgid ""
+"Creates a file with the given contents.\n"
+"If the file already exists, asks for user confirmation.\n"
+"\n"
+"## Options\n"
+"\n"
+"  * `:force` - forces installation without a shell prompt.\n"
+msgstr ""
+
+#. TRANSLATORS: def Mix.Generator.create_directory(path)
+#: lib/mix/generator.ex:29
+msgid "Creates a directory if one does not exist yet.\n"
+msgstr ""
+
+#. TRANSLATORS: Elixir.Mix.Generator Summary
+#: lib/mix/generator.ex:1
+msgid ""
+"Conveniences for working with paths and generating content.\n"
+"\n"
+"All of those functions are verbose, in the sense they log\n"
+"the action to be performed via `Mix.shell`.\n"
+msgstr ""

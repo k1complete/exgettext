@@ -1,0 +1,14 @@
+#. TRANSLATORS: Elixir.Mix.Tasks.Deps.Check Summary
+#: lib/mix/tasks/deps.check.ex:1 
+msgid ""
+"Checks if all dependencies are valid and if not, abort.\n"
+"Prints the invalid dependencies' status before aborting.\n"
+"\n"
+"This task is not shown in `mix help` but it is part\n"
+"of the `mix` public API and can be depended on.\n"
+"\n"
+"## Command line options\n"
+"\n"
+"  * `--no-compile` - do not compile dependencies\n"
+"\n"
+msgstr ""

@@ -1,0 +1,17 @@
+#. TRANSLATORS: Elixir.Mix.Tasks.Deps.Clean Summary
+#: lib/mix/tasks/deps.clean.ex:1 
+msgid ""
+"Remove the given dependencies' files.\n"
+"\n"
+"Since this is a destructive action, cleaning of dependencies\n"
+"can only happen by passing arguments/options:\n"
+"\n"
+"  * `dep1, dep2` - the name of dependencies to be removed\n"
+"  * `--all` - removes all dependencies\n"
+"  * `--unused` - removes only unused dependencies (no longer mentioned\n"
+"    in the `mix.exs` file)\n"
+"  * `--unlock` - also unlock the removed dependencies\n"
+"\n"
+"By default this task works across all environments, unless `--only`\n"
+"is given.\n"
+msgstr ""

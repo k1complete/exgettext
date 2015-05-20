@@ -1,0 +1,24 @@
+#. TRANSLATORS: def Mix.Shell.printable_app_name()
+#: lib/mix/shell.ex:61 
+msgid ""
+"Returns the printable app name.\n"
+"\n"
+"This function returns the current application name\n"
+"but only if the application name should be printed.\n"
+"\n"
+"Calling this function automatically toggles its value\n"
+"to false until the current project is re-entered. The\n"
+"goal is to exactly avoid printing the application name\n"
+"multiple times.\n"
+msgstr ""
+#. TRANSLATORS: Elixir.Mix.Shell Summary
+#: lib/mix/shell.ex:1 
+msgid ""
+"Defines Mix.Shell contract.\n"
+msgstr ""
+#. TRANSLATORS: def Mix.Shell.cmd(command, callback)
+#: lib/mix/shell.ex:69 
+msgid ""
+"An implementation of the command callback that\n"
+"is shared across different shells.\n"
+msgstr ""

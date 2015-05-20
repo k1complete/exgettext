@@ -1,0 +1,26 @@
+#. TRANSLATORS: def Mix.Dep.Loader.children(opts)
+#: lib/mix/dep/loader.ex:19 
+msgid ""
+"Gets all direct children of the current `Mix.Project`\n"
+"as a `Mix.Dep` struct. Umbrella project dependencies\n"
+"are included as children.\n"
+"\n"
+"By default, it will filter all dependencies that does not match\n"
+"current environment, behaviour can be overriden via options.\n"
+"\n"
+"## Options\n"
+"\n"
+"  * `:env` - filter dependencies on given environments\n"
+msgstr ""
+#. TRANSLATORS: def Mix.Dep.Loader.vsn_match?(req, actual, app)
+#: lib/mix/dep/loader.ex:60 
+msgid ""
+"Checks if a requirement from a dependency matches\n"
+"the given version.\n"
+msgstr ""
+#. TRANSLATORS: def Mix.Dep.Loader.load(dep, children)
+#: lib/mix/dep/loader.ex:27 
+msgid ""
+"Loads the given dependency information, including its\n"
+"latest status and children.\n"
+msgstr ""

@@ -1,0 +1,5 @@
+#. TRANSLATORS: def Mix.CLI.main(args \\ System.argv())
+#: lib/mix/cli.ex:7 
+msgid ""
+"Runs Mix according to the command line arguments.\n"
+msgstr ""

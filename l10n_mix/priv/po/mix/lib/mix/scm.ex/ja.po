@@ -1,0 +1,35 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: l 10n_mix\n"
+"PO-Revision-Date: 2015-05-20 22:52+0900\n"
+"Last-Translator: 小田 照敬 <EMAIL@ADDRESS>\n"
+"Language-Team: Japanese\n"
+"Language: ja\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#. TRANSLATORS: Elixir.Mix.SCM Summary
+#: lib/mix/scm.ex:1
+msgid ""
+"This module provides helper functions and defines the\n"
+"behaviour required by any SCM used by mix.\n"
+msgstr ""
+
+#. TRANSLATORS: def Mix.SCM.available()
+#: lib/mix/scm.ex:118
+msgid ""
+"Returns all available SCMs. Each SCM is tried in order\n"
+"until a matching one is found.\n"
+msgstr ""
+
+#. TRANSLATORS: def Mix.SCM.append(mod)
+#: lib/mix/scm.ex:134
+msgid "Append the given SCM module to the list of available SCMs.\n"
+msgstr ""
+
+#. TRANSLATORS: def Mix.SCM.prepend(mod)
+#: lib/mix/scm.ex:126
+msgid "Prepend the given SCM module to the list of available SCMs.\n"
+msgstr ""

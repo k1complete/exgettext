@@ -1,0 +1,14 @@
+#. TRANSLATORS: Elixir.Mix.Tasks.Archive Summary
+#: lib/mix/tasks/archive.ex:1 
+msgid ""
+"Lists all installed archives.\n"
+"\n"
+"Archives are typically installed at `~/.mix/archives`\n"
+"although the installation path can be customize by\n"
+"setting the `MIX_ARCHIVES` environment variable.\n"
+"\n"
+"Since archives are specific to Elixir versions, it is\n"
+"expected from build tools to swap the `MIX_ARCHIVES`\n"
+"variable to different locations based on a particular\n"
+"Elixir installation.\n"
+msgstr ""

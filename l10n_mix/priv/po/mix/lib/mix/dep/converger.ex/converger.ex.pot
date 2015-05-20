@@ -1,0 +1,17 @@
+#. TRANSLATORS: def Mix.Dep.Converger.topsort(deps)
+#: lib/mix/dep/converger.ex:10 
+msgid ""
+"Topsorts the given dependencies.\n"
+msgstr ""
+#. TRANSLATORS: def Mix.Dep.Converger.converge(acc, lock, opts, callback)
+#: lib/mix/dep/converger.ex:46 
+msgid ""
+"Converges all dependencies from the current project,\n"
+"including nested dependencies.\n"
+"\n"
+"There is a callback that is invoked for each dependency and\n"
+"must return an updated dependency in case some processing\n"
+"is done.\n"
+"\n"
+"See `Mix.Dep.Loader.children/1` for options.\n"
+msgstr ""

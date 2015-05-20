@@ -1,0 +1,5 @@
+#. TRANSLATORS: Elixir.Mix.Tasks.Iex Summary
+#: lib/mix/tasks/iex.ex:1 
+msgid ""
+"A task that is simply meant to redirect users to `iex -S mix`.\n"
+msgstr ""

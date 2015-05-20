@@ -1,0 +1,15 @@
+#. TRANSLATORS: Elixir.Mix.Tasks.Local.Rebar Summary
+#: lib/mix/tasks/local.rebar.ex:1 
+msgid ""
+"Fetch a copy of rebar from the given path or url. It defaults to a\n"
+"rebar copy that ships with Elixir source if available or fetches it\n"
+"from http://s3.hex.pm/rebar.\n"
+"\n"
+"The local copy is stored in your MIX_HOME (defaults to ~/.mix).\n"
+"This version of rebar will be used as required by `mix deps.compile`.\n"
+"\n"
+"## Command line options\n"
+"\n"
+"  * `--force` - forces installation without a shell prompt; primarily\n"
+"    intended for automation in build systems like make\n"
+msgstr ""

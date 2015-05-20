@@ -1,0 +1,11 @@
+#. TRANSLATORS: Elixir.Mix.Tasks.Deps.Get Summary
+#: lib/mix/tasks/deps.get.ex:1 
+msgid ""
+"Get all out of date dependencies, i.e. dependencies\n"
+"that are not available or have an invalid lock.\n"
+"\n"
+"## Command line options\n"
+"\n"
+"  * `--quiet` - do not output verbose messages\n"
+"  * `--only`  - only fetch dependencies for given environment\n"
+msgstr ""

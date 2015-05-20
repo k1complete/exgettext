@@ -1,0 +1,15 @@
+#. TRANSLATORS: Elixir.Mix.Tasks.Deps.Update Summary
+#: lib/mix/tasks/deps.update.ex:1 
+msgid ""
+"Update the given dependencies.\n"
+"\n"
+"Since this is a destructive action, update of all dependencies\n"
+"can only happen by passing the `--all` command line option.\n"
+"\n"
+"All dependencies are automatically recompiled after update.\n"
+"\n"
+"## Command line options\n"
+"\n"
+"  * `--all`  - update all dependencies\n"
+"  * `--only` - only fetch dependencies for given environment\n"
+msgstr ""

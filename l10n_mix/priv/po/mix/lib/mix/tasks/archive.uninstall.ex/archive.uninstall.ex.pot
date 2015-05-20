@@ -1,0 +1,8 @@
+#. TRANSLATORS: Elixir.Mix.Tasks.Archive.Uninstall Summary
+#: lib/mix/tasks/archive.uninstall.ex:1 
+msgid ""
+"Uninstall local archives:\n"
+"\n"
+"    mix archive.uninstall archive.ez\n"
+"\n"
+msgstr ""

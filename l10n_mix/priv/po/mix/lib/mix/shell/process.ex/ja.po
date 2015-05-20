@@ -1,0 +1,85 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: l 10n_mix\n"
+"PO-Revision-Date: 2015-05-20 22:52+0900\n"
+"Last-Translator: 小田 照敬 <EMAIL@ADDRESS>\n"
+"Language-Team: Japanese\n"
+"Language: ja\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#. TRANSLATORS: Elixir.Mix.Shell.Process Summary
+#: lib/mix/shell/process.ex:1
+msgid ""
+"This is a Mix shell that uses the current process mailbox\n"
+"for communication instead of IO.\n"
+"\n"
+"When a developer calls `info(\"hello\")`, the following\n"
+"message will be sent to the current process:\n"
+"\n"
+"    {:mix_shell, :info, [\"hello\"]}\n"
+"\n"
+"This is mainly useful in tests, allowing us to assert\n"
+"if given messages were received or not. Since we need\n"
+"to guarantee a clean slate between tests, there\n"
+"is also a `flush/1` function responsible for flushing all\n"
+"`:mix_shell` related messages from the process inbox.\n"
+msgstr ""
+
+#. TRANSLATORS: def Mix.Shell.Process.cmd(command, opts \\ [])
+#: lib/mix/shell/process.ex:56
+msgid ""
+"Executes the given command and forwards its messages to\n"
+"the current process.\n"
+msgstr ""
+
+#. TRANSLATORS: def Mix.Shell.Process.print_app()
+#: lib/mix/shell/process.ex:46
+msgid ""
+"Prints the currently running application if it\n"
+"was not printed yet.\n"
+msgstr ""
+
+#. TRANSLATORS: def Mix.Shell.Process.yes?(message)
+#: lib/mix/shell/process.ex:113
+msgid ""
+"Forwards the message to the current process.\n"
+"It also checks the inbox for an input message matching:\n"
+"\n"
+"    {:mix_shell_input, :yes?, value}\n"
+"\n"
+"If one does not exist, it will abort since there was no shell\n"
+"process inputs given. Value must be `true` or `false`.\n"
+msgstr ""
+
+#. TRANSLATORS: def Mix.Shell.Process.prompt(message)
+#: lib/mix/shell/process.ex:93
+msgid ""
+"Forwards the message to the current process.\n"
+"It also checks the inbox for an input message matching:\n"
+"\n"
+"    {:mix_shell_input, :prompt, value}\n"
+"\n"
+"If one does not exist, it will abort since there was no shell\n"
+"process inputs given. Value must be a string.\n"
+msgstr ""
+
+#. TRANSLATORS: def Mix.Shell.Process.info(message)
+#: lib/mix/shell/process.ex:67
+msgid "Forwards the message to the current process.\n"
+msgstr ""
+
+#. TRANSLATORS: def Mix.Shell.Process.flush(callback \\ fn x -> x end)
+#: lib/mix/shell/process.ex:29
+msgid ""
+"Flush all `:mix_shell` and `:mix_shell_input` messages from the current "
+"process.\n"
+"If a callback is given, it is invoked for each received message.\n"
+"\n"
+"## Examples\n"
+"\n"
+"    flush &IO.inspect(&1)\n"
+"\n"
+msgstr ""

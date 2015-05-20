@@ -1,0 +1,33 @@
+#. TRANSLATORS: def Mix.Local.archives_path()
+#: lib/mix/local.ex:9 
+msgid ""
+"The path for local archives.\n"
+"\n"
+"Check `mix archive` for info.\n"
+msgstr ""
+#. TRANSLATORS: def Mix.Local.archive_files(name)
+#: lib/mix/local.ex:41 
+msgid ""
+"Returns paths of all archive files matching given\n"
+"application name.\n"
+msgstr ""
+#. TRANSLATORS: def Mix.Local.all_tasks()
+#: lib/mix/local.ex:33 
+msgid ""
+"Returns all tasks in local archives.\n"
+msgstr ""
+#. TRANSLATORS: def Mix.Local.append_paths()
+#: lib/mix/local.ex:26 
+msgid ""
+"Append mix paths into Erlang code path.\n"
+msgstr ""
+#. TRANSLATORS: def Mix.Local.append_archives()
+#: lib/mix/local.ex:17 
+msgid ""
+"Append archives paths into Erlang code path.\n"
+msgstr ""
+#. TRANSLATORS: def Mix.Local.check_archive_elixir_version(path)
+#: lib/mix/local.ex:48 
+msgid ""
+"Check Elixir version requirement stored in the archive and print a warning if it is not satisfied.\n"
+msgstr ""

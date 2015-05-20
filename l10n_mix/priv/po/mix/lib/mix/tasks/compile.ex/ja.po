@@ -1,0 +1,42 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: l 10n_mix\n"
+"PO-Revision-Date: 2015-05-20 22:52+0900\n"
+"Last-Translator: 小田 照敬 <EMAIL@ADDRESS>\n"
+"Language-Team: Japanese\n"
+"Language: ja\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#. TRANSLATORS: def Mix.Tasks.Compile.manifests()
+#: lib/mix/tasks/compile.ex:83
+msgid "Returns manifests for all compilers.\n"
+msgstr ""
+
+#. TRANSLATORS: def Mix.Tasks.Compile.compilers()
+#: lib/mix/tasks/compile.ex:76
+msgid "Returns all compilers.\n"
+msgstr ""
+
+#. TRANSLATORS: Elixir.Mix.Tasks.Compile Summary
+#: lib/mix/tasks/compile.ex:1
+msgid ""
+"A meta task that compiles source files.\n"
+"\n"
+"It simply runs the compilers registered in your project. At\n"
+"the end of compilation it ensures load paths are set.\n"
+"\n"
+"## Configuration\n"
+"\n"
+"  * `:compilers` - compilers to run, defaults to:\n"
+"    `[:leex, :yeec, :erlang, :elixir, :app]`\n"
+"\n"
+"## Command line options\n"
+"\n"
+"  * `--list`          - list all enabled compilers\n"
+"  * `--no-deps-check` - skip checking of dependencies\n"
+"  * `--force`         - force compilation\n"
+"\n"
+msgstr ""

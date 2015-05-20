@@ -1,0 +1,10 @@
+#. TRANSLATORS: def Mix.RemoteConverger.register(mod)
+#: lib/mix/remote_converger.ex:39 
+msgid ""
+"Register a remote converger.\n"
+msgstr ""
+#. TRANSLATORS: def Mix.RemoteConverger.get()
+#: lib/mix/remote_converger.ex:32 
+msgid ""
+"Get registered remote converger.\n"
+msgstr ""
