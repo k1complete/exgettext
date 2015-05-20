@@ -1,0 +1,14 @@
+#. TRANSLATORS: Elixir.Mix.Tasks.Deps.Unlock Summary
+#: lib/mix/tasks/deps.unlock.ex:1 
+msgid ""
+"Unlock the given dependencies.\n"
+"\n"
+"Since this is a destructive action, unlocking of dependencies\n"
+"can only happen by passing arguments/options:\n"
+"\n"
+"  * `dep1 dep2` - the name of dependencies to be unlocked\n"
+"  * `--all` - unlocks all dependencies\n"
+"  * `--unused` - unlocks only unused dependencies (no longer mentioned\n"
+"    in the `mix.exs` file)\n"
+"\n"
+msgstr ""

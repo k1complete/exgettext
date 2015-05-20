@@ -1,0 +1,21 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: l 10n_mix\n"
+"PO-Revision-Date: 2015-05-20 22:52+0900\n"
+"Last-Translator: 小田 照敬 <EMAIL@ADDRESS>\n"
+"Language-Team: Japanese\n"
+"Language: ja\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#. TRANSLATORS: def Mix.RemoteConverger.register(mod)
+#: lib/mix/remote_converger.ex:39
+msgid "Register a remote converger.\n"
+msgstr ""
+
+#. TRANSLATORS: def Mix.RemoteConverger.get()
+#: lib/mix/remote_converger.ex:32
+msgid "Get registered remote converger.\n"
+msgstr ""

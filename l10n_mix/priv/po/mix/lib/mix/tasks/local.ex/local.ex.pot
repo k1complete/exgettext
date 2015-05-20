@@ -1,0 +1,5 @@
+#. TRANSLATORS: Elixir.Mix.Tasks.Local Summary
+#: lib/mix/tasks/local.ex:1 
+msgid ""
+"List local tasks.\n"
+msgstr ""

@@ -1,0 +1,57 @@
+#. TRANSLATORS: def Mix.Archive.ebin(path)
+#: lib/mix/archive.ex:48 
+msgid ""
+"Returns the ebin directory inside the given archive path.\n"
+"\n"
+"## Examples\n"
+"\n"
+"    iex> Mix.Archive.ebin(\"foo/bar/baz-0.1.0.ez\")\n"
+"    \"foo/bar/baz-0.1.0.ez/baz-0.1.0/ebin\"\n"
+"\n"
+msgstr ""
+#. TRANSLATORS: def Mix.Archive.name(app, vsn)
+#: lib/mix/archive.ex:23 
+msgid ""
+"Returns the archive name based on `app` and `version`.\n"
+"\n"
+"## Examples\n"
+"\n"
+"    iex> Mix.Archive.name(\"foo\", nil)\n"
+"    \"foo.ez\"\n"
+"\n"
+"    iex> Mix.Archive.name(\"foo\", \"0.1.0\")\n"
+"    \"foo-0.1.0.ez\"\n"
+"\n"
+msgstr ""
+#. TRANSLATORS: def Mix.Archive.dir(path)
+#: lib/mix/archive.ex:35 
+msgid ""
+"Returns the archive internal directory from its `path`.\n"
+"\n"
+"## Examples\n"
+"\n"
+"    iex> Mix.Archive.dir(\"foo/bar/baz-0.1.0.ez\")\n"
+"    \"baz-0.1.0\"\n"
+"\n"
+msgstr ""
+#. TRANSLATORS: Elixir.Mix.Archive Summary
+#: lib/mix/archive.ex:1 
+msgid ""
+"Module responsible for managing [archives](http://www.erlang.org/doc/man/code.html).\n"
+"\n"
+"An archive is a zip file containing the app and beam files.\n"
+"A valid archive must be named with the name of the application and\n"
+"it should contain the relative paths beginning with the application\n"
+"name, e.g. the root of the zip file should be `my_app/ebin/Elixir.My.App.beam`.\n"
+msgstr ""
+#. TRANSLATORS: def Mix.Archive.create(source, target)
+#: lib/mix/archive.ex:62 
+msgid ""
+"Creates an application archive.\n"
+"\n"
+"It receives the archive file in the format\n"
+"`path/to/archive/app-vsn.ez` and the path to the root of\n"
+"the project to be archived. Everything in the `ebin` and\n"
+"`priv` directories is archived. Dependencies are not\n"
+"archived.\n"
+msgstr ""

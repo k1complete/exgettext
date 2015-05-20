@@ -1,0 +1,20 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: l 10n_mix\n"
+"PO-Revision-Date: 2015-05-20 22:52+0900\n"
+"Last-Translator: 小田 照敬 <EMAIL@ADDRESS>\n"
+"Language-Team: Japanese\n"
+"Language: ja\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#. TRANSLATORS: Elixir.Mix.Tasks.Archive.Uninstall Summary
+#: lib/mix/tasks/archive.uninstall.ex:1
+msgid ""
+"Uninstall local archives:\n"
+"\n"
+"    mix archive.uninstall archive.ez\n"
+"\n"
+msgstr ""

@@ -1,0 +1,141 @@
+#. TRANSLATORS: def Mix.Task.run(task, args \\ [])
+#: lib/mix/task.ex:224 
+msgid ""
+"Runs a `task` with the given `args`.\n"
+"\n"
+"If the task was not yet invoked, it runs the task and\n"
+"returns the result.\n"
+"\n"
+"If there is an alias with the same name, the alias\n"
+"will be invoked instead of a task.\n"
+"\n"
+"If the task or alias were already invoked, it does not\n"
+"run them again and simply aborts with `:noop`.\n"
+"\n"
+"It may raise an exception if the an alias or a task can't\n"
+"be found or the task is invalid. Check `get!/1` for more\n"
+"information.\n"
+msgstr ""
+#. TRANSLATORS: def Mix.Task.task_name(module)
+#: lib/mix/task.ex:147 
+msgid ""
+"Returns the task name for the given `module`.\n"
+msgstr ""
+#. TRANSLATORS: def Mix.Task.all_modules()
+#: lib/mix/task.ex:97 
+msgid ""
+"Returns all loaded task modules.\n"
+"\n"
+"Modules that are not yet loaded won't show up.\n"
+"Check `load_all/0` if you want to preload all tasks.\n"
+msgstr ""
+#. TRANSLATORS: def Mix.Task.load_tasks(dirs)
+#: lib/mix/task.ex:62 
+msgid ""
+"Loads all tasks in the given `paths`.\n"
+msgstr ""
+#. TRANSLATORS: def Mix.Task.load_all()
+#: lib/mix/task.ex:56 
+msgid ""
+"Loads all tasks in all code paths.\n"
+msgstr ""
+#. TRANSLATORS: def Mix.Task.task?(module)
+#: lib/mix/task.ex:334 
+msgid ""
+"Returns `true` if given module is a task.\n"
+msgstr ""
+#. TRANSLATORS: def Mix.Task.reenable(task)
+#: lib/mix/task.ex:303 
+msgid ""
+"Reenables a given task so it can be executed again down the stack.\n"
+"\n"
+"Both alias and the regular stack are reenabled when this function\n"
+"is called.\n"
+"\n"
+"If an umbrella project reenables a task, it is reenabled for all\n"
+"children projects.\n"
+msgstr ""
+#. TRANSLATORS: def Mix.Task.get(task)
+#: lib/mix/task.ex:170 
+msgid ""
+"Receives a task name and returns `{:ok, module}` if a task is found.\n"
+"\n"
+"Otherwise returns `{:error, :invalid}` in case the module\n"
+"exists but it isn't a task or `{:error, :not_found}`.\n"
+msgstr ""
+#. TRANSLATORS: def Mix.Task.get!(task)
+#: lib/mix/task.ex:187 
+msgid ""
+"Receives a task name and retrieves the task module.\n"
+"\n"
+"## Exceptions\n"
+"\n"
+"  * `Mix.NoTaskError`      - raised if the task could not be found\n"
+"  * `Mix.InvalidTaskError` - raised if the task is not a valid `Mix.Task`\n"
+"\n"
+msgstr ""
+#. TRANSLATORS: def Mix.Task.clear()
+#: lib/mix/task.ex:289 
+msgid ""
+"Clears all invoked tasks, allowing them to be reinvoked.\n"
+"\n"
+"This operation is not recursive.\n"
+msgstr ""
+#. TRANSLATORS: def Mix.Task.recursive(module)
+#: lib/mix/task.ex:136 
+msgid ""
+"Checks if the task should be run recursively for all sub-apps in\n"
+"umbrella projects.\n"
+"\n"
+"Returns `true` or `false`.\n"
+msgstr ""
+#. TRANSLATORS: def Mix.Task.alias?(task)
+#: lib/mix/task.ex:155 
+msgid ""
+"Checks if exists an alias with the given task name.\n"
+msgstr ""
+#. TRANSLATORS: def Mix.Task.shortdoc(module)
+#: lib/mix/task.ex:122 
+msgid ""
+"Gets the shortdoc for the given task `module`.\n"
+"\n"
+"Returns the shortdoc or `nil`.\n"
+msgstr ""
+#. TRANSLATORS: def Mix.Task.moduledoc(module)
+#: lib/mix/task.ex:109 
+msgid ""
+"Gets the moduledoc for the given task `module`.\n"
+"\n"
+"Returns the moduledoc or `nil`.\n"
+msgstr ""
+#. TRANSLATORS: Elixir.Mix.Task Summary
+#: lib/mix/task.ex:1 
+msgid ""
+"A simple module that provides conveniences for creating,\n"
+"loading and manipulating tasks.\n"
+"\n"
+"A Mix task can be defined by simply using `Mix.Task`\n"
+"in a module starting with `Mix.Tasks.` and defining\n"
+"the `run/1` function:\n"
+"\n"
+"    defmodule Mix.Tasks.Hello do\n"
+"      use Mix.Task\n"
+"\n"
+"      def run(_) do\n"
+"        Mix.shell.info \"hello\"\n"
+"      end\n"
+"    end\n"
+"\n"
+"The `run/1` function will receive all arguments passed\n"
+"to the command line.\n"
+"\n"
+"## Attributes\n"
+"\n"
+"There are a couple attributes available in Mix tasks to\n"
+"configure them in Mix:\n"
+"\n"
+"  * `@shortdoc`  - makes the task public with a short description that appears\n"
+"                   on `mix help`\n"
+"  * `@recursive` - run the task recursively in umbrella projects\n"
+"\n"
+msgstr ""

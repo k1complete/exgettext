@@ -1,0 +1,11 @@
+#. TRANSLATORS: Elixir.Mix.Tasks.Clean Summary
+#: lib/mix/tasks/clean.ex:1 
+msgid ""
+"Delete generated application files.\n"
+"\n"
+"This command deletes all build artifacts for the current project\n"
+"Dependencies' build files are cleaned if the `--deps` option is given.\n"
+"\n"
+"By default this task works across all environments, unless `--only`\n"
+"is given.\n"
+msgstr ""

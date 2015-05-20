@@ -1,0 +1,51 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: l 10n_mix\n"
+"PO-Revision-Date: 2015-05-20 22:52+0900\n"
+"Last-Translator: 小田 照敬 <EMAIL@ADDRESS>\n"
+"Language-Team: Japanese\n"
+"Language: ja\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#. TRANSLATORS: def Mix.Shell.IO.error(message)
+#: lib/mix/shell/io.ex:43
+msgid "Writes an error message to the shell followed by new line.\n"
+msgstr ""
+
+#. TRANSLATORS: def Mix.Shell.IO.info(message)
+#: lib/mix/shell/io.ex:35
+msgid "Writes a message to the shell followed by new line.\n"
+msgstr ""
+
+#. TRANSLATORS: def Mix.Shell.IO.prompt(message)
+#: lib/mix/shell/io.ex:52
+msgid ""
+"Writes a message shell followed by prompting the user for\n"
+"input. Input will be consumed until enter is pressed.\n"
+msgstr ""
+
+#. TRANSLATORS: Elixir.Mix.Shell.IO Summary
+#: lib/mix/shell/io.ex:1
+msgid ""
+"This is Mix's default shell.\n"
+"\n"
+"It simply prints messages to stdio and stderr.\n"
+msgstr ""
+
+#. TRANSLATORS: def Mix.Shell.IO.yes?(message)
+#: lib/mix/shell/io.ex:62
+msgid ""
+"Receives a message and asks the user if they want to proceed.\n"
+"The user must press enter or type anything that matches the \"yes\"\n"
+"regex `~r/^Y(es)?$/i`.\n"
+msgstr ""
+
+#. TRANSLATORS: def Mix.Shell.IO.cmd(command, opts \\ [])
+#: lib/mix/shell/io.ex:24
+msgid ""
+"Executes the given command and prints its output\n"
+"to stdout as it comes.\n"
+msgstr ""

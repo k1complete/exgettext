@@ -1,0 +1,33 @@
+defmodule L10nMix.Mixfile do
+  use Mix.Project
+
+  def project do
+    [app: :l10n_mix,
+     version: "0.0.1",
+     elixir: "~> 1.1.0-dev",
+     deps: deps]
+  end
+
+  # Configuration for the OTP application
+  #
+  # Type `mix help compile.app` for more information
+  def application do
+    [applications: [:logger]]
+  end
+
+  # Dependencies can be hex.pm packages:
+  #
+  #   {:mydep, "~> 0.3.0"}
+  #
+  # Or git/path repositories:
+  #
+  #   {:mydep, git: "https://github.com/elixir-lang/mydep.git", tag: "0.1"}
+  #
+  # Type `mix help deps` for more examples and options
+  defp deps do
+    [
+     {:exgettext, github: "k1complete/exgettext"},
+     {:l10n_iex, github: "k1complete/l10n_iex"}
+    ]
+  end
+end

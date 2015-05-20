@@ -1,0 +1,30 @@
+#. TRANSLATORS: def Mix.Tasks.Compile.manifests()
+#: lib/mix/tasks/compile.ex:83 
+msgid ""
+"Returns manifests for all compilers.\n"
+msgstr ""
+#. TRANSLATORS: def Mix.Tasks.Compile.compilers()
+#: lib/mix/tasks/compile.ex:76 
+msgid ""
+"Returns all compilers.\n"
+msgstr ""
+#. TRANSLATORS: Elixir.Mix.Tasks.Compile Summary
+#: lib/mix/tasks/compile.ex:1 
+msgid ""
+"A meta task that compiles source files.\n"
+"\n"
+"It simply runs the compilers registered in your project. At\n"
+"the end of compilation it ensures load paths are set.\n"
+"\n"
+"## Configuration\n"
+"\n"
+"  * `:compilers` - compilers to run, defaults to:\n"
+"    `[:leex, :yeec, :erlang, :elixir, :app]`\n"
+"\n"
+"## Command line options\n"
+"\n"
+"  * `--list`          - list all enabled compilers\n"
+"  * `--no-deps-check` - skip checking of dependencies\n"
+"  * `--force`         - force compilation\n"
+"\n"
+msgstr ""

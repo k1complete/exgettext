@@ -1,0 +1,12 @@
+#. TRANSLATORS: Elixir.Mix.Tasks.Local.Hex Summary
+#: lib/mix/tasks/local.hex.ex:1 
+msgid ""
+"Install hex locally from https://hex.pm/installs/hex.ez.\n"
+"\n"
+"    mix local.hex\n"
+"\n"
+"## Command line options\n"
+"\n"
+"  * `--force` - forces installation without a shell prompt; primarily\n"
+"    intended for automation in build systems like make\n"
+msgstr ""

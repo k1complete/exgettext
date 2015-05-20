@@ -1,0 +1,48 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: l 10n_mix\n"
+"PO-Revision-Date: 2015-05-20 22:52+0900\n"
+"Last-Translator: 小田 照敬 <EMAIL@ADDRESS>\n"
+"Language-Team: Japanese\n"
+"Language: ja\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#. TRANSLATORS: def Mix.Dep.Lock.manifest(manifest_path \\ Mix.Project.manifest_path())
+#: lib/mix/dep/lock.ex:13
+msgid "Returns the manifest file for dependencies.\n"
+msgstr ""
+
+#. TRANSLATORS: def Mix.Dep.Lock.elixir_vsn()
+#: lib/mix/dep/lock.ex:39
+msgid "Returns the elixir version in the lock manifest.\n"
+msgstr ""
+
+#. TRANSLATORS: def Mix.Dep.Lock.elixir_vsn(manifest_path)
+#: lib/mix/dep/lock.ex:47
+msgid "Returns the elixir version in the lock manifest in the given path.\n"
+msgstr ""
+
+#. TRANSLATORS: def Mix.Dep.Lock.touch()
+#: lib/mix/dep/lock.ex:21
+msgid "Touches the manifest timestamp unless it is an umbrella application.\n"
+msgstr ""
+
+#. TRANSLATORS: def Mix.Dep.Lock.touch(manifest_path)
+#: lib/mix/dep/lock.ex:30
+msgid "Touches the manifest timestamp and updates the elixir version.\n"
+msgstr ""
+
+#. TRANSLATORS: def Mix.Dep.Lock.write(map)
+#: lib/mix/dep/lock.ex:79
+msgid "Receives a map and writes it as the latest lock.\n"
+msgstr ""
+
+#. TRANSLATORS: def Mix.Dep.Lock.read()
+#: lib/mix/dep/lock.ex:61
+msgid ""
+"Read the lockfile, returns a map containing\n"
+"each app name and its current lock information.\n"
+msgstr ""

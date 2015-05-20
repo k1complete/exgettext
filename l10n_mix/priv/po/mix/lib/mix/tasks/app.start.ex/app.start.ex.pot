@@ -1,0 +1,16 @@
+#. TRANSLATORS: Elixir.Mix.Tasks.App.Start Summary
+#: lib/mix/tasks/app.start.ex:1 
+msgid ""
+"Starts all registered apps. If no apps key exists,\n"
+"it starts the current application.\n"
+"\n"
+"## Command line options\n"
+"\n"
+"  * `--force`         - force compilation regardless of compilation times\n"
+"  * `--no-compile`    - do not compile even if files require compilation\n"
+"  * `--no-deps-check` - do not check dependencies\n"
+"  * `--no-elixir-version-check`\n"
+"                      - do not check elixir version\n"
+"  * `--no-start`      - do not start applications after compilation\n"
+"\n"
+msgstr ""

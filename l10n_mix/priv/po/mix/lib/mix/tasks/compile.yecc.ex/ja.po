@@ -1,0 +1,52 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: l 10n_mix\n"
+"PO-Revision-Date: 2015-05-20 22:52+0900\n"
+"Last-Translator: 小田 照敬 <EMAIL@ADDRESS>\n"
+"Language-Team: Japanese\n"
+"Language: ja\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#. TRANSLATORS: def Mix.Tasks.Compile.Yecc.run(args)
+#: lib/mix/tasks/compile.yecc.ex:35
+msgid "Runs this task.\n"
+msgstr ""
+
+#. TRANSLATORS: def Mix.Tasks.Compile.Yecc.manifests()
+#: lib/mix/tasks/compile.yecc.ex:53
+msgid "Returns Yecc manifests.\n"
+msgstr ""
+
+#. TRANSLATORS: def Mix.Tasks.Compile.Yecc.clean()
+#: lib/mix/tasks/compile.yecc.ex:59
+msgid "Cleans up compilation artifacts.\n"
+msgstr ""
+
+#. TRANSLATORS: Elixir.Mix.Tasks.Compile.Yecc Summary
+#: lib/mix/tasks/compile.yecc.ex:1
+msgid ""
+"Compile Yecc source files.\n"
+"\n"
+"When this task runs, it will check the modification time of every file, and\n"
+"if it has changed, the file will be compiled. Files will be\n"
+"compiled in the same source directory with a .erl extension.\n"
+"You can force compilation regardless of modification times by passing\n"
+"the `--force` option.\n"
+"\n"
+"## Command line options\n"
+"\n"
+"  * `--force` - forces compilation regardless of modification times\n"
+"\n"
+"## Configuration\n"
+"\n"
+"  * `:erlc_paths` - directories to find source files. Defaults to `[\"src"
+"\"]`.\n"
+"\n"
+"  * `:yecc_options` - compilation options that apply\n"
+"    to Yecc's compiler. There are many other available\n"
+"    options here: http://www.erlang.org/doc/man/yecc.html#file-1.\n"
+"\n"
+msgstr ""

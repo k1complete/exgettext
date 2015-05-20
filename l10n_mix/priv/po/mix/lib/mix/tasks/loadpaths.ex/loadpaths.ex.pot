@@ -1,0 +1,11 @@
+#. TRANSLATORS: Elixir.Mix.Tasks.Loadpaths Summary
+#: lib/mix/tasks/loadpaths.ex:1 
+msgid ""
+"Loads the application and its dependencies paths.\n"
+"\n"
+"## Command line options\n"
+"\n"
+"  * `--no-deps-check` - do not check dependencies\n"
+"  * `--no-elixir-version-check` - do not check elixir version\n"
+"\n"
+msgstr ""

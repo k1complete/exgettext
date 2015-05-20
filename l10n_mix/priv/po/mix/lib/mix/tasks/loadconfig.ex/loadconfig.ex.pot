@@ -1,0 +1,14 @@
+#. TRANSLATORS: Elixir.Mix.Tasks.Loadconfig Summary
+#: lib/mix/tasks/loadconfig.ex:1 
+msgid ""
+"Loads and persists the given configuration.\n"
+"\n"
+"In case no configuration file is given, it loads the project\n"
+"one at \"config/config.exs\" if it exists. Keep in mind though\n"
+"the \"config/config.exs\" file is always loaded by the CLI and\n"
+"invoking it is only required in cases you are starting Mix\n"
+"manually.\n"
+"\n"
+"This task is automatically reenabled, so it can be called\n"
+"multiple times to load different configs.\n"
+msgstr ""
