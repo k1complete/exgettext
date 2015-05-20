@@ -6,18 +6,7 @@ msgstr ""
 msgid ""
 "Hello, World2"
 msgstr ""
-#. TRANSLATORS: Elixir.Sample2 Summary
-#: Elixir.Sample2:16 
+#: lib/simple.ex:11 
 msgid ""
-"sample module for exgettext library2\n"
-msgstr ""
-#. TRANSLATORS: Elixir.Sample Summary
-#: Elixir.Sample:2 
-msgid ""
-"sample module for exgettext library\n"
-msgstr ""
-#. TRANSLATORS: def Sample.hello()
-#: Elixir.Sample.hello/0:11 
-msgid ""
-"Hello is hello function\n"
+"good morning"
 msgstr ""

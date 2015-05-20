@@ -3,7 +3,7 @@ defmodule Exgettext.Mixfile do
 
   def project do
     [app: :exgettext,
-     version: "0.0.2",
+     version: "0.1.0",
      elixir: "~> 1.1.0-dev or ~> 1.0.0 or ~> 0.15.0-dev",
      compilers: Mix.compilers ++ [:po],
      description: "Localization package using GNU gettext",

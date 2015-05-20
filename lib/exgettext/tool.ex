@@ -77,15 +77,19 @@ defmodule Exgettext.Tool do
     get_strline(fh, r, str)
   end
 
-  def convert_po(pfile) do
+  def convert_po(pfile, acc \\ %{}) do
     {:ok, fh} = File.open(pfile)
     r = IO.binread(fh, :line)
-    r = parse(fh, r, %{})
+    r = parse(fh, r, acc)
     File.close(fh)
     r
   end
-  def msgfmt(pfile, outfile) do
-    r = convert_po(pfile)
+  def msgfmt(pfiles, outfile) do
+    r = Enum.reduce(pfiles, 
+                    %{}, 
+                    fn(x, acc) ->
+                      convert_po(x, acc)
+                    end)
     {:ok, dets} = :dets.open_file(outfile,[])
     :dets.delete_all_objects(dets)
     :dets.insert(dets, (Enum.map Map.keys(r), &({&1, Map.get(r, &1)})))
@@ -240,6 +244,41 @@ defmodule Exgettext.Tool do
                  IO.binwrite(fh, "msgstr \"\"\n")
              end)
   end
+  defp output2(r, fdict, app) do
+    Enum.map(r, 
+             fn(e) -> 
+               [mh|_mt] = e[:references]
+               basename = mh[:file]
+               pofile = Exgettext.Util.pot_path(app, basename)
+               if (:ets.insert_new(fdict, {pofile, basename})) do
+                 :ok = File.mkdir_p(Path.dirname(pofile))
+                 {:ok, fh} = File.open(pofile, [:write])
+               else
+                 {:ok, fh} = File.open(pofile, [:write, :append])
+               end
+               if (t = e[:comment]) do
+                 IO.binwrite(fh, "#. TRANSLATORS: #{t}\n")
+               end
+               m = e[:references]
+               if ((length(m)) > 0) do
+                 IO.binwrite(fh, "#: ")
+                 Enum.map(m, fn(x) -> 
+                               IO.binwrite(fh, "#{x[:file]}:#{x[:line]} ")
+                          end)
+                 IO.binwrite(fh, "\n")
+               end
+               IO.binwrite(fh, "msgid \"\"\n")
+               m = e[:msgid]
+               Enum.map(m, fn(x) -> 
+                             s = escape(x)
+                             IO.binwrite(fh, "\"")
+                             IO.binwrite(fh, s)
+                             IO.binwrite(fh, "\"\n") 
+                        end)
+               IO.binwrite(fh, "msgstr \"\"\n")
+               File.close(fh)
+             end)
+  end
   def potdb(app) do
     "#{app}.pot_db"
   end
@@ -287,14 +326,18 @@ defmodule Exgettext.Tool do
                                             end)
                       } end)
     {:ok, fh} = File.open(pot, [:write])
+    files = :ets.new(:symtable, [])
+    #output2(r3, files, app)
     output(fh, r3)
     Enum.map(apps,
              fn(x) ->
                Mix.shell.info("collecting document for #{x}")
                s = doc(x, opt)
-               output(fh, s)
+               output2(s, files, Atom.to_string(x))
+               #output(fh, s)
              end)
-    File.close(fh)
+#    File.close(fh)
+    :ets.delete(files)
     :ok
   end
 
