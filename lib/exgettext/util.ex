@@ -54,11 +54,15 @@ defmodule Exgettext.Util do
   def defdelegate_filter(src, target, func) do
     target.module_info(:exports) |> 
       Stream.filter(fn({ff, a}) ->
-                      func.({ff, a}) && (not ff in [:__info__, :module_info])
+                      func.({ff, a}) && 
+                        (not ff in [:__info__, :module_info])
                     end) |>
       Stream.map(fn({ff, a}) ->
                    args1 = :lists.seq(1,a)
-                   {ff, Enum.map(args1, fn(x) -> {:"a#{x}", [], nil} end)}
+                   {ff, Enum.map(args1, 
+                                 fn(x) -> 
+                                   {:"a#{x}", [], nil} 
+                                 end)}
                  end) |>
       Enum.map(fn({ff, a}) ->
                  # IO.inspect ff
