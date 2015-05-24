@@ -38,7 +38,7 @@ defmodule Mix.Tasks.L10n.Msgfmt do
     app = Mix.Project.config[:app]
     pofiles = Exgettext.Util.pofiles(lang)
     mofile = Exgettext.Runtime.mofile(app, lang)
-    if opt[:force] || Mix.Utils.stale?(pofile, [mofile]) do
+    if opt[:force] || Mix.Utils.stale?(pofiles, [mofile]) do
       Mix.shell.info("msgfmt for #{app}")
       dir = Path.dirname(mofile)
       pofile = Enum.join(pofiles, " ")
