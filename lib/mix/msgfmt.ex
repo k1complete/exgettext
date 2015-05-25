@@ -41,7 +41,7 @@ defmodule Mix.Tasks.L10n.Msgfmt do
     if opt[:force] || Mix.Utils.stale?(pofiles, [mofile]) do
       Mix.shell.info("msgfmt for #{app}")
       dir = Path.dirname(mofile)
-      pofile = Enum.join(pofiles, " ")
+      # pofile = Enum.join(pofiles, " ")
       # Mix.shell.info("#{pofile} #{mofile}")
       :ok = File.mkdir_p(dir)
       :ok = Exgettext.Tool.msgfmt(pofiles, mofile)
