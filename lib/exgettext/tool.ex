@@ -219,7 +219,7 @@ defmodule Exgettext.Tool do
     o = o |> Enum.sort &( &1.module < &2.module && &1.name < &2.name )
     Enum.map o, fn(x) -> %{x | msgid: line_split(x.msgid) } end
   end
-  defp output(fh, r) do
+  defp output_msg(fh, r) do
     Enum.map(r, 
              fn(e) -> 
                  if (t = e[:comment]) do
@@ -244,7 +244,7 @@ defmodule Exgettext.Tool do
                  IO.binwrite(fh, "msgstr \"\"\n")
              end)
   end
-  defp output2(r, fdict, app) do
+  defp output_doc(r, fdict, app) do
     Enum.map(r, 
              fn(e) -> 
                [mh|_mt] = e[:references]
@@ -317,6 +317,7 @@ defmodule Exgettext.Tool do
                       %{msgid: km, references: v}
                   end)
     :dets.close(dets)
+
     r3 = Enum.map(r2, fn(e) ->
                      %{msgid: e[:msgid],
                        references: Enum.map(e[:references], 
@@ -327,16 +328,14 @@ defmodule Exgettext.Tool do
                       } end)
     {:ok, fh} = File.open(pot, [:write])
     files = :ets.new(:symtable, [])
-    #output2(r3, files, app)
-    output(fh, r3)
+    output_msg(fh, r3)
+    File.close(fh)
     Enum.map(apps,
              fn(x) ->
                Mix.shell.info("collecting document for #{x}")
                s = doc(x, opt)
-               output2(s, files, Atom.to_string(x))
-               #output(fh, s)
+               output_doc(s, files, Atom.to_string(x))
              end)
-#    File.close(fh)
     :ets.delete(files)
     :ok
   end

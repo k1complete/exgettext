@@ -1,5 +1,8 @@
+exgettext --  gettext for elixir
 =====================================================
- exgettext --  gettext for elixir
+
+
+概要
 =====================================================
 
 exgettextはgettext()互換のpoファイルを用いたelixir用
@@ -13,6 +16,7 @@ GNU gettext互換ですので、GNU gettextに対応したツールが使えま�
 配置され、mix archiveで配布されます。
 
 メッセージの場合
+
 |拡張子|意味                       |生成コマンド |パス
 |:-----|:--------------------------|:------------|:------------------------
 |pot   |POテンプレート             |l10n.xgetetxt|priv/po
@@ -22,6 +26,7 @@ GNU gettext互換ですので、GNU gettextに対応したツールが使えま�
 |exmo  |poをコンパイルしたもの     |l10n.msgfmt  |priv/lang/#{LANG}/
 
 ドキュメントの場合
+
 |拡張子|意味                       |生成コマンド |パス
 |:-----|:--------------------------|:------------|:------------------------
 |pot   |POテンプレート             |l10n.xgetetxt|priv/po/srctree/
@@ -57,7 +62,10 @@ GNU gettextをインストールしておきます。exgettextはmsginit, msgmer
 
 * mix.exsにdeps: exgettextを追加します。
 
-* use Exgettext; import Exgettext; を呼び出します。
+* mix.exsの、project/0にcompilers: Mix.compilers++[:po]を
+  追加します。
+
+* use Exgettext; を呼び出します。
 
 * 地域化が必要なリテラル文字列を~T() sigil でマークアップ
   します。
@@ -83,7 +91,7 @@ GNU gettextをインストールしておきます。exgettextはmsginit, msgmer
 翻訳チーム
 -----------------------------------------------------
 
-* パッケージを入手し、priv/po/app.poファイルを確認します。
+* パッケージを入手し、priv/po/lang.poファイルを確認します。
   ドキュメントを翻訳する際には、それぞれのソースファイルの
   プロジェクトからの相対パスpath_to_srcとすると、以下の位置に
   各ソースファイルに対応した翻訳ファイルがあります。
@@ -92,24 +100,26 @@ GNU gettextをインストールしておきます。exgettextはmsginit, msgmer
 
 * まだ翻訳したい言語のpoファイルが無い場合、poファイルを作成するために、
   env LANG=ja mix l10n.msginit を実行します。適切な位置に
-  po/ja.po, po/app/path_to_src/ja.po が作成されます。
+  po/ja.po, po/app/path_to_src/ja.po が作成されます(jaの場合)。
   mix l10n.msginitでは環境変数LANGを参照してどの言語へローカライズしよ
   うとしているかを判断します。内部ではGNU gettextのmsginitが呼び出され
   ます。
 
-* 既にpo/ja.poがある場合で、パッケージのバージョンアップなどでメッセー
-  ジを翻訳仕直す場合はmix l10n.msgmerge を実行します。内部では、GNU
-  gettextのmsgmerge -o priv/po/ja.pox priv/po/ja.po priv/po/app.potが実行され、
-  マージ結果としてpriv/po/ja.poxが作成されます。マージ内容に問題がなければ
-  priv/po/ja.poxをpo/ja.poに移動します。--updateオプションを付けると
-  既存のpoファイルを上書きします。
+* 既に翻訳したい言語のpoファイル(jaならpo/ja.po)がある場合で、
+  パッケージのバージョンアップなどでメッセージを翻訳し直す場合は
+  mix l10n.msgmerge を実行します。内部では、path/toをpoファイルの
+  ディレクトリとすると、GNU gettextの
+  msgmerge -o path/to/ja.pox path/to/ja.po path/to/app.potが実行され、
+  マージ結果としてpath/to/ja.poxが作成されます。マージ内容に問題がなければ
+  手動でpath/to/ja.poxをpath/to/ja.poに移動します。
+  --updateオプションを付けると既存のpoファイルを上書きしますので、
+  普段はこちらを使うとよいでしょう。
 
 * po/ja.po中のmsgidをmsgstrに翻訳していきます。GNU emacsのpoモードが
   便利です。
 
-* 翻訳が終ったら、mix l10n.msgfmtを実行して priv/po/ja.poから
+* 翻訳が終ったら、mix l10n.msgfmtを実行して path/to/ja.poから
   priv/lang/ja/app.exmoを生成します。
-
 
 実行時
 -----------------------------------------------------
@@ -118,6 +128,10 @@ GNU gettextをインストールしておきます。exgettextはmsginit, msgmer
 
 * ~T()は、exgettextへの呼出に置き換えられ、lang/ja/app.exmoを
   参照して対応する言語のメッセージが使用されます。オープンに失敗すると
-  置き換えは行なわれません。
+  置き換えは行なわれません。また、対応する翻訳結果が見付からなかったり、
+  ""の場合も置き換えは行なわれません。置き換えが行われない場合は
+  オリジナルの文字列がそのまま出力されます。
 
-[* Exgettext.h で翻訳されたmoduledocを表示させることができます。]
+* Exgettext.Helper.h で翻訳されたmoduledocを表示させることができます。
+  import Exgettext.Helperすることで、標準のhを置き換えることもできます。
+
