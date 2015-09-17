@@ -38,9 +38,15 @@ defmodule Exgettext.Code do
       :moduledoc ->
         get_docs_mod(app, r)
       _ ->
-        [docs: docs, moduledoc: moduledoc] = r
+        [docs: docs, moduledoc: moduledoc, 
+         callback_docs: callback_docs,
+         type_docs: type_docs
+        ] = r
         [docs: get_docs_func(app, docs),
-         moduledoc: get_docs_mod(app, moduledoc)]
+         moduledoc: get_docs_mod(app, moduledoc),
+         callback_docs: get_docs_func(app, callback_docs),
+         type_docs: get_docs_func(app, type_docs)
+        ]
     end
   end
 end
