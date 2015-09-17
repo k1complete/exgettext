@@ -189,7 +189,7 @@ defmodule Exgettext.Tool do
                        nil -> a
                        d -> a ++ Enum.map d, 
                             fn(x) ->
-                              {{ty, _ar}, line, doc} = x
+                              {{ty, _ar}, line, :tyep, doc} = x
                               ref = %{file: file, line: line}
                               %{module: m, 
                                 name: ty, 
@@ -211,7 +211,7 @@ defmodule Exgettext.Tool do
                        nil -> a
                        d -> a ++ Enum.map d, 
                             fn(x) ->
-                              {{ty, ar}, line, doc} = x
+                              {{ty, ar}, line, :callback, doc} = x
                               ref = %{file: file, line: line}
                               %{module: m, 
                                 name: ty, 
