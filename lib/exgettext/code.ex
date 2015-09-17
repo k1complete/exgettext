@@ -7,6 +7,7 @@ defmodule Exgettext.Code do
   end
   defp get_docs_func(app, r) do
     Enum.map(r, fn(x) -> 
+                  IO.inspect [elem: x]
                   d = elem(x, 4)
                   dloc = Exgettext.Runtime.gettext(app, d)
                   put_elem(x, 4, dloc)
