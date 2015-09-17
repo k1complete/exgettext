@@ -20,7 +20,13 @@ defmodule Exgettext.Code do
     dloc = Exgettext.Runtime.gettext(app, d)
     put_elem(r, 1, dloc)
   end
-
+  defp get_docs_type(app, r) do
+    Enum.map(r, fn(x) ->
+                  d = elem(x, 3)
+                  dloc = Exgettext.Runtime.gettext(app, d)
+                  put_elem(x, 4, dloc)
+             end)
+  end
   @doc """
   Returns the localized docs for the given module.
   
@@ -45,7 +51,7 @@ defmodule Exgettext.Code do
         [docs: get_docs_func(app, docs),
          moduledoc: get_docs_mod(app, moduledoc),
          callback_docs: get_docs_func(app, callback_docs),
-         type_docs: get_docs_func(app, type_docs)
+         type_docs: get_docs_type(app, type_docs)
         ]
     end
   end
