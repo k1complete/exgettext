@@ -3,7 +3,7 @@ defmodule Exgettext.Runtime do
   def basedir(app) do
     case :code.priv_dir(app) do
       {:error, _other} -> 
-        Logger.warn(ArgumentError, message: "bad app #{app}, cannot find to app path")
+#        Logger.warn(ArgumentError, message: "bad app #{app}, cannot find to app path")
         "priv"
       r -> r
     end
