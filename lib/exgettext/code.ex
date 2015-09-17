@@ -25,7 +25,7 @@ defmodule Exgettext.Code do
     Enum.map(r, fn(x) ->
                   d = elem(x, 3)
                   dloc = Exgettext.Runtime.gettext(app, d)
-                  put_elem(x, 4, dloc)
+                  put_elem(x, 3, dloc)
              end)
   end
   @doc """
@@ -44,6 +44,10 @@ defmodule Exgettext.Code do
         get_docs_func(app, r)
       :moduledoc ->
         get_docs_mod(app, r)
+      :type_docs ->
+        get_docs_type(app, r)
+      :callback_docs ->
+        get_docs_type(app, r)
       _ ->
         [docs: docs, moduledoc: moduledoc, 
          callback_docs: callback_docs,
@@ -51,7 +55,7 @@ defmodule Exgettext.Code do
         ] = r
         [docs: get_docs_func(app, docs),
          moduledoc: get_docs_mod(app, moduledoc),
-         callback_docs: get_docs_func(app, callback_docs),
+         callback_docs: get_docs_type(app, callback_docs),
          type_docs: get_docs_type(app, type_docs)
         ]
     end
