@@ -153,31 +153,35 @@ defmodule Exgettext.Tool do
     Enum.filter(result, fn(x) -> is_map(x) and is_binary(x.msgid) end) |> Enum.sort &(&1 < &2)
   end
   def funcdoc(modules, src_root) do
-    r = modules |> List.foldr [], 
-                        fn(m, a) ->
-                            d = Code.get_docs(m, :docs)
-                            file = module_to_file(m, src_root)
-                            case d do
-                                  nil -> a
-                                  d -> a ++ Enum.map d, 
-                                            fn(x) -> 
-                                                {{name, _arity},line, type, arg, doc} = x
-                                                ref = %{file: file,
-                                                        line: line}
-                                                com = Macro.to_string {{:".", 
-                                                                        [], 
-                                                                        [m, name]}, 
-                                                                       [], arg}
-                                                %{module: m, 
-                                                  name: name,
-                                                  msgid: doc,
-                                                  references: [ref],
-                                                  comment: "#{type} #{com}"
-                                                 }
-                                            end
-                            end
-
-                        end 
+    r = modules |>
+      List.foldr [], 
+    fn(m, a) ->
+      d = Code.get_docs(m, :docs)
+      file = module_to_file(m, src_root)
+      case d do
+        nil -> a
+        d -> 
+          a ++ Enum.map d, 
+          fn(x) -> 
+            {{name, _arity}, 
+             line, type, arg, doc} = x
+            ref = %{file: file, line: line}
+            com = Macro.to_string({{:".", 
+                                    [], 
+                                    [m, name]}, 
+                                   [], arg},
+                                  fn(_ast, s) ->
+                                    Regex.replace(~R/\n/, s, ";", [:g])
+                                  end)
+            %{module: m, 
+              name: name,
+              msgid: doc,
+              references: [ref],
+              comment: "#{type} #{com}"
+             }
+          end
+      end
+    end 
     Enum.filter(r, fn(x) -> is_map(x) and is_binary(x.msgid) end) |> Enum.sort &(&1 < &2)
   end
   def typedoc(modules, src_root) do
