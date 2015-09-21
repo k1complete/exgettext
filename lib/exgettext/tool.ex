@@ -237,9 +237,24 @@ defmodule Exgettext.Tool do
                end)
     Enum.map(r, fn({_k,v}) -> v end)
   end
+  def ensure_load(root, app) do
+    case Path.wildcard(Path.join(root, "ebin")) do
+      [] ->
+        case Path.wildcard(Path.join(root, "_build/**/#{app}/ebin")) do
+          [] ->
+            root
+           x -> hd(x)
+        end
+      x ->
+        hd(x)
+    end
+  end
   def doc(app, opts) do
     src_root = Path.expand(Keyword.get(opts, app, System.get_env("PWD")))
+    ebin = ensure_load(src_root, app)
+    Code.prepend_path(ebin)
     mod = modules_app(app)
+
     m = moduledoc(mod, src_root)
     f = funcdoc(mod, src_root)
     t = typedoc(mod, src_root)
