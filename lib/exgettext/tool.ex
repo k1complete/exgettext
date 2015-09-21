@@ -332,7 +332,9 @@ defmodule Exgettext.Tool do
     pot_db = potdb(app)
     pot = Exgettext.Util.pot_file(app)
     Mix.shell.info "xgettext #{pot_db} --output=#{pot}"
-    :ok = File.mkdir_p(Exgettext.Util.popath())
+    dir = Exgettext.Util.popath()
+    Mix.shell.info "path #{path}"
+    :ok = File.mkdir_p(dir)
     {:ok, dets} = :dets.open_file(pot_db, [])
     r = :dets.foldl(fn({k, v}, acc) when not(is_atom(k)) -> 
                         [{k, v}|acc] 
