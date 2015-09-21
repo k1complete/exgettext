@@ -59,7 +59,7 @@ defmodule Exgettext.Runtime do
   end
   def gettext_raw(app, key, lang) do
     dets_file = getpath(app, lang)
-    IO.inspect [gettext_raw: app, dets: dets_file]
+#    IO.inspect [gettext_raw: app, dets: dets_file]
     case :dets.open_file(dets_file) do
       {:ok, dets} ->
         r = case :dets.lookup(dets, key) do
