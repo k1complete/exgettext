@@ -7,7 +7,7 @@ defmodule Exgettext.HTML do
                  Map.update(mod, :moduledoc, nil, 
                             fn(x) ->
                               s = gettext(app, x)
-                              IO.puts s
+                              IO.inspect [app: app, doc: s]
                               s
                             end) |>
                  Map.update(:docs, nil, 
