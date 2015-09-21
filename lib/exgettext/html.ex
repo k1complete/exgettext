@@ -5,7 +5,7 @@ defmodule Exgettext.HTML do
       Enum.map(fn(mod) ->
                  app = Exgettext.Util.get_app(mod.module)
                  Map.update(mod, :moduledoc, nil, &(gettext(app, &1))) |>
-                 Map.update(ret, :docs, nil, 
+                 Map.update(:docs, nil, 
                             &(Enum.map(&1, 
                                        fn(x) -> 
                                          Map.update(x, :doc, nil,
