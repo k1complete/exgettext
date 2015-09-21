@@ -133,7 +133,7 @@ defmodule Exgettext.Tool do
     module.__info__(:compile)[:source]
     file = module.__info__(:compile)[:source]
     m = Exgettext.Util.relative(file, src_root)
-    IO.inspect [file: file, src_root: src_root: relative: m]
+    IO.inspect [file: file, src_root: src_root, relative: m]
     m
   end
   def moduledoc(modules, src_root) do
