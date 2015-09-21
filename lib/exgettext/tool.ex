@@ -277,6 +277,7 @@ defmodule Exgettext.Tool do
                [mh|_mt] = e[:references]
                basename = mh[:file]
                pofile = Exgettext.Util.pot_path(app, basename)
+               IO.inspect [pofile: pofile]
                if (:ets.insert_new(fdict, {pofile, basename})) do
                  :ok = File.mkdir_p(Path.dirname(pofile))
                  {:ok, fh} = File.open(pofile, [:write])
