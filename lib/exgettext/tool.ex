@@ -133,7 +133,7 @@ defmodule Exgettext.Tool do
     module.__info__(:compile)[:source]
     file = module.__info__(:compile)[:source]
     m = Exgettext.Util.relative(file, src_root)
-    IO.inspect [file: file, src_root: src_root, relative: m]
+#    IO.inspect [file: file, src_root: src_root, relative: m]
     m
   end
   def moduledoc(modules, src_root) do
@@ -294,7 +294,7 @@ defmodule Exgettext.Tool do
                [mh|_mt] = e[:references]
                basename = mh[:file]
                pofile = Exgettext.Util.pot_path(app, basename)
-               IO.inspect [pofile: pofile]
+#               IO.inspect [pofile: pofile]
                if (:ets.insert_new(fdict, {pofile, basename})) do
                  :ok = File.mkdir_p(Path.dirname(pofile))
                  {:ok, fh} = File.open(pofile, [:write])
