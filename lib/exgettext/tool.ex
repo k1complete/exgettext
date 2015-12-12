@@ -137,54 +137,53 @@ defmodule Exgettext.Tool do
     m
   end
   def moduledoc(modules, src_root) do
-    result = modules |> 
-      Enum.map fn(x) ->
-                 case Code.get_docs(x, :moduledoc) do
-                   nil -> nil
-                   {l, d} ->
-                     ref = %{file: module_to_file(x, src_root),
-                             line: l}
-                     %{module: x, 
-                       name: "", 
-                       msgid: d,
-                       references: [ref],
-                       comment: "#{x} Summary"
-                      }
-                 end
+    result = Enum.map modules, 
+      fn(x) ->
+        case Code.get_docs(x, :moduledoc) do
+          nil -> nil
+          {l, d} ->
+            ref = %{file: module_to_file(x, src_root),
+                    line: l}
+            %{module: x, 
+              name: "", 
+              msgid: d,
+              references: [ref],
+              comment: "#{x} Summary"
+             }
+        end
     end
-    Enum.filter(result, fn(x) -> is_map(x) and is_binary(x.msgid) end) |> Enum.sort &(&1 < &2)
+    Enum.filter(result, fn(x) -> is_map(x) and is_binary(x.msgid) end) |> Enum.sort(&(&1 < &2))
   end
   def funcdoc(modules, src_root) do
-    r = modules |>
-      List.foldr [], 
-    fn(m, a) ->
-      d = Code.get_docs(m, :docs)
-      file = module_to_file(m, src_root)
-      case d do
-        nil -> a
-        d -> 
-          a ++ Enum.map d, 
-          fn(x) -> 
-            {{name, _arity}, 
-             line, type, arg, doc} = x
-            ref = %{file: file, line: line}
-            com = Macro.to_string({{:".", 
-                                    [], 
-                                    [m, name]}, 
-                                   [], arg},
-                                  fn(_ast, s) ->
-                                    Regex.replace(~R/\n/, s, ";", [:g])
-                                  end)
-            %{module: m, 
-              name: name,
-              msgid: doc,
-              references: [ref],
-              comment: "#{type} #{com}"
-             }
-          end
-      end
+    r = List.foldr modules, [], 
+      fn(m, a) ->
+        d = Code.get_docs(m, :docs)
+        file = module_to_file(m, src_root)
+        case d do
+          nil -> a
+          d -> 
+            a ++ Enum.map d, 
+            fn(x) -> 
+              {{name, _arity}, 
+               line, type, arg, doc} = x
+              ref = %{file: file, line: line}
+              com = Macro.to_string({{:".", 
+                                      [], 
+                                      [m, name]}, 
+                                     [], arg},
+                                    fn(_ast, s) ->
+                                      Regex.replace(~R/\n/, s, ";", [:g])
+                                    end)
+              %{module: m, 
+                name: name,
+                msgid: doc,
+                references: [ref],
+                comment: "#{type} #{com}"
+               }
+            end
+        end
     end 
-    Enum.filter(r, fn(x) -> is_map(x) and is_binary(x.msgid) end) |> Enum.sort &(&1 < &2)
+    Enum.filter(r, fn(x) -> is_map(x) and is_binary(x.msgid) end) |> Enum.sort(&(&1 < &2))
   end
   def typedoc(modules, src_root) do
     r = List.foldr(modules, [],
@@ -206,7 +205,7 @@ defmodule Exgettext.Tool do
                      end
                    end)
     Enum.filter(r, fn(x) -> is_map(x) and is_binary(x.msgid) end) |>
-      Enum.sort &(&1 < &2)
+      Enum.sort(&(&1 < &2))
   end
   def callbackdoc(modules, src_root) do
     r = List.foldr(modules, [],
@@ -228,7 +227,7 @@ defmodule Exgettext.Tool do
                      end
                    end)
     Enum.filter(r, fn(x) -> is_map(x) and is_binary(x.msgid) end) |>
-      Enum.sort &(&1 < &2)
+      Enum.sort(&(&1 < &2))
   end
   def redup(m) do
     r = List.foldl(m, %{}, fn(x, a) -> 
@@ -260,7 +259,7 @@ defmodule Exgettext.Tool do
     t = typedoc(mod, src_root)
     c = callbackdoc(mod, src_root)
     o = redup(f ++ m ++ t ++ c)
-    o = o |> Enum.sort &( &1.module < &2.module && &1.name < &2.name )
+    o = o |> Enum.sort(&( &1.module < &2.module && &1.name < &2.name ))
     Enum.map o, fn(x) -> %{x | msgid: line_split(x.msgid) } end
   end
   defp output_msg(fh, r) do
@@ -295,11 +294,11 @@ defmodule Exgettext.Tool do
                basename = mh[:file]
                pofile = Exgettext.Util.pot_path(app, basename)
 #               IO.inspect [pofile: pofile]
-               if (:ets.insert_new(fdict, {pofile, basename})) do
+               {:ok, fh} = if (:ets.insert_new(fdict, {pofile, basename})) do
                  :ok = File.mkdir_p(Path.dirname(pofile))
-                 {:ok, fh} = File.open(pofile, [:write])
+                 File.open(pofile, [:write])
                else
-                 {:ok, fh} = File.open(pofile, [:write, :append])
+                 File.open(pofile, [:write, :append])
                end
                if (t = e[:comment]) do
                  IO.binwrite(fh, "#. TRANSLATORS: #{t}\n")

@@ -77,10 +77,10 @@ defmodule Mix.Tasks.L10n.Msgmerge do
                #x = Exgettext.Util.pathescape(x)
                poxfile = Path.join(dir, outfile)
                poxfile = Exgettext.Util.pathescape(poxfile)
-               if (update) do
-                 cmd = "msgmerge -U #{opts}#{pofile} #{basename}"
+               cmd = if (update) do
+                 "msgmerge -U #{opts}#{pofile} #{basename}"
                else
-                 cmd = "msgmerge -o #{poxfile} #{opts}#{pofile} #{basename}"
+                 "msgmerge -o #{poxfile} #{opts}#{pofile} #{basename}"
                end
 #               IO.inspect [merge: cmd]
                Mix.shell.info(cmd)
