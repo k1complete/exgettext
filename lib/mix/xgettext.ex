@@ -58,7 +58,7 @@ defmodule Mix.Tasks.L10n.Xgettext do
     end
     :ok = Exgettext.Tool.xgettext(app, opt)
     m = config[:exgettext][:extra]
-    if (m  && Module.defines?(m)) do
+    if (m  && Module.defines?(m, {:exgettext, 3})) do
       apply(m, :xgettext, [config, app, opt])
     else
       :ok      
