@@ -58,10 +58,11 @@ defmodule Mix.Tasks.L10n.Xgettext do
     end
     :ok = Exgettext.Tool.xgettext(app, opt)
     m = config[:exgettext][:extra]
-    if (m  && Module.defines?(m, {:exgettext, 3})) do
-      apply(m, :xgettext, [config, app, opt])
-    else
-      :ok      
+    case Code.ensure_loaded(m) do
+      {:module, ^m} ->
+        apply(m, :xgettext, [config, app, opt])
+      _ ->
+        :ok      
     end
   end
 end
