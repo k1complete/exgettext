@@ -83,11 +83,15 @@ defmodule Mix.Tasks.L10n.Msgmerge do
                  "msgmerge -o #{poxfile} #{opts}#{pofile} #{basename}"
                end
 #               IO.inspect [merge: cmd]
-               Mix.shell.info(cmd)
-               case Mix.shell.cmd(cmd) do
-                 0 -> 0
-                 r -> Mix.shell.error("failed #{r}")
-                      r
+               if File.regular?(basename) do
+                 Mix.shell.info(cmd)
+                 case Mix.shell.cmd(cmd) do
+                   0 -> 0
+                   r -> Mix.shell.error("failed #{r}")
+                        r
+                 end
+               else
+                 0
                end
              end)
   end
