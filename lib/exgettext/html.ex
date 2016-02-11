@@ -1,5 +1,8 @@
 defmodule Exgettext.HTML do
   import Exgettext.Runtime, only: [gettext: 2]
+  alias ExDoc.Formatter.HTML.Templates
+  alias ExDoc.Formatter.HTML.Autolink
+
   def run(module_nodes, config) when is_map(config) do
     m = module_nodes |> 
       Enum.map(fn(mod) ->
