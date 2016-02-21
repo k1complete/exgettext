@@ -9,7 +9,9 @@ defmodule Exgettext.Runtime do
     end
   end
   def mofile(app, lang) do
-    Path.join([basedir(app), "lang", "#{lang}", "#{app}.exmo"])
+    s = Path.join([basedir(app), "lang", "#{lang}", "#{app}.exmo"])
+#    IO.inspect [mofile: s]
+    s
   end
   def getpath(app, lang) do
     mofile(app, lang)
