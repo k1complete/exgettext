@@ -1,10 +1,11 @@
 defmodule Exgettext.HTML do
   import Exgettext.Runtime, only: [gettext: 2]
+#  require ExDoc
   @moduledoc """
   Generate HTML documentation for Elixir projects
   """
   @main "api-reference"
-  def module_translate(module_nodes, config) do
+  def module_translate(module_nodes, _config) do
     module_nodes |>
     Enum.map(fn(mod) ->
                app = Exgettext.Util.get_app(mod.module)
@@ -26,7 +27,7 @@ defmodule Exgettext.HTML do
   @doc """
   Generate HTML documentation for the given modules
   """
-  @spec run(list, %ExDoc.Config{}) :: String.t
+  @spec run(list, map) :: String.t
   def run(module_nodes, config) when is_map(config) do
     config = normalize_config(config)
     output = Path.expand(config.output)
@@ -41,9 +42,12 @@ defmodule Exgettext.HTML do
     exceptions = filter_list(:exceptions, all)
     protocols  = filter_list(:protocols, all)
 
-    if config.logo do
-      config = process_logo_metadata(config)
-    end
+    config =
+      if config.logo do
+        process_logo_metadata(config)
+      else
+        config
+      end
 
     generate_api_reference(modules, exceptions, protocols, output, config)
     extras = generate_extras(output, module_nodes, modules, exceptions, protocols, config)

@@ -41,7 +41,7 @@ defmodule Exgettext.Runtime do
     end
   end
   def gettext(app, key, lang) do
-#    IO.inspect [gettext: app, key: key]
+    IO.inspect [gettext: app, key: key]
     r = case gettext_raw(app, key, lang) do
           {:ok, r} -> r
           _ ->
