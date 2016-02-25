@@ -18,7 +18,25 @@ defmodule Exgettext.HTML do
                                                   fn(y) -> 
                                                     gettext(app, y)
                                                   end)
+                                     end))) |>
+               Map.update(:tyep_docs, nil,
+                          &(Enum.map(&1, 
+                                     fn(x) -> 
+                                       Map.update(x, :type_docs, nil,
+                                                  fn(y) -> 
+                                                    gettext(app, y)
+                                                  end)
+                                     end))) |>
+               Map.update(:callback__docs, nil,
+                          &(Enum.map(&1, 
+                                     fn(x) -> 
+                                       Map.update(x, :callback_docs, nil,
+                                                  fn(y) -> 
+                                                    gettext(app, y)
+                                                  end)
                                      end)))
+               
+                          
              end)
   end
   alias ExDoc.Formatter.HTML.Templates
