@@ -27,7 +27,7 @@ defmodule Exgettext.HTML do
                                                     gettext(app, y)
                                                   end)
                                      end))) |>
-               Map.update(:callback__docs, nil,
+               Map.update(:callback_docs, nil,
                           &(Enum.map(&1, 
                                      fn(x) -> 
                                        Map.update(x, :callback_docs, nil,
@@ -35,8 +35,6 @@ defmodule Exgettext.HTML do
                                                     gettext(app, y)
                                                   end)
                                      end)))
-               
-                          
              end)
   end
   alias ExDoc.Formatter.HTML.Templates
