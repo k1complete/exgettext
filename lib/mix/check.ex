@@ -39,14 +39,12 @@ defmodule Mix.Tasks.L10n.Check do
     lang = Exgettext.Runtime.getlang(env)
     app = Mix.Project.config[:app]
     pofiles = Exgettext.Util.pofiles(lang)
-    Mix.shell.info("check #{pofiles}")
-    IO.inspect [pofiles: pofiles]
+#    Mix.shell.info("check #{pofiles}")
+#    IO.inspect [pofiles: pofiles]
     Enum.reduce(pofiles, 0,
                 fn(x, a) ->
-                  IO.inspect [x: x, a: a]
                   cmd = "msgfmt -c -v --statistics -o /dev/null #{opt} #{x}"
-                  IO.inspect [cmd: cmd]
-                  Mix.shell.info(cmd)
+#                  Mix.shell.info(cmd)
                   a+Mix.shell.cmd(cmd)
                 end)
   end
