@@ -19,18 +19,18 @@ defmodule Exgettext.HTML do
                                                     gettext(app, y)
                                                   end)
                                      end))) |>
-               Map.update(:tyep_docs, nil,
+               Map.update(:typespecs, nil,
                           &(Enum.map(&1, 
                                      fn(x) -> 
-                                       Map.update(x, :type_docs, nil,
+                                       Map.update(x, :doc, nil,
                                                   fn(y) -> 
                                                     gettext(app, y)
                                                   end)
                                      end))) |>
-               Map.update(:callback_docs, nil,
+               Map.update(:callback, nil,
                           &(Enum.map(&1, 
                                      fn(x) -> 
-                                       Map.update(x, :callback_docs, nil,
+                                       Map.update(x, :doc, nil,
                                                   fn(y) -> 
                                                     gettext(app, y)
                                                   end)
