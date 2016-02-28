@@ -43,6 +43,7 @@ defmodule Mix.Tasks.L10n.Check do
 #    IO.inspect [pofiles: pofiles]
     Enum.reduce(pofiles, 0,
                 fn(x, a) ->
+                  x = Regex.replace(~r/ /, x, "\\ ")
                   cmd = "msgfmt -c -v --statistics -o /dev/null #{opt} #{x}"
 #                  Mix.shell.info(cmd)
                   a+Mix.shell.cmd(cmd)
