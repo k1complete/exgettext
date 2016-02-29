@@ -28,6 +28,7 @@ defmodule Exgettext.Util do
   end
   def pathescape(path) do
     Regex.replace(~r/ /, path, "\\\\ ", [:global])
+    path
   end
   def get_app(mod) do
     r = :application.get_application(mod)
