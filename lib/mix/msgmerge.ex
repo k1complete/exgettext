@@ -78,9 +78,9 @@ defmodule Mix.Tasks.L10n.Msgmerge do
                poxfile = Path.join(dir, outfile)
                poxfile = Exgettext.Util.pathescape(poxfile)
                cmd = if (update) do
-                 "msgmerge -U #{opts}#{pofile} #{basename}"
+                 "msgmerge -U #{opts}\"#{pofile}\" \"#{basename}\""
                else
-                 "msgmerge -o #{poxfile} #{opts}#{pofile} #{basename}"
+                 "msgmerge -o \"#{poxfile}\" #{opts}\"#{pofile}\" \"#{basename}\""
                end
 #               IO.inspect [merge: cmd]
                if File.regular?(basename) do
@@ -91,6 +91,7 @@ defmodule Mix.Tasks.L10n.Msgmerge do
                         r
                  end
                else
+                 IO.inspect [e: e, basename: basename]
                  0
                end
              end)
