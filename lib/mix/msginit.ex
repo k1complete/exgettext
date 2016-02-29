@@ -38,7 +38,7 @@ defmodule Mix.Tasks.L10n.Msginit do
              fn(x) ->
                dir = Path.dirname(x)
                dir2 = Exgettext.Util.pathescape(dir)
-               cmd = "cd #{dir2}; msginit --locale #{lang}"
+               cmd = "cd \"#{dir2}\"; msginit --locale #{lang}"
 #               IO.inspect [msgint: cmd]
                Mix.shell.info(cmd)
                Mix.Shell.Process.cmd(cmd)
