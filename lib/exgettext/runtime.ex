@@ -1,5 +1,7 @@
 defmodule Exgettext.Runtime do
-  require Logger
+  import Logger
+  alias Exgettext.Plugin
+
   def basedir(app) do
     case :code.priv_dir(app) do
       {:error, _other} -> 
@@ -80,5 +82,21 @@ defmodule Exgettext.Runtime do
   end
   def gettext(app, key) do
     gettext(app, key, getlang())
+  end
+  @doc """
+  multiple content translator with plugin.
+  
+  config is %{module: module, app: app} format.
+  if faileld, return original content with warning.
+  translator is decided by Mix Project conig[:exgettext][:extra]
+  """
+  def translate(content, config) do
+    m = config[:module]
+    app = config[:app]
+    Plugin.apply(m, :translate, [content, %{app: app}], 
+                 fn(e) -> 
+                   warn("#{e.error} in #{e.module}")
+                   content 
+                 end)
   end
 end

@@ -1,5 +1,6 @@
 defmodule Exgettext.HTML do
   import Exgettext.Runtime, only: [gettext: 2]
+
 #  require ExDoc
   @moduledoc """
   Generate HTML documentation for Elixir projects
@@ -169,12 +170,14 @@ defmodule Exgettext.HTML do
     co = Mix.Project.config
 #    IO.inspect [co: co]
 #    IO.inspect [docs: co[:docs].()]
+    m = config[:exgettext][:extra]
+    app = config[:app]
     dir = Keyword.get(co[:docs].(), :source_beam, "./ebin")
     if valid_extension_name?(options.input) do
       content =
         Path.join([dir,"..",options.input])
         |> File.read!()
-        |> Extrans.md(%{app: co[:app]})
+        |> Exgettext.Runtime.translate(%{module: m, app: app})
         |> Autolink.project_doc(module_nodes)
 
       title = options[:title] || extract_title(content) || input_to_title(options[:input])

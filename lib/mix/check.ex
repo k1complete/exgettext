@@ -37,7 +37,7 @@ defmodule Mix.Tasks.L10n.Check do
     {opt, _args, _rest} = OptionParser.parse(opt)
     env  = Keyword.get(opt, :locale, System.get_env("LANG"))
     lang = Exgettext.Runtime.getlang(env)
-    app = Mix.Project.config[:app]
+#    app = Mix.Project.config[:app]
     pofiles = Exgettext.Util.pofiles(lang)
 #    Mix.shell.info("check #{pofiles}")
 #    IO.inspect [pofiles: pofiles]

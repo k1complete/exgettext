@@ -27,7 +27,7 @@ defmodule Mix.Tasks.ExgettextTest do
 #    IO.inspect [lang: lang, la: la]
     Mix.Tasks.L10n.Msginit.run []
     System.put_env("LANG", env)
-    ex = "cd priv/po; msginit --locale #{lang}"
+    ex = "cd \"priv/po\"; msginit --locale #{lang}"
     assert_received {:mix_shell, :info, [^ex]}
     assert File.regular? "priv/po/#{la}.po"
     sp = Path.wildcard("priv/po/**/#{la}.po") 
