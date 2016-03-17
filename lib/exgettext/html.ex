@@ -170,8 +170,8 @@ defmodule Exgettext.HTML do
     co = Mix.Project.config
 #    IO.inspect [co: co]
 #    IO.inspect [docs: co[:docs].()]
-    m = config[:exgettext][:extra]
-    app = config[:app]
+    m = co[:exgettext][:extra]
+    app = co[:app]
     dir = Keyword.get(co[:docs].(), :source_beam, "./ebin")
     if valid_extension_name?(options.input) do
       content =
