@@ -9,7 +9,7 @@ defmodule Sample do
   Hello is hello function
   """
   def hello() do
-    IO.puts ~T"Hello, World"
+    IO.puts ~L"Hello, World"
   end
 
 end
@@ -20,7 +20,7 @@ defmodule Sample2 do
   use Exgettext
   import Exgettext
   def hello() do
-    IO.puts ~T"Hello, World2"
+    IO.puts ~L"Hello, World2"
   end
 
 end

@@ -67,13 +67,13 @@ GNU gettextをインストールしておきます。exgettextはmsginit, msgmer
 
 * use Exgettext; を呼び出します。
 
-* 地域化が必要なリテラル文字列を~T() sigil でマークアップ
+* 地域化が必要なリテラル文字列を~L() sigil でマークアップ
   します。
 
 * mix l10n.xgettextタスクにより、app.potファイルを生成します。
   priv/po/app.potファイルには、以下が格納されます。
 
-  ~T()
+  ~L()
 
   また、priv/po/path_to_src/src.potファイルには、以下が格納さ
   れます。
@@ -126,7 +126,7 @@ GNU gettextをインストールしておきます。exgettextはmsginit, msgmer
 
 * Exgettext.setlocale/1 でロケールを明示的に設定することが出来ます。
 
-* ~T()は、exgettextへの呼出に置き換えられ、lang/ja/app.exmoを
+* ~L()は、exgettextへの呼出に置き換えられ、lang/ja/app.exmoを
   参照して対応する言語のメッセージが使用されます。オープンに失敗すると
   置き換えは行なわれません。また、対応する翻訳結果が見付からなかったり、
   ""の場合も置き換えは行なわれません。置き換えが行われない場合は

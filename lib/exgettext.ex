@@ -4,7 +4,7 @@ defmodule Exgettext do
   
   *** target
   0. setlocale() 
-  1. ~T sigil quoted string literal
+  1. ~L sigil quoted string literal
   2. @moduledoc
   3. @doc
   
@@ -15,11 +15,11 @@ defmodule Exgettext do
     use Exgettext
     def hello do
       setlocale()  
-      ~T "Hello, World."
+      ~L "Hello, World."
     end
     ```
 
-    ~T macro expanded to
+    ~L macro expanded to
 
     ```
     def hello do
@@ -80,9 +80,9 @@ defmodule Exgettext do
     :dets.close(dets)
   end
   @doc """
-  ~T is detect to translate target string.
+  ~L is detect to translate target string.
   """
-  defmacro sigil_T({:<<>>, _line, [string]}, options) when is_binary(string) do
+  defmacro sigil_L({:<<>>, _line, [string]}, options) when is_binary(string) do
     binary = Macro.unescape_string(string)
     case  options do
       [] -> 

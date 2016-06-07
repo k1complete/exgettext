@@ -150,12 +150,12 @@ defmodule Mix.Tasks.ExgettextTest do
   test "option" do
     assert {:__block__, [], 
             [{:=, [], [{:ja, [], Mix.Tasks.ExgettextTest}, "ja"]}, 
-             {:sigil_T, [context:
+             {:sigil_L, [context:
                          Mix.Tasks.ExgettextTest, import: Exgettext],
               [{:<<>>, [], ["Hello world"]}, 'ja']}]} ==
       Macro.expand(quote do
                      ja = "ja"
-                     ~T"Hello world"ja
+                     ~L"Hello world"ja
                    end, __ENV__)
   end
 end
