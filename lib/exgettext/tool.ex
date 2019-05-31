@@ -139,101 +139,96 @@ defmodule Exgettext.Tool do
   def moduledoc(modules, src_root) do
     result = Enum.map modules, 
       fn(x) ->
-        case Code.get_docs(x, :moduledoc) do
+        case Code.fetch_docs(x) do
           nil -> nil
-          {l, d} ->
+          {:docs_v1, line, :elixir, "text/markdown", %{"en" => module_doc}, _, _} ->
             ref = %{file: module_to_file(x, src_root),
-                    line: l}
-            %{module: x, 
-              name: "", 
-              msgid: d,
+                    line: line}
+            IO.inspect(module_doc: module_doc)
+            %{module: x,
+              name: "",
+              msgid: module_doc,
               references: [ref],
-              comment: "#{x} Summary"
-             }
+              comment: "#{x} Summary"}
+          {:docs_v1, _line, :elixir, "text/markdown", :none, %{}, _} ->
+            nil
         end
     end
     Enum.filter(result, fn(x) -> is_map(x) and is_binary(x.msgid) end) |> Enum.sort(&(&1 < &2))
   end
-  def funcdoc(modules, src_root) do
+  def partdoc(modules, src_root, kind) do
     r = List.foldr modules, [], 
       fn(m, a) ->
-        d = Code.get_docs(m, :docs)
         file = module_to_file(m, src_root)
-        case d do
-          nil -> a
-          d -> 
-            a ++ Enum.map d, 
-            fn(x) -> 
-              {{name, _arity}, 
-               line, type, arg, doc} = x
-              ref = %{file: file, line: line}
-              com = Macro.to_string({{:".", 
-                                      [], 
-                                      [m, name]}, 
-                                     [], arg},
-                                    fn(_ast, s) ->
-                                      Regex.replace(~R/\n/, s, ";", [:g])
-                                    end)
-              %{module: m, 
-                name: name,
-                msgid: doc,
-                references: [ref],
-                comment: "#{type} #{com}"
-               }
-            end
+        docs = case Code.fetch_docs(m) do
+                 nil -> nil
+                 {:docs_v1, _line, :elixir, "text/markdown", _moduledoc, _metadata, docs} ->
+                   docs
+               end
+        case docs do
+          nil -> 
+            a
+          d ->
+            kdocs = Enum.map(d,
+              fn({{^kind, name, _arity},
+                   line, signature, doc, _metadata}) ->
+                  ref = %{file: file, line: line}
+                  k = case kind do
+                        :function -> "def"
+                        :type -> "@type"
+                        :callback -> "@callback"
+                        :macro -> "defmacro"
+                      end
+                  com = Enum.join([m, k | signature], " ")
+                  %{module: m, 
+                    name: name,
+                    msgid: doc,
+                    references: [ref],
+                    comment: "#{com}"
+                  }
+                {{kind, name, _arity}, line, signature, mdoc, _meta} ->
+                  doc = case mdoc do
+                          %{"en"=> doc} -> doc
+                          :none -> "none"
+                          :hidden -> "hidden"
+                        end
+                  ref = %{file: file, line: line}
+                  k = case kind do
+                        :function -> "def"
+                        :type -> "@type"
+                        :callback -> "@callback"
+                        :macro -> "defmacro"
+                        :hidden -> "hidden"
+                      end
+                  com = Enum.join([m, k | signature], " ")
+                  s = %{module: m,
+                    name: name,
+                    msgid: doc,
+                    references: [ref],
+                    comment: "#{com}"
+                    }
+                  s
+            end) |> Enum.filter(fn(x) -> x != nil end)
+            a ++ kdocs
         end
-    end 
+    end
     Enum.filter(r, fn(x) -> is_map(x) and is_binary(x.msgid) end) |> Enum.sort(&(&1 < &2))
   end
+  def funcdoc(modules, src_root) do
+    partdoc(modules, src_root, :function)
+    partdoc(modules, src_root, :macro)
+  end
   def typedoc(modules, src_root) do
-    r = List.foldr(modules, [],
-                   fn(m, a) ->
-                     d = Code.get_docs(m, :type_docs)
-                     file = module_to_file(m, src_root)
-                     case d do
-                       nil -> a
-                       d -> a ++ Enum.map d, 
-                            fn(x) ->
-                              {{ty, _ar}, line, type, doc} = x
-                              ref = %{file: file, line: line}
-                              %{module: m, 
-                                name: ty, 
-                                msgid: doc,
-                                references: [ref],
-                                comment: "@#{type} #{ty}"}
-                            end
-                     end
-                   end)
-    Enum.filter(r, fn(x) -> is_map(x) and is_binary(x.msgid) end) |>
-      Enum.sort(&(&1 < &2))
+    partdoc(modules, src_root, :type)
   end
   def callbackdoc(modules, src_root) do
-    r = List.foldr(modules, [],
-                   fn(m, a) ->
-                     d = Code.get_docs(m, :callback_docs)
-                     file = module_to_file(m, src_root)
-                     case d do
-                       nil -> a
-                       d -> a ++ Enum.map d, 
-                            fn(x) ->
-                              {{ty, ar}, line, :callback, doc} = x
-                              ref = %{file: file, line: line}
-                              %{module: m, 
-                                name: ty, 
-                                msgid: doc,
-                                references: [ref],
-                                comment: "@callback #{ty}/#{ar}"}
-                            end
-                     end
-                   end)
-    Enum.filter(r, fn(x) -> is_map(x) and is_binary(x.msgid) end) |>
-      Enum.sort(&(&1 < &2))
+    partdoc(modules, src_root, :callback)
   end
   def redup(m) do
     r = List.foldl(m, %{}, fn(x, a) -> 
-                         k = x[:msgid]
-                         Dict.put(a, k, x)
-               end)
+      k = x[:msgid]
+      Map.put(a, k, x)
+    end)
     Enum.map(r, fn({_k,v}) -> v end)
   end
   def ensure_load(root, app) do
@@ -265,6 +260,7 @@ defmodule Exgettext.Tool do
   defp output_msg(fh, r) do
     Enum.map(r, 
              fn(e) -> 
+                 IO.inspect(e: e)
                  if (t = e[:comment]) do
                    IO.binwrite(fh, "#. TRANSLATORS: #{t}\n")
                  end
@@ -293,7 +289,7 @@ defmodule Exgettext.Tool do
                [mh|_mt] = e[:references]
                basename = mh[:file]
                pofile = Exgettext.Util.pot_path(app, basename)
-#               IO.inspect [pofile: pofile]
+               IO.inspect [pofile: pofile]
                {:ok, fh} = if (:ets.insert_new(fdict, {pofile, basename})) do
                  :ok = File.mkdir_p(Path.dirname(pofile))
                  File.open(pofile, [:write])
@@ -324,7 +320,7 @@ defmodule Exgettext.Tool do
              end)
   end
   def potdb(app) do
-    "#{app}.pot_db"
+    '#{app}.pot_db'
   end
   def clean(app) do
     pot_db = potdb(app)

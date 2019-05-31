@@ -1,62 +1,47 @@
 defmodule Exgettext.Code do
   Exgettext.Util.defdelegate_filter(Exgettext.Code, Code,
-                                        fn(x) -> not(x in [{:get_docs, 2}] )
+                                        fn(x) -> not(x in [{:fetch_docs, 1}] )
                                      end)
-  defp get_docs_func(_app, nil) do
-    nil
-  end
-  defp get_docs_func(app, r) do
-    Enum.map(r, fn(x) -> 
-                  d = elem(x, 4)
-                  dloc = Exgettext.Runtime.gettext(app, d)
-                  put_elem(x, 4, dloc)
-             end)
-  end
-  defp get_docs_mod(_app, nil) do
-    nil
-  end
-  defp get_docs_mod(app, r) do
-    d = elem(r, 1)
-    dloc = Exgettext.Runtime.gettext(app, d)
-    put_elem(r, 1, dloc)
-  end
-  defp get_docs_type(app, r) do
-    Enum.map(r, fn(x) ->
-                  d = elem(x, 3)
-                  dloc = Exgettext.Runtime.gettext(app, d)
-                  put_elem(x, 3, dloc)
-             end)
+  require Exgettext
+  @doclang "en"
+  defp doc_trans(app, docs, doclang) do
+    Enum.map(docs, fn(x = {kna, anno, sig, doc, metadata}) ->
+      case doc do
+        doc when is_map(doc) ->
+          if (rawdoc = Map.get(doc, doclang)) do
+            {kna, 
+             anno, 
+             sig, 
+             %{doclang => Exgettext.Runtime.gettext(app, rawdoc)},
+             metadata}
+          else
+            x
+          end
+        :none -> x
+        :hidden -> x
+      end
+    end)
   end
   @doc """
   Returns the localized docs for the given module.
   
   see `Elixir.Code.get_docs`
   """
-  def get_docs(module, kind) do
+  def fetch_docs(module) do
 #    if (Exgettext.Helper === module) do
 #      module = IEx.Helpers
 #    end
     app = Exgettext.Util.get_app(module)
-    r = Elixir.Code.get_docs(module, kind)
-    case kind do
-      :docs ->
-        get_docs_func(app, r)
-      :moduledoc ->
-        get_docs_mod(app, r)
-      :type_docs ->
-        get_docs_type(app, r)
-      :callback_docs ->
-        get_docs_type(app, r)
-      _ ->
-        [docs: docs, moduledoc: moduledoc, 
-         callback_docs: callback_docs,
-         type_docs: type_docs
-        ] = r
-        [docs: get_docs_func(app, docs),
-         moduledoc: get_docs_mod(app, moduledoc),
-         callback_docs: get_docs_type(app, callback_docs),
-         type_docs: get_docs_type(app, type_docs)
-        ]
+    case x = Elixir.Code.fetch_docs(module) do
+      {:error, _reason} ->
+        x
+      {:docs_v1, anno, bleam_language, format, module_doc, metadata, docs} ->
+        module_doc = %{@doclang => 
+                        Exgettext.Runtime.gettext(app, module_doc[@doclang])}
+        docs = doc_trans(app, docs, @doclang)
+        {:docs_v1, anno, bleam_language, format, module_doc, metadata, docs}
+      x ->
+        x
     end
   end
 end

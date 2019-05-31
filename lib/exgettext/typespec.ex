@@ -3,13 +3,15 @@ defmodule Exgettext.Typespec do
                                     fn(x) -> 
                                       not(x in [{:beam_typedocs, 1}])
                                     end)
+  @doclang "en"
   def beam_typedocs(module) do
     app = Exgettext.Util.get_app(module)
-    r = Elixir.Kernel.Typespec.beam_typedocs(module)
-    Enum.map(r, fn(x) ->
-                  d = elem(x, 1)
-                  dloc = Exgettext.Runtime.gettext(app, d)
-                  put_elem(x, 1, dloc)
-             end)
+    {_, _, _, _, _, _, r} = Code.fetch_docs(module)
+    Stream.filter(r, &(elem(elem(&1, 0), 0) == :type)) 
+    |> Enum.map(fn({{:type, t, _}, _, _, d, _}) -> 
+      rawdoc = Map.get(d, @doclang)
+      ldoc = Exgettext.Runtime.gettext(app, rawdoc)
+      {t, ldoc}
+    end)
   end
 end

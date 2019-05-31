@@ -13,7 +13,7 @@ defmodule Exgettext.Runtime do
   def mofile(app, lang) do
     s = Path.join([basedir(app), "lang", "#{lang}", "#{app}.exmo"])
 #    IO.inspect [mofile: s]
-    s
+    String.to_charlist(s)
   end
   def getpath(app, lang) do
     mofile(app, lang)

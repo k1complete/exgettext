@@ -6,7 +6,7 @@ defmodule Exgettext.Helper do
   """
   def h() do
     Exgettext.Introspection.h(IEx.Helpers)
-    dont_display_result
+    dont_display_result()
   end
   @h_modules [__MODULE__, IEx.Helpers, Kernel, Kernel.SpecialForms]
 

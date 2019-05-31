@@ -69,7 +69,7 @@ defmodule Exgettext do
     Mix.Project.config[:app]
   end
   defp put_dets(s, reference) do
-    app_pot_db = "#{get_app()}.pot_db"
+    app_pot_db = '#{get_app()}.pot_db'
     {:ok, dets} = :dets.open_file(app_pot_db, [])
     k = s
     case :dets.lookup(dets, k) do
@@ -89,7 +89,7 @@ defmodule Exgettext do
         quote do: txt(unquote(binary))
       options ->
         options = List.to_atom(options)
-        v = {:"var!", [], [{options, [], nil}]}
+        v = {:var!, [], [{options, [], nil}]}
         quote do
           txt(unquote(binary), unquote(v))
         end

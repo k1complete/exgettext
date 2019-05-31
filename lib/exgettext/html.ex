@@ -1,205 +1,300 @@
 defmodule Exgettext.HTML do
-  import Exgettext.Runtime, only: [gettext: 2]
+  @moduledoc false
+  alias ExDoc.Formatter.HTML.{Assets, Autolink, Templates, SearchItems}
+  alias ExDoc.{Markdown, GroupMatcher}
 
-#  require ExDoc
-  @moduledoc """
-  Generate HTML documentation for Elixir projects
-  """
   @main "api-reference"
-  def module_translate(module_nodes, _config) do
-    module_nodes |>
-    Enum.map(fn(mod) ->
-               app = Exgettext.Util.get_app(mod.module)
-               mod |>
-               Map.update(:moduledoc, nil, &(gettext(app, &1))) |>
-               Map.update(:docs, nil, 
-                          &(Enum.map(&1, 
-                                     fn(x) -> 
-                                       Map.update(x, :doc, nil,
-                                                  fn(y) -> 
-                                                    gettext(app, y)
-                                                  end)
-                                     end))) |>
-               Map.update(:typespecs, nil,
-                          &(Enum.map(&1, 
-                                     fn(x) -> 
-                                       Map.update(x, :doc, nil,
-                                                  fn(y) -> 
-                                                    gettext(app, y)
-                                                  end)
-                                     end))) |>
-               Map.update(:callback, nil,
-                          &(Enum.map(&1, 
-                                     fn(x) -> 
-                                       Map.update(x, :doc, nil,
-                                                  fn(y) -> 
-                                                    gettext(app, y)
-                                                  end)
-                                     end)))
-             end)
-  end
-  alias ExDoc.Formatter.HTML.Templates
-  alias ExDoc.Formatter.HTML.Autolink
+  @assets_dir "assets"
 
   @doc """
-  Generate HTML documentation for the given modules
+  Generates HTML documentation for Elixir projects.
   """
-  @spec run(list, map) :: String.t
-  def run(module_nodes, config) when is_map(config) do
+  alias ExDoc.{Markdown, GroupMatcher}
+
+  import Exgettext.Runtime, only: [gettext: 2]
+#  require ExDoc
+  alias ExDoc.Formatter.HTML.Templates
+  alias ExDoc.Formatter.HTML.Autolink
+  alias ExDoc.Formatter.HTML.Assets
+
+  def module_translate(module_nodes, _config) do
+    module_nodes 
+    |> Enum.map(fn(mod) ->
+      app = Exgettext.Util.get_app(mod.module)
+      mod 
+      |> Map.update(:moduledoc, nil, &(gettext(app, &1))) 
+      |> Map.update(:docs, nil, 
+        &(Enum.map(&1, 
+              fn(x) -> 
+                Map.update(x, :doc, nil,
+                  fn(y) -> 
+                    gettext(app, y)
+                  end)
+              end))) 
+      |> Map.update(:typespecs, nil,
+        &(Enum.map(&1, 
+              fn(x) -> 
+                Map.update(x, :doc, nil,
+                  fn(y) -> 
+                    gettext(app, y)
+                  end)
+              end))) 
+      |> Map.update(:callback, nil,
+        &(Enum.map(&1, 
+              fn(x) -> 
+                Map.update(x, :doc, nil,
+                  fn(y) -> 
+                    gettext(app, y)
+                  end)
+              end)))
+    end)
+  end
+
+  @main "api-reference"
+
+  @doc """
+  Generate HTML documentation for the given modules.
+  """
+  @spec run(list, ExDoc.Config.t()) :: String.t()
+  def run(project_nodes, config) when is_map(config) do
     config = normalize_config(config)
-    output = Path.expand(config.output)
-    File.rm_rf! output
-    :ok = File.mkdir_p output
+    config = %{config | output: Path.expand(config.output)}
 
-    assets |> templates_path() |> generate_assets(output)
+    build = Path.join(config.output, ".build")
+    output_setup(build, config)
+    project_nodes = module_translate(project_nodes, config)
+    {project_nodes, autolink} = autolink_and_render(project_nodes, ".html", config)
+    extras = build_extras(config, autolink)
 
-    module_nodes = module_translate(module_nodes, config)
-    all = Autolink.all(module_nodes)
-    modules    = filter_list(:modules, all)
-    exceptions = filter_list(:exceptions, all)
-    protocols  = filter_list(:protocols, all)
+    # Generate search early on without api reference in extras
+    static_files = generate_assets(config, @assets_dir, default_assets(config))
+    search_items = generate_search_items(project_nodes, extras, config)
 
-    config =
-      if config.logo do
-        process_logo_metadata(config)
+    nodes_map = %{
+      modules: filter_list(:module, project_nodes),
+      exceptions: filter_list(:exception, project_nodes),
+      tasks: filter_list(:task, project_nodes)
+    }
+
+    extras =
+      if config.api_reference do
+        [build_api_reference(nodes_map, config) | extras]
       else
-        config
+        extras
       end
 
-    generate_api_reference(modules, exceptions, protocols, output, config)
-    extras = generate_extras(output, module_nodes, modules, exceptions, protocols, config)
+    all_files =
+      search_items ++
+        static_files ++
+        generate_sidebar_items(nodes_map, extras, config) ++
+        generate_extras(nodes_map, extras, config) ++
+        generate_logo(@assets_dir, config) ++
+        generate_search(nodes_map, config) ++
+        generate_not_found(nodes_map, config) ++
+        generate_list(nodes_map.modules, nodes_map, config) ++
+        generate_list(nodes_map.exceptions, nodes_map, config) ++
+        generate_list(nodes_map.tasks, nodes_map, config) ++ generate_index(config)
 
-    generate_index(output, config)
-    generate_not_found(modules, exceptions, protocols, output, config)
-    generate_sidebar_items(modules, exceptions, protocols, extras, output)
-
-    generate_list(modules, modules, exceptions, protocols, output, config)
-    generate_list(exceptions, modules, exceptions, protocols, output, config)
-    generate_list(protocols, modules, exceptions, protocols, output, config)
-
-    Path.join(config.output, "index.html")
+    generate_build(all_files, build)
+    config.output |> Path.join("index.html") |> Path.relative_to_cwd()
   end
-
   defp normalize_config(%{main: "index"}) do
-    raise ArgumentError, message: ~S("main" cannot be set to "index", otherwise it will recursively link to itself)
+    raise ArgumentError,
+      message: ~S("main" cannot be set to "index", otherwise it will recursively link to itself)
   end
+
   defp normalize_config(%{main: main} = config) do
     %{config | main: main || @main}
   end
-
-  defp generate_index(output, config) do
-    generate_redirect(output, "index.html", config, "#{config.main}.html")
-  end
-
-  defp generate_api_reference(modules, exceptions, protocols, output, config) do
-    content = Templates.api_reference_template(config, modules, exceptions, protocols)
-    File.write!("#{output}/api-reference.html", content)
-  end
-
-  defp generate_not_found(modules, exceptions, protocols, output, config) do
-    content = Templates.not_found_template(config, modules, exceptions, protocols)
-    File.write!("#{output}/404.html", content)
-  end
-
-  defp generate_sidebar_items(modules, exceptions, protocols, extras, output) do
-    nodes = %{modules: modules, protocols: protocols,
-              exceptions: exceptions, extras: extras}
-    content = Templates.create_sidebar_items(nodes)
-    File.write!("#{output}/dist/sidebar_items.js", content)
-  end
-
-  defp assets do
-    [{"dist/*.{css,js}", "dist"},
-     {"fonts/*.{eot,svg,ttf,woff,woff2}", "fonts"}]
-  end
-
-  # TODO: decouple EPUB/HTML
   @doc """
-  Copy a list of assets into a given directory
+  Autolinks and renders all docs.
   """
-  @spec generate_assets(list, String.t) :: :ok
-  def generate_assets(source, output) do
-    Enum.each source, fn({ pattern, dir }) ->
-      output = "#{output}/#{dir}"
-      File.mkdir! output
+  def autolink_and_render(project_nodes, ext, config) do
+    autolink = Autolink.compile(project_nodes, ext, config)
+    {project_nodes |> Autolink.all(autolink) |> render_docs(), autolink}
+  end
 
-      Enum.map Path.wildcard(pattern), fn(file) ->
-        base = Path.basename(file)
-        File.copy file, "#{output}/#{base}"
-      end
+  defp render_docs(nodes) do
+    for module <- nodes do
+      docs = Enum.map(module.docs, &render_doc/1)
+      typespecs = Enum.map(module.typespecs, &render_doc/1)
+      %{render_doc(module) | docs: docs, typespecs: typespecs}
     end
   end
 
-  defp generate_extras(output, module_nodes, modules, exceptions, protocols, config) do
-    extras =
-      config.extras
-      |> Enum.map(&Task.async(fn ->
-          generate_extra(&1, output, module_nodes, modules, exceptions, protocols, config)
-         end))
-      |> Enum.map(&Task.await(&1, :infinity))
-    [{"api-reference", "API Reference", []}|extras]
+  defp render_doc(%{doc: nil} = node),
+    do: node
+
+  defp render_doc(%{doc: doc, source_path: file, doc_line: line} = node),
+    do: %{node | rendered_doc: ExDoc.Markdown.to_html(doc, file: file, line: line + 1)}
+
+  defp output_setup(build, config) do
+    if File.exists?(build) do
+      build
+      |> File.read!()
+      |> String.split("\n", trim: true)
+      |> Enum.map(&Path.join(config.output, &1))
+      |> Enum.each(&File.rm/1)
+
+      File.rm(build)
+    else
+      File.rm_rf!(config.output)
+      File.mkdir_p!(config.output)
+    end
   end
 
-  defp generate_extra({input_file, options}, output, module_nodes, modules, exceptions, protocols, config) do
-    input_file = to_string(input_file)
-    output_file_name = options[:path] || input_file |> input_to_title() |> title_to_filename()
-
-    options = %{
-      title: options[:title],
-      output_file_name: output_file_name,
-      input: input_file,
-      output: output
-    }
-
-    create_extra_files(module_nodes, modules, exceptions, protocols, config, options)
+  defp generate_build(files, build) do
+    entries = Enum.map(files, &[&1, "\n"])
+    File.write!(build, entries)
   end
 
-  defp generate_extra(input, output, module_nodes, modules, exceptions, protocols, config) do
-    output_file_name = input |> input_to_title |> title_to_filename
-
-    options = %{
-      output_file_name: output_file_name,
-      input: input,
-      output: output
-    }
-
-    create_extra_files(module_nodes, modules, exceptions, protocols, config, options)
+  defp generate_index(config) do
+    index_file = "index.html"
+    main_file = "#{config.main}.html"
+    generate_redirect(index_file, config, main_file)
+    [index_file]
   end
 
-  defp create_extra_files(module_nodes, modules, exceptions, protocols, config, options) do
-    co = Mix.Project.config
-#    IO.inspect [co: co]
-#    IO.inspect [docs: co[:docs].()]
-    m = co[:exgettext][:extra]
-    app = co[:app]
-    dir = Keyword.get(co[:docs].(), :source_beam, "./ebin")
-    if valid_extension_name?(options.input) do
-      content =
-        Path.join([dir,"..",options.input])
-        |> File.read!()
-        |> Exgettext.Runtime.translate(%{module: m, app: app})
-        |> Autolink.project_doc(module_nodes)
+  defp generate_not_found(nodes_map, config) do
+    filename = "404.html"
+    config = set_canonical_url(config, filename)
+    content = Templates.not_found_template(config, nodes_map)
+    File.write!("#{config.output}/#{filename}", content)
+    [filename]
+  end
 
-      title = options[:title] || extract_title(content) || input_to_title(options[:input])
+  defp generate_search(nodes_map, config) do
+    filename = "search.html"
+    config = set_canonical_url(config, filename)
+    content = Templates.search_template(config, nodes_map)
+    File.write!("#{config.output}/#{filename}", content)
+    [filename]
+  end
 
-      html = Templates.extra_template(config, title, modules,
-                                      exceptions, protocols, link_headers(content))
+  defp generate_sidebar_items(nodes_map, extras, config) do
+    content = Templates.create_sidebar_items(nodes_map, extras)
+    sidebar_items = "dist/sidebar_items-#{digest(content)}.js"
+    File.write!(Path.join(config.output, sidebar_items), content)
+    [sidebar_items]
+  end
+  defp generate_search_items(linked, extras, config) do
+    content = SearchItems.create(linked, extras)
+    search_items = "dist/search_items-#{digest(content)}.js"
+    File.write!(Path.join(config.output, search_items), content)
+    [search_items]
+  end
+  defp digest(content) do
+    content
+    |> :erlang.md5()
+    |> Base.encode16(case: :lower)
+    |> binary_part(0, 10)
+  end
 
-      output = "#{options.output}/#{options.output_file_name}.html"
+  defp generate_extras(nodes_map, extras, config) do
+    Enum.map(extras, fn %{id: id, title: title, content: content} ->
+      filename = "#{id}.html"
+      output = "#{config.output}/#{filename}"
+      config = set_canonical_url(config, filename)
+      html = Templates.extra_template(config, title, nodes_map, content)
 
-      if File.regular? output do
-        IO.puts "warning: file #{Path.basename output} already exists"
+      if File.regular?(output) do
+        IO.puts(:stderr, "warning: file #{Path.relative_to_cwd(output)} already exists")
       end
 
       File.write!(output, html)
+      filename
+    end)
+  end
 
-      {options.output_file_name, title, extract_headers(content)}
+  @doc false
+  def generate_assets(config, assets_dir, defaults) do
+    write_default_assets(config, defaults) ++ copy_assets(config, assets_dir)
+  end
+
+  defp copy_assets(config, assets_dir) do
+    if path = config.assets do
+      path
+      |> Path.join("**/*")
+      |> Path.wildcard()
+      |> Enum.map(fn source ->
+        filename = Path.join(assets_dir, Path.relative_to(source, path))
+        target = Path.join(config.output, filename)
+        File.mkdir(Path.dirname(target))
+        File.copy(source, target)
+        filename
+      end)
+    else
+      []
+    end
+  end
+
+  defp write_default_assets(config, sources) do
+    Enum.flat_map(sources, fn {files, dir} ->
+      target_dir = Path.join(config.output, dir)
+      File.mkdir_p!(target_dir)
+
+      Enum.map(files, fn {name, content} ->
+        target = Path.join(target_dir, name)
+        File.write(target, content)
+        Path.relative_to(target, config.output)
+      end)
+    end)
+  end
+
+  defp default_assets(_config) do
+    [
+      {Assets.dist(), "dist"},
+      {Assets.fonts(), "dist/html/fonts"},
+      {Assets.markdown_processor_assets(), ""}
+    ]
+  end
+
+  defp build_api_reference(nodes_map, config) do
+    api_reference = Templates.api_reference_template(config, nodes_map)
+    %{id: "api-reference", title: "API Reference", group: "", content: api_reference}
+  end
+
+  @doc """
+  Builds extra nodes by normalizing the config entries.
+  """
+  def build_extras(config, autolink) do
+    groups = config.groups_for_extras
+
+    config.extras
+    |> Task.async_stream(&build_extra(&1, autolink, groups), timeout: :infinity)
+    |> Enum.map(&elem(&1, 1))
+    |> Enum.sort_by(fn extra -> GroupMatcher.group_index(groups, extra.group) end)
+  end
+
+  defp build_extra({input, options}, autolink, groups) do
+    input = to_string(input)
+    id = options[:filename] || input |> filename_to_title() |> text_to_id()
+    build_extra(input, id, options[:title], autolink, groups)
+  end
+
+  defp build_extra(input, autolink, groups) do
+    id = input |> filename_to_title() |> text_to_id()
+    build_extra(input, id, nil, autolink, groups)
+  end
+
+  defp build_extra(input, id, title, autolink, groups) do
+    if valid_extension_name?(input) do
+      content =
+        input
+        |> File.read!()
+        |> Autolink.project_doc(id, autolink)
+
+      group = GroupMatcher.match_extra(groups, input)
+      html_content = Markdown.to_html(content, file: input, line: 1)
+
+      title = title || extract_title(html_content) || filename_to_title(input)
+      %{id: id, title: title, group: group, content: html_content}
     else
       raise ArgumentError, "file format not recognized, allowed format is: .md"
     end
   end
 
-  defp valid_extension_name?(input) do
+  def valid_extension_name?(input) do
     file_ext =
       input
       |> Path.extname()
@@ -212,99 +307,137 @@ defmodule Exgettext.HTML do
     end
   end
 
-  @h1_regex ~r/^#([^#].*)\n$/m
+  @tag_regex ~r/<[^>]*>/m
+  defp strip_html(header) do
+    Regex.replace(@tag_regex, header, "")
+  end
 
+  @h1_regex ~r/<h1.*?>(.+)<\/h1>/m
   defp extract_title(content) do
     title = Regex.run(@h1_regex, content, capture: :all_but_first)
 
     if title do
-      title |> List.first |> String.strip
+      title |> List.first() |> strip_html() |> String.trim()
     end
   end
 
-  @h2_regex ~r/^##([^#].*)\n$/m
-
-  defp extract_headers(content) do
-    @h2_regex
-    |> Regex.scan(content, capture: :all_but_first)
-    |> List.flatten()
-    |> Enum.map(&{&1, header_to_id(&1)})
-  end
-
-  defp link_headers(content) do
-    Regex.replace(@h2_regex, content, fn _, part ->
-      "<h2 id=\"#{header_to_id(part)}\">#{Templates.h(part)}</h2>\n"
-    end)
-  end
-
-  defp input_to_title(input) do
-#    IO.inspect [input_to_title: input]
+  @doc """
+  Convert the input file name into a title
+  """
+  def filename_to_title(input) do
     input |> Path.basename() |> Path.rootname()
   end
 
-  defp title_to_filename(title) do
-    title |> String.replace(" ", "-") |> String.downcase()
+  @clean_html_regex ~r/<(?:[^>=]|='[^']*'|="[^"]*"|=[^'"][^\s>]*)*>/
+
+  @doc """
+  Strips html tags from text leaving their text content
+  """
+  def strip_tags(text) when is_binary(text) do
+    String.replace(text, @clean_html_regex, "")
   end
 
-  defp header_to_id(header) do
-    header
-    |> String.strip()
-    |> String.replace(~r/\W+/, "-")
+  @doc """
+  Generates an ID from some text
+
+  Used primarily with titles, headings and functions group names.
+  """
+  def text_to_id(atom) when is_atom(atom), do: text_to_id(Atom.to_string(atom))
+
+  def text_to_id(text) when is_binary(text) do
+    text
+    |> strip_tags()
+    |> String.replace(~r/&#\d+;/, "")
+    |> String.replace(~r/&[A-Za-z0-9]+;/, "")
+    |> String.replace(~r/\W+/u, "-")
+    |> String.trim("-")
     |> String.downcase()
-    |> Templates.h()
+  end
+  @doc """
+  Generate a link id for the given node.
+  """
+  def link_id(node), do: link_id(node.id, node.type)
+
+  @doc """
+  Generate a link id for the given id and type.
+  """
+  def link_id(id, type) do
+    case type do
+      :macrocallback -> "c:#{id}"
+      :callback -> "c:#{id}"
+      :type -> "t:#{id}"
+      :opaque -> "t:#{id}"
+      _ -> "#{id}"
+    end
   end
 
-  defp process_logo_metadata(config) do
-    output = "#{config.output}/assets"
-    File.mkdir_p! output
-    file_extname =
-      config.logo
+
+  @doc """
+  Generates the logo from config into the given directory
+  and adjusts the logo config key.
+  """
+  def generate_logo(_dir, %{logo: nil}) do
+    []
+  end
+
+  def generate_logo(dir, %{output: output, logo: logo}) do
+    extname =
+      logo
       |> Path.extname()
       |> String.downcase()
 
-    if file_extname in ~w(.png .jpg) do
-      file_name = "#{output}/logo#{file_extname}"
-      File.copy!(config.logo, file_name)
-      Map.put(config, :logo, Path.basename(file_name))
+    if extname in ~w(.png .jpg .svg) do
+      filename = Path.join(dir, "logo#{extname}")
+      target = Path.join(output, filename)
+      File.mkdir_p!(Path.dirname(target))
+      File.copy!(logo, target)
+      [filename]
     else
       raise ArgumentError, "image format not recognized, allowed formats are: .jpg, .png"
     end
   end
 
-  defp generate_redirect(output, file_name, config, redirect_to) do
+  defp generate_redirect(filename, config, redirect_to) do
+    unless File.regular?("#{config.output}/#{redirect_to}") do
+      IO.puts(:stderr, "warning: #{filename} redirects to #{redirect_to}, which does not exist")
+    end
+
     content = Templates.redirect_template(config, redirect_to)
-    File.write!("#{output}/#{file_name}", content)
+    File.write!("#{config.output}/#{filename}", content)
   end
 
-  defp filter_list(:modules, nodes) do
-    Enum.filter nodes, &(not &1.type in [:exception, :protocol, :impl])
+  def filter_list(:module, nodes) do
+    Enum.filter(nodes, &(not (&1.type in [:exception, :task])))
   end
 
-  defp filter_list(:exceptions, nodes) do
-    Enum.filter nodes, &(&1.type in [:exception])
+  def filter_list(type, nodes) do
+    Enum.filter(nodes, &(&1.type == type))
   end
 
-  defp filter_list(:protocols, nodes) do
-    Enum.filter nodes, &(&1.type in [:protocol])
-  end
-
-  defp generate_list(nodes, modules, exceptions, protocols, output, config) do
+  defp generate_list(nodes, nodes_map, config) do
     nodes
-    |> Enum.map(&Task.async(fn ->
-        generate_module_page(&1, modules, exceptions, protocols, output, config)
-       end))
-    |> Enum.map(&Task.await(&1, :infinity))
+    |> Task.async_stream(&generate_module_page(&1, nodes_map, config), timeout: :infinity)
+    |> Enum.map(&elem(&1, 1))
   end
 
-  defp generate_module_page(node, modules, exceptions, protocols, output, config) do
-    content = Templates.module_page(node, modules, exceptions, protocols, config)
-    File.write!("#{output}/#{node.id}.html", content)
+  defp generate_module_page(module_node, nodes_map, config) do
+    filename = "#{module_node.id}.html"
+    config = set_canonical_url(config, filename)
+    content = Templates.module_page(module_node, nodes_map, config)
+    File.write!("#{config.output}/#{filename}", content)
+    filename
   end
 
-  defp templates_path(patterns) do
-#    IO.inspect [DIR: __DIR__]
-    Enum.into(patterns, [], fn {pattern, dir} ->
-      {"deps/ex_doc/lib/ex_doc/formatter/html/templates/#{pattern}", dir}
-    end)
+  defp set_canonical_url(config, filename) do
+    if config.canonical do
+      canonical_url =
+        config.canonical
+        |> String.trim_trailing("/")
+        |> Path.join(filename)
+
+      Map.put(config, :canonical, canonical_url)
+    else
+      config
+    end
   end
 end

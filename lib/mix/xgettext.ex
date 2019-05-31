@@ -48,7 +48,7 @@ defmodule Mix.Tasks.L10n.Xgettext do
       :noop -> 
         Mix.shell.info("noop")
         :ok
-      :ok -> :ok
+      {:ok, _} -> :ok
     end
     case Mix.Tasks.Compile.App.run(["--force --docs"]) do
       :noop -> 

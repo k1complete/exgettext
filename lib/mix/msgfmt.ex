@@ -32,7 +32,7 @@ defmodule Mix.Tasks.L10n.Msgfmt do
   """
   @spec run(String.t) :: :ok | :noop 
   def run(opt) do
-    {opt, _args, _rest} = OptionParser.parse(opt)
+    {opt, _args, _rest} = OptionParser.parse(opt, switches: [force: :boolean])
     env  = Keyword.get(opt, :locale, System.get_env("LANG"))
     lang = Exgettext.Runtime.getlang(env)
     app = Mix.Project.config[:app]
