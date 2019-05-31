@@ -150,6 +150,8 @@ defmodule Exgettext.Tool do
               msgid: module_doc,
               references: [ref],
               comment: "#{x} Summary"}
+          {:docs_v1, _line, :elixir, "text/markdown", :hidden, %{}, _} ->
+            nil
           {:docs_v1, _line, :elixir, "text/markdown", :none, %{}, _} ->
             nil
         end

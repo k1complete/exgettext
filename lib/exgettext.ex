@@ -1,14 +1,14 @@
 defmodule Exgettext do
   @moduledoc """
-  ** Localization package for Elixir
+  ## Localization package for Elixir
   
-  *** target
+  ### target
   0. setlocale() 
   1. ~L sigil quoted string literal
   2. @moduledoc
   3. @doc
   
-  *** example
+  ### example
     example for the :app application:
 
     ```

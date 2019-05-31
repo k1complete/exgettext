@@ -22,7 +22,7 @@ defmodule Exgettext.HTML do
     |> Enum.map(fn(mod) ->
       app = Exgettext.Util.get_app(mod.module)
       mod 
-      |> Map.update(:moduledoc, nil, &(gettext(app, &1))) 
+      |> Map.update(:doc, nil, &(gettext(app, &1)))
       |> Map.update(:docs, nil, 
         &(Enum.map(&1, 
               fn(x) -> 
